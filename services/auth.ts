@@ -1,3 +1,4 @@
+import type { SignUpData } from '../types/auth';
 import { supabase } from '../utils/supabase';
 
 export async function signInWithEmail(email: string, password: string) {
@@ -8,11 +9,22 @@ export async function signInWithEmail(email: string, password: string) {
   return { data, error };
 }
 
-export async function signUpWithEmail(email: string, password: string) {
+export async function signUpWithEmail(signUpData: SignUpData) {
+  const { email, password, username, fullName, nativeLanguage, targetLanguage } = signUpData;
+  
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
+    options: {
+      data: {
+        username,
+        full_name: fullName,
+        native_language: nativeLanguage,
+        target_language: targetLanguage,
+      },
+    },
   });
+  console.log(error?.message)
   return { data, error };
 }
 

@@ -63,7 +63,7 @@ function RootLayoutNav() {
 
     if (!session && !inAuthGroup) {
       // Redirect to login if not authenticated
-      router.replace('/(public)/login');
+      router.replace('/(public)');
     } else if (session && inAuthGroup) {
       // Redirect to tabs if authenticated
       router.replace('/(tabs)');

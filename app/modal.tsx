@@ -50,6 +50,7 @@ const styles = StyleSheet.create({
     paddingTop: 4,
     paddingBottom: 4,
     alignSelf: 'stretch',
+    margin: 20,
   },
   mt20: {
     marginTop: 20,

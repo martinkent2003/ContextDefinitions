@@ -1,4 +1,5 @@
-import { signInWithEmail, signUpWithEmail } from '@/services/auth'
+import { useThemeColors } from '@/hooks/useThemeColor'
+import { signUpWithEmail } from '@/services/auth'
 import { LanguageCode, SignUpData } from '@/types/auth'
 import { FontAwesome } from '@expo/vector-icons'
 import { Picker } from '@react-native-picker/picker'
@@ -35,6 +36,7 @@ AppState.addEventListener('change', (state) => {
 })
 
 export default function Auth() {
+  const colors = useThemeColors()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [username, setUsername] = useState('')
@@ -44,13 +46,6 @@ export default function Auth() {
 
   const [loading, setLoading] = useState(false)
 
-  async function signIn() {
-    setLoading(true)
-    const { error } = await signInWithEmail(email, password)
-
-    if (error) Alert.alert(error.message)
-    setLoading(false)
-  }
 
   async function signUp() {
     setLoading(true)
@@ -67,7 +62,7 @@ export default function Auth() {
       data: { session },
       error,
     } = await signUpWithEmail(signUpData)
-
+    
     if (error) Alert.alert(error.message)
     if (!session) Alert.alert('Please check your inbox for email verification!')
     setLoading(false)
@@ -78,41 +73,45 @@ export default function Auth() {
       <View style={[styles.verticallySpaced, styles.mt20]}>
         <Input
           label="Email"
-          leftIcon={<FontAwesome  name='envelope' size={20} color="gray"/> }
+          leftIcon={<FontAwesome  name='envelope' size={20} color={colors.text}/>}
           onChangeText={(text) => setEmail(text)}
           value={email}
           placeholder="email@address.com"
           autoCapitalize={'none'}
+          inputStyle={{ color: colors.text }}
         />
       </View>
       <View style={styles.verticallySpaced}>
         <Input
           label="Password"
-          leftIcon={<FontAwesome name="lock" size={20} color="gray"/>}
+          leftIcon={<FontAwesome name="lock" size={20} color={colors.text}/>}
           onChangeText={(text) => setPassword(text)}
           value={password}
           secureTextEntry={true}
           placeholder="Password"
           autoCapitalize={'none'}
+          inputStyle={{ color: colors.text }}
         />
       </View>
       <View style={styles.verticallySpaced}>
         <Input
           label="Username"
-          leftIcon={<FontAwesome name="user" size={20} color="gray"/>}
+          leftIcon={<FontAwesome name="user" size={20} color={colors.text}/>}
           onChangeText={(text) => setUsername(text)}
           value={username}
           placeholder="Username (min 6 characters)"
           autoCapitalize={'none'}
+          inputStyle={{ color: colors.text }}
         />
       </View>
       <View style={styles.verticallySpaced}>
         <Input
           label="Full Name"
-          leftIcon={<FontAwesome name="id-card" size={20} color="gray"/>}
+          leftIcon={<FontAwesome name="id-card" size={20} color={colors.text}/>}
           onChangeText={(text) => setFullName(text)}
           value={fullName}
           placeholder="Your full name"
+          inputStyle={{ color: colors.text }}
         />
       </View>
       <View style={styles.verticallySpaced}>
@@ -142,9 +141,6 @@ export default function Auth() {
         </View>
       </View>
       <View style={[styles.verticallySpaced, styles.mt20]}>
-        <Button title="Sign in" disabled={loading} onPress={() => signIn()} />
-      </View>
-      <View style={styles.verticallySpaced}>
         <Button title="Sign up" disabled={loading} onPress={() => signUp()} />
       </View>
     </ScrollView>
@@ -175,7 +171,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginTop: 10,
     borderColor: '#86939e',
-    borderRadius: 4,
-    marginHorizontal: 10,
+    borderRadius: 20,
+    marginHorizontal: 20,
   },
 })

@@ -1,10 +1,10 @@
-import Auth from '@/components/Auth';
+import SignInScreen from '@/components/SignInScreen';
 import { SafeAreaView, StyleSheet } from 'react-native';
 
-export default function LoginScreen() {
+export default function SignIn() {
   return (
     <SafeAreaView style={styles.container}>
-      <Auth />
+      <SignInScreen />
     </SafeAreaView>
   );
 }

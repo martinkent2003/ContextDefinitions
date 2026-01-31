@@ -1,11 +1,9 @@
-import { useThemeColors } from '@/hooks/useThemeColor'
+import { Button, Icon, Input, ScrollView, Text, View } from '@/components/ui'
 import { signUpWithEmail } from '@/services/auth'
 import { LanguageCode, SignUpData } from '@/types/auth'
-import { FontAwesome } from '@expo/vector-icons'
 import { Picker } from '@react-native-picker/picker'
-import { Button, Input, Text } from '@rneui/themed'
 import React, { useState } from 'react'
-import { Alert, AppState, ScrollView, StyleSheet, View } from 'react-native'
+import { Alert, AppState, StyleSheet } from 'react-native'
 import { supabase } from '../utils/supabase'
 
 const LANGUAGES: { label: string; value: LanguageCode }[] = [
@@ -35,8 +33,7 @@ AppState.addEventListener('change', (state) => {
   }
 })
 
-export default function Auth() {
-  const colors = useThemeColors()
+export default function SignUp() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [username, setUsername] = useState('')
@@ -73,45 +70,45 @@ export default function Auth() {
       <View style={[styles.verticallySpaced, styles.mt20]}>
         <Input
           label="Email"
-          leftIcon={<FontAwesome  name='envelope' size={20} color={colors.text}/>}
+          leftIcon={<Icon name='envelope' size={20}/>}
           onChangeText={(text) => setEmail(text)}
           value={email}
           placeholder="email@address.com"
           autoCapitalize={'none'}
-          inputStyle={{ color: colors.text }}
+
         />
       </View>
       <View style={styles.verticallySpaced}>
         <Input
           label="Password"
-          leftIcon={<FontAwesome name="lock" size={20} color={colors.text}/>}
+          leftIcon={<Icon name="lock" size={20}/>}
           onChangeText={(text) => setPassword(text)}
           value={password}
           secureTextEntry={true}
           placeholder="Password"
           autoCapitalize={'none'}
-          inputStyle={{ color: colors.text }}
+
         />
       </View>
       <View style={styles.verticallySpaced}>
         <Input
           label="Username"
-          leftIcon={<FontAwesome name="user" size={20} color={colors.text}/>}
+          leftIcon={<Icon name="user" size={20}/>}
           onChangeText={(text) => setUsername(text)}
           value={username}
           placeholder="Username (min 6 characters)"
           autoCapitalize={'none'}
-          inputStyle={{ color: colors.text }}
+
         />
       </View>
       <View style={styles.verticallySpaced}>
         <Input
           label="Full Name"
-          leftIcon={<FontAwesome name="id-card" size={20} color={colors.text}/>}
+          leftIcon={<Icon name="id-card" size={20}/>}
           onChangeText={(text) => setFullName(text)}
           value={fullName}
           placeholder="Your full name"
-          inputStyle={{ color: colors.text }}
+
         />
       </View>
       <View style={styles.verticallySpaced}>

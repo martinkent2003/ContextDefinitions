@@ -1,11 +1,12 @@
+import { Text, View } from '@/components/ui';
 import { Button } from '@rneui/themed';
 import { useRouter } from 'expo-router';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function WelcomeScreen() {
   const router = useRouter();
-
+  
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>

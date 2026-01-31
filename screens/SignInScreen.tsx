@@ -1,9 +1,7 @@
 import { signInWithEmail } from '@/services/auth'
-import { LanguageCode } from '@/types/auth'
-import { FontAwesome } from '@expo/vector-icons'
-import { Button, Input } from '@rneui/themed'
 import React, { useState } from 'react'
-import { Alert, AppState, ScrollView, StyleSheet, View } from 'react-native'
+import { Alert, AppState, ScrollView, StyleSheet } from 'react-native'
+import { Button, Icon, Input, View } from '../components/ui'
 import { supabase } from '../utils/supabase'
 
 
@@ -20,13 +18,9 @@ AppState.addEventListener('change', (state) => {
   }
 })
 
-export default function Auth() {
+export default function SignIn() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [username, setUsername] = useState('')
-  const [fullName, setFullName] = useState('')
-  const [nativeLanguage, setNativeLanguage] = useState<LanguageCode>('en')
-  const [targetLanguage, setTargetLanguage] = useState<LanguageCode>('ja')
 
   const [loading, setLoading] = useState(false)
 
@@ -44,7 +38,7 @@ export default function Auth() {
       <View style={[styles.verticallySpaced, styles.mt20]}>
         <Input
           label="Email"
-          leftIcon={<FontAwesome  name='envelope' size={20} color="gray"/> }
+          leftIcon={<Icon name='envelope' size={20}/> }
           onChangeText={(text) => setEmail(text)}
           value={email}
           placeholder="email@address.com"
@@ -54,7 +48,7 @@ export default function Auth() {
       <View style={styles.verticallySpaced}>
         <Input
           label="Password"
-          leftIcon={<FontAwesome name="lock" size={20} color="gray"/>}
+          leftIcon={<Icon name="lock" size={20}/>}
           onChangeText={(text) => setPassword(text)}
           value={password}
           secureTextEntry={true}

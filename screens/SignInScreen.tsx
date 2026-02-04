@@ -4,8 +4,6 @@ import { Alert, AppState, ScrollView, StyleSheet } from 'react-native'
 import { Button, Icon, Input, View } from '../components/ui'
 import { supabase } from '../utils/supabase'
 
-
-
 // Tells Supabase Auth to continuously refresh the session automatically if
 // the app is in the foreground. When this is added, you will continue to receive
 // `onAuthStateChange` events with the `TOKEN_REFRESHED` or `SIGNED_OUT` event
@@ -21,23 +19,19 @@ AppState.addEventListener('change', (state) => {
 export default function SignIn() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-
   const [loading, setLoading] = useState(false)
 
   async function signIn() {
     setLoading(true)
     const { error } = await signInWithEmail(email, password)
-
     if (error) Alert.alert(error.message)
     setLoading(false)
   }
 
-
   return (
     <ScrollView style={styles.container} keyboardShouldPersistTaps="handled">
-      <View style={[styles.verticallySpaced, styles.mt20]}>
+      <View style={styles.verticallySpaced}>
         <Input
-          label="Email"
           leftIcon={<Icon name='envelope' size={20}/> }
           onChangeText={(text) => setEmail(text)}
           value={email}
@@ -47,7 +41,6 @@ export default function SignIn() {
       </View>
       <View style={styles.verticallySpaced}>
         <Input
-          label="Password"
           leftIcon={<Icon name="lock" size={20}/>}
           onChangeText={(text) => setPassword(text)}
           value={password}
@@ -57,8 +50,8 @@ export default function SignIn() {
         />
       </View>
       
-      <View style={[styles.verticallySpaced, styles.mt20]}>
-        <Button title="Sign in" disabled={loading} onPress={() => signIn()} />
+      <View style={styles.verticallySpaced}>
+        <Button variant="primary" size = "lg" disabled={loading} onPress={() => signIn()}>Sign In</Button>
       </View>
       
     </ScrollView>
@@ -67,29 +60,12 @@ export default function SignIn() {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 40,
-    padding: 12,
+    marginTop: 100,
+    padding: 10,
   },
   verticallySpaced: {
+    backgroundColor: 'transparent',
     paddingTop: 4,
     paddingBottom: 4,
-    alignSelf: 'stretch',
-  },
-  mt20: {
-    marginTop: 20,
-  },
-  label: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#86939e',
-    marginLeft: 10,
-    marginBottom: 4,
-  },
-  pickerContainer: {
-    borderWidth: 1,
-    marginTop: 10,
-    borderColor: '#86939e',
-    borderRadius: 4,
-    marginHorizontal: 10,
   },
 })

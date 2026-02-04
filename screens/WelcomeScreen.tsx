@@ -1,30 +1,19 @@
-import { Text, View } from '@/components/ui';
-import { Button } from '@rneui/themed';
+import { Button, Text, View } from '@/components/ui';
 import { useRouter } from 'expo-router';
 import { StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function WelcomeScreen() {
   const router = useRouter();
-  
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.title}>Welcome</Text>
-        <Text style={styles.subtitle}>Get started by signing in or creating an account</Text>
-
+        <Text style={styles.title}>Yomu</Text>
+        <Text style={styles.subtitle}>Get started, sign in or creating an account</Text>
+        
         <View style={styles.buttonContainer}>
-          <Button
-            title="Sign In"
-            onPress={() => router.push('./signin')}
-            containerStyle={styles.button}
-          />
-          <Button
-            title="Sign Up"
-            type="outline"
-            onPress={() => router.push('./signup')}
-            containerStyle={styles.button}
-          />
+          <Button variant="primary" size="lg" onPress={() => {router.push("/signin") }}>Sign In</Button>
+          <Button variant="secondary" size="lg" onPress={() => {router.push("/signup") }}>Sign Up</Button>
         </View>
       </View>
     </SafeAreaView>
@@ -55,8 +44,5 @@ const styles = StyleSheet.create({
   buttonContainer: {
     width: '100%',
     gap: 12,
-  },
-  button: {
-    width: '100%',
   },
 });

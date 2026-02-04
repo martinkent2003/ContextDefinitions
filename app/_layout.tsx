@@ -10,7 +10,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import "react-native-reanimated";
 
-import { useColorScheme } from "@/components/useColorScheme";
+import { useColorScheme } from "@/hooks/useColorScheme";
 import { SessionProvider, useSession } from "@/hooks/useSession";
 
 export {
@@ -29,6 +29,7 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
   const [loaded, error] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
+    Excalifont: require("../assets/fonts/Excalifont-Regular.ttf"),
     ...FontAwesome.font,
   });
 
@@ -67,10 +68,10 @@ function RootLayoutNav() {
 
     if (!session && !inAuthGroup) {
       // Redirect to login if not authenticated
-      router.replace("/(public)");
+      router.replace("/(public)/welcome");
     } else if (session && inAuthGroup) {
       // Redirect to tabs if authenticated
-      router.replace("/(tabs)");
+      router.replace("/(tabs)/home");
     }
   }, [session, segments, isLoading]);
 

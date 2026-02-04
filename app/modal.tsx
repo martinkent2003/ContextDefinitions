@@ -1,6 +1,5 @@
-import { View } from '@/components/ui';
+import { Button, View } from '@/components/ui';
 import { signOut } from '@/services/auth';
-import { Button } from '@rneui/themed';
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
 import { Alert, Platform, StyleSheet } from 'react-native';
@@ -18,7 +17,7 @@ export default function ModalScreen() {
   return (
     <View style={styles.container}>
       <View style = {[styles.verticallySpaced, styles.mt20]}>
-        <Button title="Sign out" disabled ={loading} onPress={()=> logOut()}/>
+        <Button variant='danger' size = 'lg' disabled={loading} onPress={()=> logOut()}>Sign Out</Button>
       </View>
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
       {/* Use a light status bar on iOS to account for the black space above the modal */}

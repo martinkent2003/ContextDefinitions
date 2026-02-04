@@ -1,4 +1,4 @@
-import UploadReadingScreen from "@/components/UploadScreen/UploadReadingScreen";
+import UploadReadingScreen from "@/screens/UploadScreen/UploadReadingScreen";
 import { StyleSheet } from "react-native";
 
 export default function TabTwoScreen() {

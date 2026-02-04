@@ -1,11 +1,10 @@
+import { Text, View } from '@/components/ui';
 import { StyleSheet } from 'react-native';
 
-import { Text, View } from '@/components/ui';
-
-export default function TabOneScreen() {
+export default function Library() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab One</Text>
+      <Text style={styles.title}>Have Words Here</Text>
     </View>
   );
 }

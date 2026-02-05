@@ -1,5 +1,6 @@
+import { Button, View } from "@/components/ui";
 import { Ionicons } from "@expo/vector-icons";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Text } from "react-native";
 import { styles } from "./styles";
 
 type Props = {
@@ -9,20 +10,34 @@ type Props = {
 };
 export default function UploadActionButton({ label, icon, onPress }: Props) {
   return (
-    <TouchableOpacity
-      style={styles.uploadButton}
-      onPress={onPress}
-      activeOpacity={0.8}
-    >
-      <View style={styles.uploadButtonRow}>
-        <Ionicons
-          name={icon}
-          size={22}
-          color="#fff"
-          style={styles.uploadButtonIcon}
-        />
-        <Text style={styles.uploadButtonLabel}> {label}</Text>
-      </View>
-    </TouchableOpacity>
+    <>
+      <Button style={styles.uploadButton} onPress={onPress}>
+        <View style={styles.uploadButtonRow}>
+          <Ionicons
+            name={icon}
+            size={22}
+            color="#fff"
+            style={styles.uploadButtonIcon}
+          />
+          <Text style={styles.uploadButtonLabel}> {label}</Text>
+        </View>
+      </Button>
+
+      {/* <TouchableOpacity
+        style={styles.uploadButton}
+        onPress={onPress}
+        activeOpacity={0.8}
+      >
+        <View style={styles.uploadButtonRow}>
+          <Ionicons
+            name={icon}
+            size={22}
+            color="#fff"
+            style={styles.uploadButtonIcon}
+          />
+          <Text style={styles.uploadButtonLabel}> {label}</Text>
+        </View>
+      </TouchableOpacity> */}
+    </>
   );
 }

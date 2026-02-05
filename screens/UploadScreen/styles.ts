@@ -1,10 +1,11 @@
+import { useThemeColor } from "@/hooks/useThemeColor";
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
   // Screen
   screen: {
     flex: 1,
-    backgroundColor: "#050507",
+    backgroundColor: useThemeColor({}, "background"),
     paddingHorizontal: 24,
     paddingTop: 40,
     paddingBottom: 32,
@@ -59,14 +60,17 @@ export const styles = StyleSheet.create({
   uploadButtonRow: {
     flexDirection: "row",
     alignItems: "center",
+    backgroundColor: "#18181C",
   },
   uploadButtonIcon: {
     marginRight: 12,
+    backgroundColor: "#18181C",
   },
   uploadButtonLabel: {
     color: "#FFFFFF",
     fontSize: 20,
     fontWeight: "500",
+    backgroundColor: "#18181C",
   },
 
   // Help link

@@ -7,13 +7,17 @@ import { View } from "react-native";
 import Header from "./Header";
 import { styles } from "./styles";
 import UploadActionButton from "./UploadActionButton";
+import UploadText from "./UploadText";
 
 export default function UploadReadingScreen() {
   const router = useRouter();
   const [upload, setUpload] = useState<UploadedFile>({
     images: [],
     file: null,
+    text: null,
   });
+
+  const [isTextModalVisible, setTextModalVisible] = useState(false);
 
   const pickImageAsync = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -27,6 +31,7 @@ export default function UploadReadingScreen() {
       setUpload({
         images: result.assets.map((asset) => asset.uri),
         file: null,
+        text: null,
       });
       alert("Images were picked");
       console.log(...upload.images);
@@ -46,12 +51,21 @@ export default function UploadReadingScreen() {
       setUpload({
         images: [],
         file: { uri: result.assets[0].uri, name: result.assets[0].name },
+        text: null,
       });
       alert("Document was chosen");
       console.log(upload.file?.uri);
     } else {
       alert("You did not select a file");
     }
+  };
+
+  const handleConfirmText = (text: string) => {
+    setUpload({
+      images: [],
+      file: null,
+      text,
+    });
   };
 
   return (
@@ -71,7 +85,17 @@ export default function UploadReadingScreen() {
         <UploadActionButton
           label="Paste Text"
           icon="text-outline"
-          onPress={() => {}}
+          onPress={() => setTextModalVisible(true)}
+        />
+        {/* <UploadText
+          visible={isTextModalVisible}
+          onClose={() => setTextModalVisible(false)}
+          onConfirm={handleConfirmText}
+          initialText={upload.text ?? ""}
+        /> */}
+        <UploadText
+          visible={isTextModalVisible}
+          onClose={() => setTextModalVisible(false)}
         />
         <UploadActionButton
           label="Upload File"

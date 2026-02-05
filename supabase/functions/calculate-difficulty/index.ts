@@ -65,7 +65,7 @@ function computeDifficultyScore(text: string): number {
   const fleschKincaidGrade =
     0.39 * wordsPerSentence + 11.8 * syllablesPerWord - 15.59;
 
-  // Normalize: 0 = easy, 100 = hard (cap at grade 22)
+  // Normalize: 0 = easy, 100 = hard (cap at grade 30)
   return Math.min(100, Math.max(0, (fleschKincaidGrade / 30) * 100));
 }
 
@@ -79,6 +79,7 @@ Deno.serve(async (req) => {
         { status: 401, headers: { "Content-Type": "application/json" } },
       );
     }
+    //TODO: database never set to failed, still pending so misleading
 
     const { reading_id, content } = await req.json();
 

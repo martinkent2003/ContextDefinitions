@@ -11,7 +11,6 @@ export async function signInWithEmail(email: string, password: string) {
 
 export async function signUpWithEmail(signUpData: SignUpData) {
   const { email, password, username, fullName, nativeLanguage, targetLanguage } = signUpData;
-  
   const { data, error } = await supabase.auth.signUp({
     email,
     password,

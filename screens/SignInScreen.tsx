@@ -1,12 +1,8 @@
 import { signInWithEmail } from '@/services/auth'
-import { LanguageCode } from '@/types/auth'
-import { FontAwesome } from '@expo/vector-icons'
-import { Button, Input } from '@rneui/themed'
 import React, { useState } from 'react'
-import { Alert, AppState, ScrollView, StyleSheet, View } from 'react-native'
+import { Alert, AppState, StyleSheet } from 'react-native'
+import { Button, Icon, Input, ScrollView, View } from '../components/ui'
 import { supabase } from '../utils/supabase'
-
-
 
 // Tells Supabase Auth to continuously refresh the session automatically if
 // the app is in the foreground. When this is added, you will continue to receive
@@ -20,31 +16,23 @@ AppState.addEventListener('change', (state) => {
   }
 })
 
-export default function Auth() {
+export default function SignIn() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [username, setUsername] = useState('')
-  const [fullName, setFullName] = useState('')
-  const [nativeLanguage, setNativeLanguage] = useState<LanguageCode>('en')
-  const [targetLanguage, setTargetLanguage] = useState<LanguageCode>('ja')
-
   const [loading, setLoading] = useState(false)
 
   async function signIn() {
     setLoading(true)
     const { error } = await signInWithEmail(email, password)
-
     if (error) Alert.alert(error.message)
     setLoading(false)
   }
 
-
   return (
     <ScrollView style={styles.container} keyboardShouldPersistTaps="handled">
-      <View style={[styles.verticallySpaced, styles.mt20]}>
+      <View style={styles.verticallySpaced}>
         <Input
-          label="Email"
-          leftIcon={<FontAwesome  name='envelope' size={20} color="gray"/> }
+          leftIcon={<Icon name='envelope' size={20}/> }
           onChangeText={(text) => setEmail(text)}
           value={email}
           placeholder="email@address.com"
@@ -53,8 +41,7 @@ export default function Auth() {
       </View>
       <View style={styles.verticallySpaced}>
         <Input
-          label="Password"
-          leftIcon={<FontAwesome name="lock" size={20} color="gray"/>}
+          leftIcon={<Icon name="lock" size={20}/>}
           onChangeText={(text) => setPassword(text)}
           value={password}
           secureTextEntry={true}
@@ -63,8 +50,8 @@ export default function Auth() {
         />
       </View>
       
-      <View style={[styles.verticallySpaced, styles.mt20]}>
-        <Button title="Sign in" disabled={loading} onPress={() => signIn()} />
+      <View style={styles.verticallySpaced}>
+        <Button variant="primary" size = "lg" disabled={loading} onPress={() => signIn()}>Sign In</Button>
       </View>
       
     </ScrollView>
@@ -73,29 +60,12 @@ export default function Auth() {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 40,
-    padding: 12,
+    marginTop: 100,
+    padding: 10,
   },
   verticallySpaced: {
+    backgroundColor: 'transparent',
     paddingTop: 4,
     paddingBottom: 4,
-    alignSelf: 'stretch',
-  },
-  mt20: {
-    marginTop: 20,
-  },
-  label: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#86939e',
-    marginLeft: 10,
-    marginBottom: 4,
-  },
-  pickerContainer: {
-    borderWidth: 1,
-    marginTop: 10,
-    borderColor: '#86939e',
-    borderRadius: 4,
-    marginHorizontal: 10,
   },
 })

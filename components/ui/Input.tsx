@@ -1,4 +1,4 @@
-import { radii, spacing, typography } from "@/constants/Themes";
+import { radii, spacing } from "@/constants/Themes";
 import { ThemeProps, useThemeColor } from "@/hooks/useThemeColor";
 import {
   Input as DefaultInput,
@@ -23,14 +23,8 @@ export function Input(props: InputProps) {
 
   return (
     <DefaultInput
-      inputStyle={[
-        { color, fontFamily: typography.fonts.excalifont },
-        inputStyle,
-      ]}
-      labelStyle={[
-        { fontFamily: typography.fonts.excalifont, color: labelColor },
-        labelStyle,
-      ]}
+      inputStyle={[{ color }, inputStyle]}
+      labelStyle={[{ color: labelColor }, labelStyle]}
       inputContainerStyle={[
         {
           borderWidth: 2,

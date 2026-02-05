@@ -1,4 +1,3 @@
-import { typography } from '@/constants/Themes';
 import { ThemeProps, useThemeColor } from '@/hooks/useThemeColor';
 import { Text as DefaultText } from 'react-native';
 
@@ -10,7 +9,7 @@ export function Text(props: TextProps) {
 
   return (
     <DefaultText
-      style={[{ color, fontFamily: typography.fonts.excalifont }, style]}
+      style={[{ color }, style]}
       {...otherProps}
     />
   );

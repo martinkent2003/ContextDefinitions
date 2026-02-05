@@ -9,7 +9,7 @@ const palette = {
     200: '#90caf9',
     300: '#64b5f6',
     400: '#42a5f5',
-    500: '#2f95dc', // current tint
+    500: '#2f95dc', 
     600: '#1e88e5',
     700: '#1976d2',
     800: '#1565c0',
@@ -36,6 +36,7 @@ const palette = {
   // Base
   white: '#ffffff',
   black: '#000000',
+
 } as const;
 
 // Spacing scale (based on 4px grid)
@@ -46,8 +47,9 @@ export const spacing = {
   md: 16,
   lg: 24,
   xl: 32,
-  '2xl': 48,
-  '3xl': 64,
+  xxl: 48,
+  xxxl: 64,
+  xxxxl: 96,
 } as const;
 
 // Typography
@@ -66,9 +68,9 @@ export const typography = {
     md: 16,
     lg: 18,
     xl: 20,
-    '2xl': 24,
-    '3xl': 30,
-    '4xl': 36,
+    xxl: 24,
+    xxxl: 30,
+    xxxxl: 36,
   },
   lineHeights: {
     tight: 1.2,
@@ -159,9 +161,9 @@ export const Colors = {
   },
   dark: {
     // Backgrounds
-    background: palette.gray[900],
-    backgroundSecondary: palette.gray[800],
-    backgroundTertiary: palette.gray[700],
+    background: palette.black,
+    backgroundSecondary: palette.gray[900],
+    backgroundTertiary: palette.gray[800],
     
     // Text
     text: palette.white,

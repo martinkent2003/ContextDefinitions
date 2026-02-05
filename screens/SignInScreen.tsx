@@ -1,7 +1,7 @@
 import { signInWithEmail } from '@/services/auth'
 import React, { useState } from 'react'
-import { Alert, AppState, ScrollView, StyleSheet } from 'react-native'
-import { Button, Icon, Input, View } from '../components/ui'
+import { Alert, AppState, StyleSheet } from 'react-native'
+import { Button, Icon, Input, ScrollView, View } from '../components/ui'
 import { supabase } from '../utils/supabase'
 
 // Tells Supabase Auth to continuously refresh the session automatically if

@@ -1,10 +1,10 @@
 import { radii, spacing, typography } from '@/constants/Themes';
 import { ThemeProps, useThemeColor } from '@/hooks/useThemeColor';
 import {
-  ActivityIndicator,
-  StyleSheet,
-  TouchableOpacity,
-  TouchableOpacityProps
+    ActivityIndicator,
+    StyleSheet,
+    TouchableOpacity,
+    TouchableOpacityProps
 } from 'react-native';
 import { Text } from './Text';
 

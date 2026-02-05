@@ -1,16 +1,8 @@
-import SignUpScreen from '@/components/SignUpScreen';
-import { SafeAreaView, StyleSheet } from 'react-native';
+import SignUpScreen from '@/screens/SignUpScreen';
 
 export default function SignUp() {
   return (
-    <SafeAreaView style={styles.container}>
-      <SignUpScreen />
-    </SafeAreaView>
+      <SignUpScreen/>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});

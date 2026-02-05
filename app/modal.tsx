@@ -1,11 +1,8 @@
-import { StatusBar } from 'expo-status-bar';
-import { Alert, Platform, StyleSheet } from 'react-native';
-
-import EditScreenInfo from '@/components/EditScreenInfo';
-import { View } from '@/components/Themed';
+import { Button, View } from '@/components/ui';
 import { signOut } from '@/services/auth';
-import { Button } from '@rneui/themed';
+import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
+import { Alert, Platform, StyleSheet } from 'react-native';
 
 export default function ModalScreen() {
   const[loading, setLoading] = useState(false)
@@ -20,11 +17,9 @@ export default function ModalScreen() {
   return (
     <View style={styles.container}>
       <View style = {[styles.verticallySpaced, styles.mt20]}>
-        <Button title="Sign out" disabled ={loading} onPress={()=> logOut()}/>
+        <Button variant='danger' size = 'lg' disabled={loading} onPress={()=> logOut()}>Sign Out</Button>
       </View>
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="app/modal.tsx" />
-
       {/* Use a light status bar on iOS to account for the black space above the modal */}
       <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
     </View>

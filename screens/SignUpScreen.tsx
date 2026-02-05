@@ -1,11 +1,8 @@
-import { useThemeColors } from '@/hooks/useThemeColor'
+import { Button, Icon, Input, Picker, ScrollView, View } from '@/components/ui'
 import { signUpWithEmail } from '@/services/auth'
 import { LanguageCode, SignUpData } from '@/types/auth'
-import { FontAwesome } from '@expo/vector-icons'
-import { Picker } from '@react-native-picker/picker'
-import { Button, Input, Text } from '@rneui/themed'
 import React, { useState } from 'react'
-import { Alert, AppState, ScrollView, StyleSheet, View } from 'react-native'
+import { Alert, AppState, StyleSheet } from 'react-native'
 import { supabase } from '../utils/supabase'
 
 const LANGUAGES: { label: string; value: LanguageCode }[] = [
@@ -35,8 +32,7 @@ AppState.addEventListener('change', (state) => {
   }
 })
 
-export default function Auth() {
-  const colors = useThemeColors()
+export default function SignUp() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [username, setUsername] = useState('')
@@ -72,76 +68,62 @@ export default function Auth() {
     <ScrollView style={styles.container} keyboardShouldPersistTaps="handled">
       <View style={[styles.verticallySpaced, styles.mt20]}>
         <Input
-          label="Email"
-          leftIcon={<FontAwesome  name='envelope' size={20} color={colors.text}/>}
+          leftIcon={<Icon name='envelope' size={20}/>}
           onChangeText={(text) => setEmail(text)}
           value={email}
           placeholder="email@address.com"
           autoCapitalize={'none'}
-          inputStyle={{ color: colors.text }}
+
         />
       </View>
       <View style={styles.verticallySpaced}>
         <Input
-          label="Password"
-          leftIcon={<FontAwesome name="lock" size={20} color={colors.text}/>}
+          leftIcon={<Icon name="lock" size={20}/>}
           onChangeText={(text) => setPassword(text)}
           value={password}
           secureTextEntry={true}
           placeholder="Password"
           autoCapitalize={'none'}
-          inputStyle={{ color: colors.text }}
+
         />
       </View>
       <View style={styles.verticallySpaced}>
         <Input
-          label="Username"
-          leftIcon={<FontAwesome name="user" size={20} color={colors.text}/>}
+          leftIcon={<Icon name="user" size={20}/>}
           onChangeText={(text) => setUsername(text)}
           value={username}
           placeholder="Username (min 6 characters)"
           autoCapitalize={'none'}
-          inputStyle={{ color: colors.text }}
+
         />
       </View>
       <View style={styles.verticallySpaced}>
         <Input
-          label="Full Name"
-          leftIcon={<FontAwesome name="id-card" size={20} color={colors.text}/>}
+          leftIcon={<Icon name="id-card" size={20}/>}
           onChangeText={(text) => setFullName(text)}
           value={fullName}
           placeholder="Your full name"
-          inputStyle={{ color: colors.text }}
+
         />
       </View>
       <View style={styles.verticallySpaced}>
-        <Text style={styles.label}>Native Language</Text>
-        <View style={styles.pickerContainer}>
-          <Picker
-            selectedValue={nativeLanguage}
-            onValueChange={(value) => setNativeLanguage(value)}
-          >
-            {LANGUAGES.map((lang) => (
-              <Picker.Item key={lang.value} label={lang.label} value={lang.value} />
-            ))}
-          </Picker>
-        </View>
+        <Picker
+          label="Native Language"
+          items={LANGUAGES}
+          selectedValue={nativeLanguage}
+          onValueChange={(value) => setNativeLanguage(value as LanguageCode)}
+        />
       </View>
       <View style={styles.verticallySpaced}>
-        <Text style={styles.label}>Target Language</Text>
-        <View style={styles.pickerContainer}>
-          <Picker
-            selectedValue={targetLanguage}
-            onValueChange={(value) => setTargetLanguage(value)}
-          >
-            {LANGUAGES.map((lang) => (
-              <Picker.Item key={lang.value} label={lang.label} value={lang.value} />
-            ))}
-          </Picker>
-        </View>
+        <Picker
+          label="Target Language"
+          items={LANGUAGES}
+          selectedValue={targetLanguage}
+          onValueChange={(value) => setTargetLanguage(value as LanguageCode)}
+        />
       </View>
       <View style={[styles.verticallySpaced, styles.mt20]}>
-        <Button title="Sign up" disabled={loading} onPress={() => signUp()} />
+        <Button  disabled={loading} onPress={() => signUp()}>Sign up</Button>
       </View>
     </ScrollView>
   )
@@ -149,29 +131,17 @@ export default function Auth() {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 40,
+    backgroundColor: 'transparent',
+    marginTop: 100,
+    marginBottom: 50,
     padding: 12,
   },
   verticallySpaced: {
+    backgroundColor: 'transparent',
     paddingTop: 4,
     paddingBottom: 4,
-    alignSelf: 'stretch',
   },
   mt20: {
     marginTop: 20,
-  },
-  label: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#86939e',
-    marginLeft: 10,
-    marginBottom: 4,
-  },
-  pickerContainer: {
-    borderWidth: 1,
-    marginTop: 10,
-    borderColor: '#86939e',
-    borderRadius: 20,
-    marginHorizontal: 20,
   },
 })

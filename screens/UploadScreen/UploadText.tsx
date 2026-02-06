@@ -3,10 +3,11 @@ import { Colors, radii, spacing, typography } from "@/constants/Themes";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import React from "react";
 import {
-    KeyboardAvoidingView,
-    Modal,
-    StyleSheet,
-    TextInput,
+  KeyboardAvoidingView,
+  Modal,
+  Platform,
+  StyleSheet,
+  TextInput,
 } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 // create a modal
@@ -24,11 +25,12 @@ export default function UploadText({ visible, onClose }: Props) {
     <Modal
       visible={visible}
       animationType="slide"
-      style={[{ backgroundColor }, styles.container]}
     >
       <SafeAreaProvider>
-        <SafeAreaView style={{ backgroundColor }}>
-          <KeyboardAvoidingView>
+        <SafeAreaView style={[{backgroundColor }, styles.container]}>
+          <KeyboardAvoidingView style={{flex: 1}} 
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          keyboardVerticalOffset={Platform.OS === "ios" ? 20 : 0}>
             <TextInput
               style={[styles.textBox, { color: textColor }]}
               multiline

@@ -141,7 +141,61 @@ This will be implemented later when database triggers are added.
 
 ---
 
-## 7. Do / Don’t Checklist
+## 7. Database -> Edge Function Trigger Security Model
+
+This project uses database triggers to invoke Supabase Edge Functions for additional processing. Because Edge Functions are public HTTP endpoints, we need to take certain security measures.
+
+## Handling Secrets and Authentication
+
+* A shared webhook secret is stored in two places:
+  * Supabase Vault (Dashboard -> Settings -> Vault) Used by Postgres trigger functions to authenticate outbound HTTP requests.
+  * Edge Function Secrets (Dashboard -> Edge Functions -> Secrets) Used by the Edge Function to verify incoming requests
+* The secrets must have an identical name and value in both locations
+* Secrets are never accessible to client roles (anon, authenticated)
+
+## Trigger -> Edge Function Invocation Flow
+
+A database trigger fires on table events
+
+The trigger calls a server-side plpgsql function which:
+* Uses `pg_net` extention to make an async HTTP POST request
+* Sends the payload in body
+* Includes the secret in a custom header:
+
+```
+x-webhook-secret: <shared-secret>
+```
+
+> `pg_net` does not wait for a response. The HTTP response from the edge function is only stored in logs
+
+All trigger-invoked functions must:
+* Be declared as the following to ensure it runs with the owner's privileges (access to vault) and cannot be shadowed by malicious user-defined objects:
+
+```
+SECURITY DEFINER
+SET search_path = pg_catalog, public
+```
+
+* Revoke execution from all client-facing roles:
+
+```
+REVOKE EXECUTE ON FUNCTION <function_name> FROM public, anon, authenticated;
+```
+
+## Edge Function Authentication and Database Writes
+
+* The Edge Function rejects all requests without a valid `x-webhook-secret`
+* When writing back to the database, the Edge Function uses `SUPABASE_SERVICE_ROLE_KEY` to bypass RLS intentionally for system-managed updates
+
+## Row-Level Security
+* RLS must be enabled on tables touched by clients
+* Recommended pattern:
+  * User-owned columns (e.g. title, content)
+  * System-owned columns (e.g. status, difficulty)
+
+---
+
+## 8. Do / Don’t Checklist
 
 ### ✅ Do
 
@@ -166,7 +220,7 @@ npx supabase secrets set KEY=value
 
 ---
 
-## 8. To Do / Open Decisions
+## 9. To Do / Open Decisions
 
 This section tracks upcoming backend decisions and implementation work related to Edge Functions.
 

@@ -22,15 +22,14 @@ export default function UploadText({ visible, onClose }: Props) {
   const backgroundColor = useThemeColor({}, "background");
   const textColor = useThemeColor({}, "text");
   return (
-    <Modal
-      visible={visible}
-      animationType="slide"
-    >
+    <Modal visible={visible} animationType="slide">
       <SafeAreaProvider>
-        <SafeAreaView style={[{backgroundColor }, styles.container]}>
-          <KeyboardAvoidingView style={{flex: 1}} 
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-          keyboardVerticalOffset={Platform.OS === "ios" ? 20 : 0}>
+        <SafeAreaView style={[{ backgroundColor }, styles.container]}>
+          <KeyboardAvoidingView
+            style={{ flex: 1 }}
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            keyboardVerticalOffset={Platform.OS === "ios" ? 20 : 0}
+          >
             <TextInput
               style={[styles.textBox, { color: textColor }]}
               multiline

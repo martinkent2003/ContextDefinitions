@@ -1,9 +1,10 @@
 {
   "editor.codeActionsOnSave": {
-
-    "source.fixAll": "never",
+    "source.fixAll": "explicit",
     "source.organizeImports": "never",
     "source.sortMembers": "explicit"
   },
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode"
 }

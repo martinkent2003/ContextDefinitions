@@ -1,6 +1,7 @@
-import { Ionicons } from "@expo/vector-icons";
+
 import React from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Icon, Text } from "@/components/ui";
+import { TouchableOpacity, View } from "react-native";
 import { styles } from "./styles";
 
 type Props = {
@@ -12,14 +13,18 @@ export default function Header({ title, onBack }: Props) {
   return (
     <View style={styles.headerRoot}>
       <TouchableOpacity onPress={onBack} style={styles.backButton}>
-        <Ionicons name="chevron-back" size={22} color="#ffffff" />
+        <Icon
+          library="Ionicons"
+          name="chevron-back" 
+          size={22} 
+          />
       </TouchableOpacity>
       <View style={styles.header}>
         <Text style={styles.title}>{title}</Text>
-        <Ionicons
+        <Icon
+          library="Ionicons"
           style={styles.bookIcon}
           name="book-outline"
-          color="#fff"
           size={40}
         />
       </View>

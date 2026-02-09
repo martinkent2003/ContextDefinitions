@@ -9,7 +9,7 @@ import {
 import { Text } from './Text';
 
 // Define variant types
-type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger';
+type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'upload';
 type ButtonSize = 'sm' | 'md' | 'lg';
 
 export type ButtonProps = ThemeProps & TouchableOpacityProps & {
@@ -61,6 +61,7 @@ export function Button(props: ButtonProps) {
   const primaryBg = useThemeColor({}, 'buttonBackground');
   const secondaryBg = useThemeColor({}, 'buttonBackgroundSecondary');
   const ghostBg = useThemeColor({}, 'buttonBackgroundGhost');
+  const uploadBg = useThemeColor({}, 'cardBackground');
   const errorColor = useThemeColor({}, 'error');
   
   const primaryText = useThemeColor({}, 'textInverse');
@@ -93,6 +94,12 @@ export function Button(props: ButtonProps) {
       borderWidth: 0,
       borderColor: 'transparent',
     },
+    upload: {
+      backgroundColor: uploadBg,
+      textColor: primaryText,
+      borderWidth: 0,
+      borderColor: 'transparent'
+    }
   };
 
   const currentVariant = variantStyles[variant];

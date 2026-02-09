@@ -5,7 +5,6 @@ export const styles = StyleSheet.create({
   // Screen
   screen: {
     flex: 1,
-    backgroundColor: useThemeColor({}, "background"),
     paddingHorizontal: 24,
     paddingTop: 40,
     paddingBottom: 32,
@@ -35,12 +34,10 @@ export const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: "#18181C",
     justifyContent: "center",
     alignItems: "center",
   },
   title: {
-    color: "#FFFFFF",
     fontSize: 24,
     fontWeight: "600",
     letterSpacing: 0.5,
@@ -51,7 +48,6 @@ export const styles = StyleSheet.create({
 
   // Upload buttons
   uploadButton: {
-    backgroundColor: "#18181C",
     borderRadius: 14,
     paddingVertical: 18,
     paddingHorizontal: 18,
@@ -60,17 +56,14 @@ export const styles = StyleSheet.create({
   uploadButtonRow: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#18181C",
+    backgroundColor: 'transparent',
   },
   uploadButtonIcon: {
     marginRight: 12,
-    backgroundColor: "#18181C",
   },
   uploadButtonLabel: {
-    color: "#FFFFFF",
     fontSize: 20,
     fontWeight: "500",
-    backgroundColor: "#18181C",
   },
 
   // Help link

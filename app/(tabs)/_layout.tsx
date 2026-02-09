@@ -27,6 +27,7 @@ export default function TabLayout() {
         options={{
           tabBarIcon: ({ color, focused }) => (
             <Icon
+              library="FontAwesome"
               name= {focused? "home" : "home"}
               color={color}
               size={24}
@@ -36,7 +37,8 @@ export default function TabLayout() {
             <Link href="/modal" asChild>
               <Pressable>
                 {({ pressed }) => (
-                  <FontAwesome
+                  <Icon
+                    library="FontAwesome"
                     name="user"
                     size={40}
                     color={Colors[colorScheme ?? "light"].text}
@@ -52,7 +54,7 @@ export default function TabLayout() {
         name="create"
         options={{
           tabBarIcon: ({ color, focused }) => (
-            <Icon name="plus" color={color} size={24} />
+            <Icon library="FontAwesome" name="plus" color={color} size={24} />
           ),
           headerShown: false,
         }}
@@ -61,9 +63,10 @@ export default function TabLayout() {
         name="library"
         options={{
           tabBarIcon: ({color, focused}) => (
-            <Icon 
+            <Icon
+              library="FontAwesome"
               name={focused ? "folder-open" : "folder"}
-              color={color} 
+              color={color}
               size = {24}
             />
           ),

@@ -32,7 +32,7 @@ export default function SignIn() {
     <ScrollView style={styles.container} keyboardShouldPersistTaps="handled">
       <View style={styles.verticallySpaced}>
         <Input
-          leftIcon={<Icon name='envelope' size={20}/> }
+          leftIcon={<Icon library="FontAwesome" name='envelope' size={20}/> }
           onChangeText={(text) => setEmail(text)}
           value={email}
           placeholder="email@address.com"
@@ -41,7 +41,7 @@ export default function SignIn() {
       </View>
       <View style={styles.verticallySpaced}>
         <Input
-          leftIcon={<Icon name="lock" size={20}/>}
+          leftIcon={<Icon library="FontAwesome" name="lock" size={20}/>}
           onChangeText={(text) => setPassword(text)}
           value={password}
           secureTextEntry={true}

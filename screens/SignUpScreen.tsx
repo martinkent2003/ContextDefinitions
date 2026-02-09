@@ -68,7 +68,7 @@ export default function SignUp() {
     <ScrollView style={styles.container} keyboardShouldPersistTaps="handled">
       <View style={[styles.verticallySpaced, styles.mt20]}>
         <Input
-          leftIcon={<Icon name='envelope' size={20}/>}
+          leftIcon={<Icon library="FontAwesome" name='envelope' size={20}/>}
           onChangeText={(text) => setEmail(text)}
           value={email}
           placeholder="email@address.com"
@@ -78,7 +78,7 @@ export default function SignUp() {
       </View>
       <View style={styles.verticallySpaced}>
         <Input
-          leftIcon={<Icon name="lock" size={20}/>}
+          leftIcon={<Icon library="FontAwesome" name="lock" size={20}/>}
           onChangeText={(text) => setPassword(text)}
           value={password}
           secureTextEntry={true}
@@ -89,7 +89,7 @@ export default function SignUp() {
       </View>
       <View style={styles.verticallySpaced}>
         <Input
-          leftIcon={<Icon name="user" size={20}/>}
+          leftIcon={<Icon library="FontAwesome" name="user" size={20}/>}
           onChangeText={(text) => setUsername(text)}
           value={username}
           placeholder="Username (min 6 characters)"
@@ -99,7 +99,7 @@ export default function SignUp() {
       </View>
       <View style={styles.verticallySpaced}>
         <Input
-          leftIcon={<Icon name="id-card" size={20}/>}
+          leftIcon={<Icon library="FontAwesome" name="id-card" size={20}/>}
           onChangeText={(text) => setFullName(text)}
           value={fullName}
           placeholder="Your full name"

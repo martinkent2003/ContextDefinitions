@@ -1,6 +1,5 @@
-import { Button, View } from "@/components/ui";
+import { Button, View, Text, Icon} from "@/components/ui";
 import { Ionicons } from "@expo/vector-icons";
-import { Text } from "react-native";
 import { styles } from "./styles";
 
 type Props = {
@@ -11,12 +10,12 @@ type Props = {
 export default function UploadActionButton({ label, icon, onPress }: Props) {
   return (
     <>
-      <Button style={styles.uploadButton} onPress={onPress}>
+      <Button variant="upload" style={styles.uploadButton} onPress={onPress}>
         <View style={styles.uploadButtonRow}>
-          <Ionicons
+          <Icon
+            library="Ionicons"
             name={icon}
             size={22}
-            color="#fff"
             style={styles.uploadButtonIcon}
           />
           <Text style={styles.uploadButtonLabel}> {label}</Text>

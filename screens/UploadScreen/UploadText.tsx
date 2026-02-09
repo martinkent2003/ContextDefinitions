@@ -1,7 +1,8 @@
 import { Button, View } from "@/components/ui";
 import { Colors, radii, spacing, typography } from "@/constants/Themes";
 import { useThemeColor } from "@/hooks/useThemeColor";
-import React from "react";
+import { UploadedFile } from "@/types/upload";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import {
   KeyboardAvoidingView,
   Modal,
@@ -17,8 +18,10 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 type Props = {
   visible: boolean;
   onClose: () => void;
+  setDocument: Dispatch<SetStateAction<UploadedFile>>;
 };
-export default function UploadText({ visible, onClose }: Props) {
+export default function UploadText({ visible, onClose, setDocument }: Props) {
+  const [text, setText] = useState<string>("");
   const backgroundColor = useThemeColor({}, "background");
   const textColor = useThemeColor({}, "text");
   return (
@@ -33,6 +36,7 @@ export default function UploadText({ visible, onClose }: Props) {
             <TextInput
               style={[styles.textBox, { color: textColor }]}
               multiline
+              onChangeText={(text) => setText(text)}
             ></TextInput>
             <View
               style={[
@@ -44,10 +48,34 @@ export default function UploadText({ visible, onClose }: Props) {
                 { backgroundColor },
               ]}
             >
-              <Button variant="secondary" onPress={onClose}>
+              <Button
+                variant="ghost"
+                onPress={() => {
+                  setDocument({
+                    images: [],
+                    file: null,
+                    text: null,
+                  });
+                  console.log(`Document is now empty`);
+                  onClose();
+                }}
+              >
                 Cancel
               </Button>
-              <Button variant="primary" onPress={onClose}>
+              <Button
+                variant={text ? "primary" : "secondary"}
+                disabled={!text}
+                onPress={() => {
+                  setDocument({
+                    images: [],
+                    file: null,
+                    text: text,
+                  });
+                  console.log(`document set to ${text}`);
+                  setText("");
+                  onClose();
+                }}
+              >
                 Confirm
               </Button>
             </View>

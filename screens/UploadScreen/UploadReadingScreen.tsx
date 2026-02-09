@@ -60,13 +60,13 @@ export default function UploadReadingScreen() {
     }
   };
 
-  const handleConfirmText = (text: string) => {
-    setUpload({
-      images: [],
-      file: null,
-      text,
-    });
-  };
+  // const handleConfirmText = (text: string) => {
+  //   setUpload({
+  //     images: [],
+  //     file: null,
+  //     text,
+  //   });
+  // };
 
   return (
     <View style={styles.screen}>
@@ -96,6 +96,7 @@ export default function UploadReadingScreen() {
         <UploadText
           visible={isTextModalVisible}
           onClose={() => setTextModalVisible(false)}
+          setDocument={setUpload}
         />
         <UploadActionButton
           label="Upload File"

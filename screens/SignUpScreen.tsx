@@ -123,7 +123,7 @@ export default function SignUp() {
         />
       </View>
       <View style={[styles.verticallySpaced, styles.mt20]}>
-        <Button  disabled={loading} onPress={() => signUp()}>Sign up</Button>
+        <Button variant="primary" size="lg" disabled={loading} onPress={() => signUp()}>Sign up</Button>
       </View>
     </ScrollView>
   )

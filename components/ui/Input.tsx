@@ -14,15 +14,18 @@ export function Input(props: InputProps) {
     inputStyle,
     labelStyle,
     inputContainerStyle,
+    placeholderTextColor,
     ...otherProps
   } = props;
   const color = useThemeColor({ light: lightColor, dark: darkColor }, "text");
   const labelColor = useThemeColor({}, "textSecondary");
   const borderColor = useThemeColor({}, "border");
   const backgroundColor = useThemeColor({}, "backgroundSecondary");
+  const placeholderColor = useThemeColor({}, "textTertiary");
 
   return (
     <DefaultInput
+      placeholderTextColor={placeholderTextColor ?? placeholderColor}
       inputStyle={[{ color }, inputStyle]}
       labelStyle={[{ color: labelColor }, labelStyle]}
       inputContainerStyle={[

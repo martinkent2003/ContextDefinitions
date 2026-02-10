@@ -73,4 +73,8 @@ export const styles = StyleSheet.create({
     alignSelf: "center",
     marginTop: "auto",
   },
+  container:{
+    flex: 1
+  },
+  
 });

@@ -6,4 +6,5 @@ export { Picker, PickerItem, PickerProps } from "./Picker";
 export { ScrollView, ScrollViewProps } from "./ScrollView";
 export { Text, TextProps } from "./Text";
 export { View, ViewProps } from "./View";
-
+export { TextArea, TextAreaProps} from "./TextArea";
+export { RadioButton, RadioButtonProps, RadioItem } from "./RadioButton";

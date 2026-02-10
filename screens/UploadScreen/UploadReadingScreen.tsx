@@ -3,11 +3,11 @@ import * as DocumentPicker from "expo-document-picker";
 import * as ImagePicker from "expo-image-picker";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { View } from "react-native";
 import Header from "./Header";
 import { styles } from "./styles";
 import UploadActionButton from "./UploadActionButton";
 import UploadText from "./UploadText";
+import { View } from "@/components/ui";
 
 export default function UploadReadingScreen() {
   const router = useRouter();

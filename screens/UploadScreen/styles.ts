@@ -1,3 +1,4 @@
+import { spacing } from "@/constants/Themes";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { StyleSheet } from "react-native";
 
@@ -11,10 +12,11 @@ export const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    marginTop: 50,
+    marginTop: 30,
   },
   headerRoot: {
-    paddingTop: 40, // distance from very top
+    paddingTop: 40, 
+    paddingBottom: 20,
     paddingHorizontal: 24,
   },
   // Header
@@ -74,7 +76,8 @@ export const styles = StyleSheet.create({
     marginTop: "auto",
   },
   container:{
-    flex: 1
+    flex: 1,
+    padding: spacing.xs
   },
   
 });

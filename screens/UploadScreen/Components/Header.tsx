@@ -3,7 +3,7 @@ import React, { ComponentProps } from "react";
 import { Icon, Text } from "@/components/ui";
 import { Ionicons } from "@expo/vector-icons";
 import { TouchableOpacity, View } from "react-native";
-import { styles } from "./styles";
+import { styles } from "../styles";
 
 type Props = {
   title: string;

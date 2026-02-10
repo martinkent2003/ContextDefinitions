@@ -1,4 +1,4 @@
-import { radii, spacing, typography } from "@/constants/Themes";
+import { radii, spacing, theme, typography } from "@/constants/Themes";
 import { ThemeProps, useThemeColor } from "@/hooks/useThemeColor";
 import { StyleSheet, TouchableOpacity, View, ViewStyle } from "react-native";
 import { Text } from "./Text";
@@ -14,6 +14,7 @@ export type RadioButtonProps = ThemeProps & {
     selected?: string;
     onSelect?: (value: string) => void;
     label?: string;
+    subLabel?: string;
     direction?: "row" | "column";
     containerStyle?: ViewStyle;
 };
@@ -26,6 +27,7 @@ export function RadioButton(props: RadioButtonProps) {
         selected,
         onSelect,
         label,
+        subLabel,
         direction = "column",
         containerStyle,
     } = props;
@@ -37,10 +39,15 @@ export function RadioButton(props: RadioButtonProps) {
     const tintColor = useThemeColor({}, "tint");
 
     return (
-        <View style={styles.wrapper}>
+        <View style={[styles.wrapper , {borderColor: borderColor, backgroundColor: backgroundColor}]}>
             {label && (
                 <Text style={[styles.label, { color: labelColor }]}>
                     {label}
+                </Text>
+            )}
+            {subLabel && (
+                <Text style={[styles.subLabel, { color: labelColor }]}>
+                    {subLabel}
                 </Text>
             )}
             <View style={[styles.group, { flexDirection: direction }, containerStyle]}>
@@ -90,14 +97,22 @@ export function RadioButton(props: RadioButtonProps) {
 
 const styles = StyleSheet.create({
     wrapper: {
-        padding: spacing.xs,
-        marginHorizontal: spacing.sm
+        marginTop: spacing.md,
+        marginBottom: spacing.md,
+        padding: spacing.sm,
+        marginHorizontal: spacing.sm,
+        borderRadius: radii.md,
+        borderWidth: 2
     },
     label: {
-        fontSize: typography.sizes.xl,
+        fontSize: typography.sizes.xxl,
+        marginLeft: spacing.xs,
+    },
+    subLabel: {
+        fontSize: typography.sizes.sm,
         paddingBottom:spacing.xs,
         marginLeft: spacing.sm,
-        marginBottom: spacing.xs,
+        marginBottom: spacing.sm
     },
     group: {
         gap: spacing.md,
@@ -131,6 +146,6 @@ const styles = StyleSheet.create({
         fontSize: typography.sizes.lg,
     },
     optionDescription:{
-        fontSize: typography.sizes.md
+        fontSize: typography.sizes.sm
     }
 });

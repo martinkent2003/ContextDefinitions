@@ -9,9 +9,9 @@ import { Stack, useRouter, useSegments } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import "react-native-reanimated";
-
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { SessionProvider, useSession } from "@/hooks/useSession";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -49,9 +49,11 @@ export default function RootLayout() {
   }
 
   return (
-    <SessionProvider>
-      <RootLayoutNav />
-    </SessionProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SessionProvider>
+        <RootLayoutNav />
+      </SessionProvider>
+    </GestureHandlerRootView>
   );
 }
 
@@ -80,7 +82,6 @@ function RootLayoutNav() {
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="(public)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: "modal" }} />
       </Stack>
     </ThemeProvider>
   );

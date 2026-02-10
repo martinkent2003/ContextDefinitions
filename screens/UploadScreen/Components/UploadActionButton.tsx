@@ -1,6 +1,6 @@
 import { Button, View, Text, Icon} from "@/components/ui";
 import { Ionicons } from "@expo/vector-icons";
-import { styles } from "./styles";
+import { styles } from "../styles";
 
 type Props = {
   label: string;
@@ -21,22 +21,6 @@ export default function UploadActionButton({ label, icon, onPress }: Props) {
           <Text style={styles.uploadButtonLabel}> {label}</Text>
         </View>
       </Button>
-
-      {/* <TouchableOpacity
-        style={styles.uploadButton}
-        onPress={onPress}
-        activeOpacity={0.8}
-      >
-        <View style={styles.uploadButtonRow}>
-          <Ionicons
-            name={icon}
-            size={22}
-            color="#fff"
-            style={styles.uploadButtonIcon}
-          />
-          <Text style={styles.uploadButtonLabel}> {label}</Text>
-        </View>
-      </TouchableOpacity> */}
     </>
   );
 }

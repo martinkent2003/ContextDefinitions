@@ -1,4 +1,4 @@
-import { radii, spacing, typography } from '@/constants/Themes';
+import { radii, shadows, spacing, typography } from '@/constants/Themes';
 import { ThemeProps, useThemeColor } from '@/hooks/useThemeColor';
 import {
     ActivityIndicator,
@@ -61,8 +61,10 @@ export function Button(props: ButtonProps) {
   const primaryBg = useThemeColor({}, 'buttonBackground');
   const secondaryBg = useThemeColor({}, 'buttonBackgroundSecondary');
   const ghostBg = useThemeColor({}, 'buttonBackgroundGhost');
-  const uploadBg = useThemeColor({}, 'cardBackground');
   const errorColor = useThemeColor({}, 'error');
+  
+  const uploadBg = useThemeColor({}, 'cardBackground');
+  const cardBorderColor = useThemeColor({}, 'cardBorder')
   
   const primaryText = useThemeColor({}, 'textInverse');
   const secondaryText = useThemeColor({}, 'text');
@@ -97,8 +99,8 @@ export function Button(props: ButtonProps) {
     upload: {
       backgroundColor: uploadBg,
       textColor: primaryText,
-      borderWidth: 0,
-      borderColor: 'transparent'
+      borderWidth: 2,
+      borderColor: cardBorderColor
     }
   };
 
@@ -119,6 +121,7 @@ export function Button(props: ButtonProps) {
           opacity: disabled ? 0.5 : 1,
           width: fullWidth ? '100%' : undefined,
         },
+        shadows.md,
         style,
       ]}
       disabled={disabled || loading}

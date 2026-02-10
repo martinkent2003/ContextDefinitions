@@ -4,9 +4,8 @@ export type UploadedFile = {
   text: string | null;
 };
 
-export type UploadText = {
+export type UploadMetadata = {
   title: string;
   genre: string;
-  content: string;
   privacy: boolean;
-}
+};

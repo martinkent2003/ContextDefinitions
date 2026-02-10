@@ -2,6 +2,7 @@ import { Icon } from "@/components/ui";
 import { useClientOnlyValue } from "@/components/useClientOnlyValue";
 import Colors from "@/constants/Themes";
 import { useColorScheme } from "@/hooks/useColorScheme";
+import { UploadProvider } from "@/hooks/useUpload";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Link, Tabs } from "expo-router";
 import React from "react";
@@ -12,6 +13,7 @@ export default function TabLayout() {
   const colorScheme = useColorScheme();
 
   return (
+    <UploadProvider>
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
@@ -74,5 +76,6 @@ export default function TabLayout() {
         }}
       />
     </Tabs>
+    </UploadProvider>
   );
 }

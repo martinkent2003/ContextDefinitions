@@ -36,7 +36,6 @@ export default function TabLayout() {
             />
           ),
           headerRight: () => (
-            <Link href="/modal" asChild>
               <Pressable>
                 {({ pressed }) => (
                   <Icon
@@ -48,7 +47,6 @@ export default function TabLayout() {
                   />
                 )}
               </Pressable>
-            </Link>
           ),
         }}
       />

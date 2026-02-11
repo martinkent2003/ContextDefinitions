@@ -10,6 +10,7 @@ type UploadContextType = {
   setImages: (uris: string[]) => void;
   setFile: (file: { uri: string; name: string }) => void;
   setText: (content: string, title: string, genre: string, privacy: boolean) => void;
+  processUpload: () => Promise<void>;
   clearUpload: () => void;
 
   // Modal visibility
@@ -50,6 +51,24 @@ export function UploadProvider({ children }: { children: React.ReactNode }) {
     setMetadata({ title, genre, privacy });
   };
 
+  // Private — not exposed in context. Shared by images, files, scan, etc.
+  const runOcr = async (sources: string[]): Promise<string> => {
+    // TODO: Replace with actual OCR library call
+    return sources.map(() => "").join("\n");
+  };
+
+  const processUpload = async () => {
+    const sources =
+      upload.images.length > 0
+        ? upload.images
+        : upload.file
+          ? [upload.file.uri]
+          : [];
+    const text = await runOcr(sources);
+    setUpload((prev) => ({ ...prev, text }));
+    setTextModalVisible(true);
+  };
+
   const clearUpload = () => {
     setUpload(defaultUpload);
     setMetadata(null);
@@ -63,6 +82,7 @@ export function UploadProvider({ children }: { children: React.ReactNode }) {
         setImages,
         setFile,
         setText,
+        processUpload,
         clearUpload,
         isTextModalVisible,
         isConfirmImagesVisible,

@@ -1,15 +1,21 @@
 import { Input, TextArea, RadioButton } from "@/components/ui";
 import { useUpload } from "@/hooks/useUpload";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ConfirmModal from "../Components/ConfirmModal";
 
 export default function UploadText() {
-  const { isTextModalVisible, hideTextModal, setText, clearUpload } = useUpload();
+  const { upload, isTextModalVisible, hideTextModal, setText, clearUpload } = useUpload();
 
   const [title, setTitle] = useState<string>("");
   const [genre, setGenre] = useState<string>("");
   const [content, setContent] = useState<string>("");
   const [privacy, setPrivacy] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (upload.text !== null) {
+      setContent(upload.text);
+    }
+  }, [upload.text]);
 
   const handleConfirm = () => {
     setText(content, title, genre, privacy);
@@ -42,6 +48,7 @@ export default function UploadText() {
       <TextArea
         multiline
         placeholder="Enter Content"
+        value={content}
         onChangeText={(text) => setContent(text)}
       />
       <RadioButton

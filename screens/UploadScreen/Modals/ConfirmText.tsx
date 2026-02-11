@@ -3,8 +3,8 @@ import { useUpload } from "@/hooks/useUpload";
 import React, { useEffect, useState } from "react";
 import ConfirmModal from "../Components/ConfirmModal";
 
-export default function UploadText() {
-  const { upload, isTextModalVisible, hideTextModal, setText, clearUpload } = useUpload();
+export default function ConfirmText() {
+  const { upload, isConfirmTextModalVisible, hideConfirmTextModal, setText, clearUpload } = useUpload();
 
   const [title, setTitle] = useState<string>("");
   const [genre, setGenre] = useState<string>("");
@@ -19,17 +19,17 @@ export default function UploadText() {
 
   const handleConfirm = () => {
     setText(content, title, genre, privacy);
-    hideTextModal();
+    hideConfirmTextModal();
   };
 
   const handleCancel = () => {
     clearUpload();
-    hideTextModal();
+    hideConfirmTextModal();
   };
 
   return (
     <ConfirmModal
-      visible={isTextModalVisible}
+      visible={isConfirmTextModalVisible}
       title="Upload Text"
       icon="text-outline"
       onCancel={handleCancel}

@@ -4,26 +4,14 @@ import { useUpload } from "@/hooks/useUpload";
 import Header from "./Components/Header";
 import { styles } from "./styles";
 import UploadActionButton from "./Components/UploadActionButton";
-import UploadText from "./Modals/UploadText";
 import ConfirmImages from "./Modals/ConfirmImages";
 import { View } from "@/components/ui";
+import ConfirmText from "./Modals/ConfirmText";
+import ConfirmFile from "./Modals/ConfirmFile";
 
 export default function UploadReadingScreen() {
   const router = useRouter();
-  const { setFile, showTextModal, showConfirmImages } = useUpload();
-
-  const pickDocumentAsync = async () => {
-    const result = await DocumentPicker.getDocumentAsync({
-      type: [
-        "application/pdf",
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-      ],
-    });
-
-    if (!result.canceled) {
-      setFile({ uri: result.assets[0].uri, name: result.assets[0].name });
-    }
-  };
+  const { setFile, showConfirmTextModal, showConfirmFileModal, showConfirmImageModal } = useUpload();
 
   return (
     <View style={styles.screen}>
@@ -37,21 +25,22 @@ export default function UploadReadingScreen() {
         <UploadActionButton
           label="Select Image"
           icon="image-outline"
-          onPress={showConfirmImages}
+          onPress={showConfirmImageModal}
         />
         <UploadActionButton
           label="Paste Text"
           icon="text-outline"
-          onPress={showTextModal}
+          onPress={showConfirmTextModal}
         />
         <UploadActionButton
           label="Upload File"
           icon="cloud-upload-outline"
-          onPress={pickDocumentAsync}
+          onPress={showConfirmFileModal}
         />
         {/* MODALS */}
-        <UploadText />
+        <ConfirmText />
         <ConfirmImages />
+        <ConfirmFile/>
       </View>
     </View>
   );

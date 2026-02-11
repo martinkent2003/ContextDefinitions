@@ -14,12 +14,15 @@ type UploadContextType = {
   clearUpload: () => void;
 
   // Modal visibility
-  isTextModalVisible: boolean;
-  isConfirmImagesVisible: boolean;
-  showTextModal: () => void;
-  hideTextModal: () => void;
-  showConfirmImages: () => void;
-  hideConfirmImages: () => void;
+  isConfirmTextModalVisible: boolean;
+  isConfirmImageModalVisible: boolean;
+  isConfirmFileModalVisible: boolean;
+  showConfirmTextModal: () => void;
+  hideConfirmTextModal: () => void;
+  showConfirmImageModal: () => void;
+  hideConfirmImageModal: () => void;
+  showConfirmFileModal: () => void;
+  hideConfirmFileModal: () => void;
 };
 
 const defaultUpload: UploadedFile = {
@@ -33,8 +36,9 @@ const UploadContext = createContext<UploadContextType | null>(null);
 export function UploadProvider({ children }: { children: React.ReactNode }) {
   const [upload, setUpload] = useState<UploadedFile>(defaultUpload);
   const [metadata, setMetadata] = useState<UploadMetadata | null>(null);
-  const [isTextModalVisible, setTextModalVisible] = useState(false);
-  const [isConfirmImagesVisible, setConfirmImagesVisible] = useState(false);
+  const [isConfirmTextModalVisible, setTextModalVisible] = useState(false);
+  const [isConfirmImageModalVisible, setConfirmImagesVisible] = useState(false);
+  const [isConfirmFileModalVisible, setConfirmFileVisible] = useState(false);
 
   const setImages = (uris: string[]) => {
     setUpload({ images: uris, file: null, text: null });
@@ -84,12 +88,15 @@ export function UploadProvider({ children }: { children: React.ReactNode }) {
         setText,
         processUpload,
         clearUpload,
-        isTextModalVisible,
-        isConfirmImagesVisible,
-        showTextModal: () => setTextModalVisible(true),
-        hideTextModal: () => setTextModalVisible(false),
-        showConfirmImages: () => setConfirmImagesVisible(true),
-        hideConfirmImages: () => setConfirmImagesVisible(false),
+        isConfirmTextModalVisible,
+        isConfirmImageModalVisible,
+        showConfirmTextModal: () => setTextModalVisible(true),
+        hideConfirmTextModal: () => setTextModalVisible(false),
+        showConfirmImageModal: () => setConfirmImagesVisible(true),
+        hideConfirmImageModal: () => setConfirmImagesVisible(false),
+        isConfirmFileModalVisible,
+        showConfirmFileModal: () => setConfirmFileVisible(true),
+        hideConfirmFileModal: () => setConfirmFileVisible(false),
       }}
     >
       {children}

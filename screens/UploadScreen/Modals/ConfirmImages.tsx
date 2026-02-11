@@ -7,7 +7,7 @@ import ConfirmModal from "../Components/ConfirmModal";
 import ImageCarousel from "../Components/ImageCarousel";
 
 export default function ConfirmImages() {
-  const { upload, setImages, isConfirmImagesVisible, hideConfirmImages, processUpload, clearUpload } = useUpload();
+  const { upload, setImages, isConfirmImageModalVisible, hideConfirmImageModal, processUpload, clearUpload } = useUpload();
 
   const pickImageAsync = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -23,7 +23,7 @@ export default function ConfirmImages() {
   };
 
   const handleConfirm = async () => {
-    hideConfirmImages();
+    hideConfirmImageModal();
     await processUpload();
   };
 
@@ -31,10 +31,10 @@ export default function ConfirmImages() {
 
   return (
     <ConfirmModal
-      visible={isConfirmImagesVisible}
+      visible={isConfirmImageModalVisible}
       title="Select Images"
       icon="images-outline"
-      onCancel={() => { clearUpload(); hideConfirmImages(); }}
+      onCancel={() => { clearUpload(); hideConfirmImageModal(); }}
       onConfirm={handleConfirm}
       confirmDisabled={!hasImages}
     >

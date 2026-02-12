@@ -1,5 +1,6 @@
 import { createContext, useContext, useState } from "react";
 import { UploadedFile, UploadMetadata } from "@/types/upload";
+import { recognizeText } from "rn-mlkit-ocr";
 
 type UploadContextType = {
   // Data
@@ -55,10 +56,12 @@ export function UploadProvider({ children }: { children: React.ReactNode }) {
     setMetadata({ title, genre, privacy });
   };
 
-  // Private — not exposed in context. Shared by images, files, scan, etc.
   const runOcr = async (sources: string[]): Promise<string> => {
-    // TODO: Replace with actual OCR library call
-    return sources.map(() => "").join("\n");
+    //TODO: add specific language capabilities as it currently only works with english/spanish
+    const results = await Promise.all(
+      sources.map((uri) => recognizeText(uri))
+    );
+    return results.map((r) => r.text).join("\n");
   };
 
   const processUpload = async () => {

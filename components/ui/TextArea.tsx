@@ -28,12 +28,11 @@ export function TextArea(props: TextAreaProps) {
                     flex: 1,
                     minHeight: 300,
                     padding: spacing.sm,
-                    margin: spacing.sm,
+                    marginHorizontal: spacing.sm,
                     borderColor: borderColor,
                     borderWidth: 2,
                     borderRadius: radii.md,
                     fontSize: typography.sizes.md,
-                    paddingHorizontal:spacing.sm,
                     backgroundColor: backgroundColor,
                     color: color
                 },

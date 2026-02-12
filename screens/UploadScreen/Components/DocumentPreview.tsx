@@ -18,7 +18,7 @@ export default function DocumentPreview({ fileUri }: Props) {
     <View
       style={{
         width: previewWidth,
-        height: previewWidth,
+        height: previewWidth * 1.3,
         alignSelf: "center",
         borderRadius: radii.lg,
         borderWidth: 1,
@@ -28,8 +28,9 @@ export default function DocumentPreview({ fileUri }: Props) {
     >
       <Pdf
         source={{ uri: fileUri }}
-        style={{ flex: 1 }}
+        style={{ flex: 1, width: previewWidth }}
         enablePaging
+        horizontal
       />
     </View>
   );

@@ -11,8 +11,10 @@ export function Input(props: InputProps) {
   const {
     lightColor,
     darkColor,
+    style,
     inputStyle,
     labelStyle,
+    containerStyle,
     inputContainerStyle,
     placeholderTextColor,
     ...otherProps
@@ -28,6 +30,7 @@ export function Input(props: InputProps) {
       placeholderTextColor={placeholderTextColor ?? placeholderColor}
       inputStyle={[{ color }, inputStyle]}
       labelStyle={[{ color: labelColor }, labelStyle]}
+      containerStyle={containerStyle}
       inputContainerStyle={[
         {
           borderWidth: 2,
@@ -35,10 +38,11 @@ export function Input(props: InputProps) {
           borderRadius: radii.md,
           backgroundColor: backgroundColor,
           paddingHorizontal: spacing.sm,
-          borderBottomWidth: 1,
+          borderBottomWidth: 2,
         },
         inputContainerStyle,
       ]}
+      errorStyle={{ height: 0, margin: 0 }}
       {...otherProps}
     />
   );

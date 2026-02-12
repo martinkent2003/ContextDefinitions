@@ -1,6 +1,7 @@
 import { createContext, useContext, useState } from "react";
 import { UploadedFile, UploadMetadata } from "@/types/upload";
 import { recognizeText } from "rn-mlkit-ocr";
+//import { extractText } from "expo-pdf-text-extract";
 
 type UploadContextType = {
   // Data
@@ -18,12 +19,15 @@ type UploadContextType = {
   isConfirmTextModalVisible: boolean;
   isConfirmImageModalVisible: boolean;
   isConfirmFileModalVisible: boolean;
+  isConfirmScanModalVisible: boolean;
   showConfirmTextModal: () => void;
   hideConfirmTextModal: () => void;
   showConfirmImageModal: () => void;
   hideConfirmImageModal: () => void;
   showConfirmFileModal: () => void;
   hideConfirmFileModal: () => void;
+  showConfirmScanModal: () => void;
+  hideConfirmScanModal: () => void;
 };
 
 const defaultUpload: UploadedFile = {
@@ -40,6 +44,7 @@ export function UploadProvider({ children }: { children: React.ReactNode }) {
   const [isConfirmTextModalVisible, setTextModalVisible] = useState(false);
   const [isConfirmImageModalVisible, setConfirmImagesVisible] = useState(false);
   const [isConfirmFileModalVisible, setConfirmFileVisible] = useState(false);
+  const [isConfirmScanModalVisible, setConfirmScanVisible] = useState(false);
 
   const setImages = (uris: string[]) => {
     setUpload({ images: uris, file: null, text: null });
@@ -65,13 +70,13 @@ export function UploadProvider({ children }: { children: React.ReactNode }) {
   };
 
   const processUpload = async () => {
-    const sources =
-      upload.images.length > 0
-        ? upload.images
-        : upload.file
-          ? [upload.file.uri]
-          : [];
-    const text = await runOcr(sources);
+    let text = "";
+    if (upload.images.length > 0) {
+      text = await runOcr(upload.images);
+    } else if (upload.file) {
+      text = "not working"
+      //text = await extractText(upload.file.uri);
+    }
     setUpload((prev) => ({ ...prev, text }));
     setTextModalVisible(true);
   };
@@ -92,14 +97,17 @@ export function UploadProvider({ children }: { children: React.ReactNode }) {
         processUpload,
         clearUpload,
         isConfirmTextModalVisible,
-        isConfirmImageModalVisible,
         showConfirmTextModal: () => setTextModalVisible(true),
         hideConfirmTextModal: () => setTextModalVisible(false),
+        isConfirmImageModalVisible,
         showConfirmImageModal: () => setConfirmImagesVisible(true),
         hideConfirmImageModal: () => setConfirmImagesVisible(false),
         isConfirmFileModalVisible,
         showConfirmFileModal: () => setConfirmFileVisible(true),
         hideConfirmFileModal: () => setConfirmFileVisible(false),
+        isConfirmScanModalVisible,
+        showConfirmScanModal: () => setConfirmScanVisible(true),
+        hideConfirmScanModal: () => setConfirmScanVisible(false),
       }}
     >
       {children}

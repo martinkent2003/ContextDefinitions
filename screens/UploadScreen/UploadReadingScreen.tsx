@@ -8,10 +8,11 @@ import ConfirmImages from "./Modals/ConfirmImages";
 import { View } from "@/components/ui";
 import ConfirmText from "./Modals/ConfirmText";
 import ConfirmFile from "./Modals/ConfirmFile";
+import ConfirmScan from "./Modals/ConfirmScan";
 
 export default function UploadReadingScreen() {
   const router = useRouter();
-  const { setFile, showConfirmTextModal, showConfirmFileModal, showConfirmImageModal } = useUpload();
+  const { setFile, showConfirmTextModal, showConfirmFileModal, showConfirmImageModal, showConfirmScanModal } = useUpload();
 
   return (
     <View style={styles.screen}>
@@ -20,7 +21,7 @@ export default function UploadReadingScreen() {
         <UploadActionButton
           label="Scan"
           icon="scan-outline"
-          onPress={() => {}}
+          onPress={showConfirmScanModal}
         />
         <UploadActionButton
           label="Select Image"
@@ -41,6 +42,7 @@ export default function UploadReadingScreen() {
         <ConfirmText />
         <ConfirmImages />
         <ConfirmFile/>
+        <ConfirmScan />
       </View>
     </View>
   );

@@ -97,8 +97,6 @@ export function RadioButton(props: RadioButtonProps) {
 
 const styles = StyleSheet.create({
     wrapper: {
-        marginTop: spacing.md,
-        marginBottom: spacing.md,
         padding: spacing.sm,
         marginHorizontal: spacing.sm,
         borderRadius: radii.md,

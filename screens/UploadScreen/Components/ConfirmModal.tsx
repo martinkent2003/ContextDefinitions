@@ -43,7 +43,9 @@ export default function ConfirmModal({
           >
             <ScrollView style={styles.container} keyboardShouldPersistTaps="handled">
               <Header title={title} iconName={icon} onBack={onCancel} />
-              {children}
+              <View style={{ gap: spacing.md, paddingVertical: spacing.sm }}>
+                {children}
+              </View>
               <View
                 style={[
                   {

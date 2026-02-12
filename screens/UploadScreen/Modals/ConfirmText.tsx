@@ -2,6 +2,7 @@ import { Input, TextArea, RadioButton } from "@/components/ui";
 import { useUpload } from "@/hooks/useUpload";
 import React, { useEffect, useState } from "react";
 import ConfirmModal from "../Components/ConfirmModal";
+import { uploadReading } from "@/services/readings";
 
 export default function ConfirmText() {
   const { upload, isConfirmTextModalVisible, hideConfirmTextModal, setText, clearUpload } = useUpload();
@@ -19,7 +20,6 @@ export default function ConfirmText() {
 
   const handleConfirm = () => {
     setText(content, title, genre, privacy);
-    //push to supabase shit
     hideConfirmTextModal();
   };
 

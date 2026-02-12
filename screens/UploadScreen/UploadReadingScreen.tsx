@@ -1,4 +1,3 @@
-import * as DocumentPicker from "expo-document-picker";
 import { useRouter } from "expo-router";
 import { useUpload } from "@/hooks/useUpload";
 import Header from "./Components/Header";

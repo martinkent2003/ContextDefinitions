@@ -19,6 +19,7 @@ export default function ConfirmText() {
 
   const handleConfirm = () => {
     setText(content, title, genre, privacy);
+    //push to supabase shit
     hideConfirmTextModal();
   };
 

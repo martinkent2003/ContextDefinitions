@@ -1,7 +1,7 @@
 import { createContext, useContext, useState } from "react";
 import { UploadedFile, UploadMetadata } from "@/types/upload";
 import { recognizeText } from "rn-mlkit-ocr";
-//import { extractText } from "expo-pdf-text-extract";
+import { convert } from "react-native-pdf-to-image";
 
 type UploadContextType = {
   // Data
@@ -74,8 +74,8 @@ export function UploadProvider({ children }: { children: React.ReactNode }) {
     if (upload.images.length > 0) {
       text = await runOcr(upload.images);
     } else if (upload.file) {
-      text = "not working"
-      //text = await extractText(upload.file.uri);
+      const { outputFiles } = await convert(upload.file.uri);
+      text = await runOcr(outputFiles ?? []);
     }
     setUpload((prev) => ({ ...prev, text }));
     setTextModalVisible(true);

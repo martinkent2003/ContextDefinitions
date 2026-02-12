@@ -11,10 +11,7 @@ export default function ConfirmFile() {
 
   const pickDocumentAsync = async () => {
     const result = await DocumentPicker.getDocumentAsync({
-      type: [
-        "application/pdf",
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-      ],
+      type: ["application/pdf"],
     });
 
     if (!result.canceled) {

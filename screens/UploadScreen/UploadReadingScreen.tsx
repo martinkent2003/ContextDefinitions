@@ -15,7 +15,7 @@ export default function UploadReadingScreen() {
 
   return (
     <View style={styles.screen}>
-      <Header title="Upload Reading" onBack={() => router.back()} />
+      <Header title="Upload Reading"  />
       <View style={styles.content}>
         <UploadActionButton
           label="Scan"

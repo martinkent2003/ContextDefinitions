@@ -4,6 +4,7 @@ import { recognizeText } from "rn-mlkit-ocr";
 import { uploadReading } from "@/services/readings";
 import { Alert } from "react-native";
 import { useLoading } from "./useLoading";
+import { useHome } from "./useHome";
 //import { convert } from "react-native-pdf-to-image";
 
 type UploadContextType = {
@@ -50,6 +51,8 @@ export function UploadProvider({ children }: { children: React.ReactNode }) {
   const [isConfirmScanModalVisible, setConfirmScanVisible] = useState(false);
   const { showLoading, hideLoading } = useLoading();
 
+  const { fetchFeed } = useHome();
+
   const setImages = (uris: string[]) => {
     setUpload({ images: uris, file: null, text: null });
     setMetadata(null);
@@ -67,10 +70,10 @@ export function UploadProvider({ children }: { children: React.ReactNode }) {
       //push to supabase shit
     try {
       showLoading("Uploading Reading...", "typing")
-      //const result = await uploadReading(content, title, genre, privacy)
-      await new Promise(resolve => setTimeout(resolve, 10000));
+      const result = await uploadReading(content, title, genre, privacy)
       hideLoading()
       Alert.alert("Successfully uploaded " + title)
+      fetchFeed()
     }
     catch (err) {
       Alert.alert("Error uploading " + title)

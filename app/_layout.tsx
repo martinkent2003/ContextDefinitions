@@ -5,7 +5,7 @@ import {
   ThemeProvider,
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import { Stack, useRouter, useSegments } from "expo-router";
+import { Redirect, Stack, useSegments } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import "react-native-reanimated";
@@ -64,21 +64,12 @@ function RootLayoutNav() {
   const colorScheme = useColorScheme();
   const { session, isLoading } = useSession();
   const segments = useSegments();
-  const router = useRouter();
 
-  useEffect(() => {
-    if (isLoading) return;
+  if (isLoading) {
+    return null;
+  }
 
-    const inAuthGroup = segments[0] === "(public)";
-
-    if (!session && !inAuthGroup) {
-      // Redirect to login if not authenticated
-      router.replace("/(public)/welcome");
-    } else if (session && inAuthGroup) {
-      // Redirect to tabs if authenticated
-      router.replace("/(tabs)/home");
-    }
-  }, [session, segments, isLoading]);
+  const inAuthGroup = segments[0] === "(public)";
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
@@ -87,6 +78,8 @@ function RootLayoutNav() {
         <Stack.Screen name="(public)" options={{ headerShown: false }} />
         <Stack.Screen name="modal" options={{ presentation: "modal" }} />
       </Stack>
+      {!session && !inAuthGroup && <Redirect href="/(public)/welcome" />}
+      {session && inAuthGroup && <Redirect href="/(tabs)/home" />}
     </ThemeProvider>
   );
 }

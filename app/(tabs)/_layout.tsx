@@ -1,5 +1,5 @@
 import { Icon } from "@/components/ui";
-import { useClientOnlyValue } from "@/components/useClientOnlyValue";
+import { useClientOnlyValue } from "@/hooks/useClientOnlyValue";
 import Colors from "@/constants/Themes";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { UploadProvider } from "@/hooks/useUpload";

@@ -1,5 +1,4 @@
 import { spacing } from "@/constants/Themes";
-import { useThemeColor } from "@/hooks/useThemeColor";
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({

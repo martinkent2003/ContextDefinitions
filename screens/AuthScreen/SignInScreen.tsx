@@ -2,8 +2,8 @@ import { signInWithEmail } from '@/services/auth'
 import { useLoading } from '@/hooks/useLoading'
 import React, { useState } from 'react'
 import { Alert, AppState, StyleSheet } from 'react-native'
-import { Button, Icon, Input, ScrollView, View } from '../components/ui'
-import { supabase } from '../utils/supabase'
+import { Button, Icon, Input, ScrollView, View } from '../../components/ui'
+import { supabase } from '../../utils/supabase'
 
 // Tells Supabase Auth to continuously refresh the session automatically if
 // the app is in the foreground. When this is added, you will continue to receive

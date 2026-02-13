@@ -4,7 +4,7 @@ import { useLoading } from '@/hooks/useLoading'
 import { LanguageCode, SignUpData } from '@/types/auth'
 import React, { useState } from 'react'
 import { Alert, AppState, StyleSheet } from 'react-native'
-import { supabase } from '../utils/supabase'
+import { supabase } from '../../utils/supabase'
 
 const LANGUAGES: { label: string; value: LanguageCode }[] = [
   { label: 'English', value: 'en' },

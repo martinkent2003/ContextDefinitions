@@ -2,78 +2,71 @@ import { Icon } from "@/components/ui";
 import { useClientOnlyValue } from "@/hooks/useClientOnlyValue";
 import Colors from "@/constants/Themes";
 import { useColorScheme } from "@/hooks/useColorScheme";
-import { UploadProvider } from "@/hooks/useUpload";
-import { Tabs, useRouter } from "expo-router";
+import { Tabs } from "expo-router";
 import React from "react";
-import { Pressable } from "react-native";
+import { HomeProvider } from "@/hooks/useHome";
+import { UploadProvider } from "@/hooks/useUpload";
 
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
-  const router = useRouter();
 
   return (
-    <UploadProvider>
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
-        headerTransparent:true,
-        headerTitle:'',
-        // Disable the static render of the header on web
-        // to prevent a hydration error in React Navigation v6.
-        headerShown: useClientOnlyValue(false, true),
-      }}
-    >
-      <Tabs.Screen
-        name="home"
-        options={{
-          tabBarIcon: ({ color, focused }) => (
-            <Icon
-              library="FontAwesome"
-              name= {focused? "home" : "home"}
-              color={color}
-              size={24}
-            />
-          ),
-          headerRight: () => (
-              <Pressable onPress={() => router.push("/modal")}>
-                {({ pressed }) => (
-                  <Icon
-                    library="FontAwesome"
-                    name="user"
-                    size={40}
-                    color={Colors[colorScheme ?? "light"].text}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="create"
-        options={{
-          tabBarIcon: ({ color, focused }) => (
-            <Icon library="FontAwesome" name="plus" color={color} size={24} />
-          ),
-          headerShown: false,
-        }}
-      />
-      <Tabs.Screen
-        name="library"
-        options={{
-          tabBarIcon: ({color, focused}) => (
-            <Icon
-              library="FontAwesome"
-              name={focused ? "folder-open" : "folder"}
-              color={color}
-              size = {24}
-            />
-          ),
-          headerShown: false,
-        }}
-      />
-    </Tabs>
-    </UploadProvider>
+    <HomeProvider>
+      <UploadProvider>
+        <Tabs
+          screenOptions={{
+            tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
+            headerTransparent:true,
+            headerTitle:'',
+            // Disable the static render of the header on web
+            // to prevent a hydration error in React Navigation v6.
+            headerShown: useClientOnlyValue(false, true),
+          }}
+        >
+          <Tabs.Screen
+            name="home"
+            options={{
+              tabBarIcon: ({ color, focused }) => (
+                <Icon
+                  library="FontAwesome"
+                  name= {focused? "home" : "home"}
+                  color={color}
+                  size={24}
+                />
+              ),
+              headerShown: false,
+            }}
+          />
+          <Tabs.Screen
+            name="create"
+            options={{
+              tabBarIcon: ({ color, focused }) => (
+                <Icon 
+                library="FontAwesome" 
+                name="plus" 
+                color={color} 
+                size={24} />
+              ),
+              headerShown: false,
+            }}
+          />
+          <Tabs.Screen
+            name="library"
+            options={{
+              tabBarIcon: ({color, focused}) => (
+                <Icon
+                  library="FontAwesome"
+                  name={focused ? "folder-open" : "folder"}
+                  color={color}
+                  size = {24}
+                />
+              ),
+              headerShown: false,
+            }}
+          />
+        </Tabs>
+      </UploadProvider>
+    </HomeProvider>
   );
 }

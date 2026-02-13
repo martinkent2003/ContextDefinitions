@@ -1,4 +1,4 @@
-import SignUpScreen from '@/screens/SignUpScreen';
+import SignUpScreen from '@/screens/AuthScreen/SignUpScreen';
 
 export default function SignUp() {
   return (

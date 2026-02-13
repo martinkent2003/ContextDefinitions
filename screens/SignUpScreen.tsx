@@ -1,5 +1,6 @@
 import { Button, Icon, Input, Picker, ScrollView, View } from '@/components/ui'
 import { signUpWithEmail } from '@/services/auth'
+import { useLoading } from '@/hooks/useLoading'
 import { LanguageCode, SignUpData } from '@/types/auth'
 import React, { useState } from 'react'
 import { Alert, AppState, StyleSheet } from 'react-native'
@@ -40,11 +41,10 @@ export default function SignUp() {
   const [nativeLanguage, setNativeLanguage] = useState<LanguageCode>('en')
   const [targetLanguage, setTargetLanguage] = useState<LanguageCode>('ja')
 
-  const [loading, setLoading] = useState(false)
-
+  const { showLoading, hideLoading } = useLoading()
 
   async function signUp() {
-    setLoading(true)
+    showLoading("Creating account...", "typing")
     const signUpData: SignUpData = {
       email,
       password,
@@ -58,10 +58,10 @@ export default function SignUp() {
       data: { session },
       error,
     } = await signUpWithEmail(signUpData)
-    
+
     if (error) Alert.alert(error.message)
     if (!session) Alert.alert('Please check your inbox for email verification!')
-    setLoading(false)
+    hideLoading()
   }
 
   return (
@@ -123,7 +123,7 @@ export default function SignUp() {
         />
       </View>
       <View style={[styles.verticallySpaced, styles.mt20]}>
-        <Button variant="primary" size="lg" disabled={loading} onPress={() => signUp()}>Sign up</Button>
+        <Button variant="primary" size="lg" onPress={() => signUp()}>Sign up</Button>
       </View>
     </ScrollView>
   )

@@ -11,6 +11,7 @@ import { useEffect } from "react";
 import "react-native-reanimated";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { SessionProvider, useSession } from "@/hooks/useSession";
+import { LoadingProvider } from "@/hooks/useLoading";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export {
@@ -50,9 +51,11 @@ export default function RootLayout() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <SessionProvider>
-        <RootLayoutNav />
-      </SessionProvider>
+      <LoadingProvider>
+        <SessionProvider>
+          <RootLayoutNav />
+        </SessionProvider>
+      </LoadingProvider>
     </GestureHandlerRootView>
   );
 }

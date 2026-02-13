@@ -3,13 +3,14 @@ import { useClientOnlyValue } from "@/components/useClientOnlyValue";
 import Colors from "@/constants/Themes";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { UploadProvider } from "@/hooks/useUpload";
-import { Tabs } from "expo-router";
+import { Tabs, useRouter } from "expo-router";
 import React from "react";
 import { Pressable } from "react-native";
 
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const router = useRouter();
 
   return (
     <UploadProvider>
@@ -35,7 +36,7 @@ export default function TabLayout() {
             />
           ),
           headerRight: () => (
-              <Pressable>
+              <Pressable onPress={() => router.push("/modal")}>
                 {({ pressed }) => (
                   <Icon
                     library="FontAwesome"

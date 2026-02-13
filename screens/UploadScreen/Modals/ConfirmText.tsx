@@ -10,7 +10,7 @@ export default function ConfirmText() {
   const [title, setTitle] = useState<string>("");
   const [genre, setGenre] = useState<string>("");
   const [content, setContent] = useState<string>("");
-  const [privacy, setPrivacy] = useState<boolean>(false);
+  const [privacy, setPrivacy] = useState<boolean>(true);
 
   useEffect(() => {
     if (upload.text !== null) {
@@ -56,7 +56,7 @@ export default function ConfirmText() {
         label="Privacy"
         subLabel="Choose who can access"
         items={[
-          { label: "Public", description: "Shared with everyone", value: "public" },
+          { label: "Public", description: "Shared with everyone", value: "public" , warning: "This reading will be visible to everyone" },
           { label: "Private", description: "Only yours ;)", value: "private" },
         ]}
         selected={privacy ? "private" : "public"}

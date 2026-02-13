@@ -1,12 +1,13 @@
 import { radii, spacing, theme, typography } from "@/constants/Themes";
 import { ThemeProps, useThemeColor } from "@/hooks/useThemeColor";
-import { StyleSheet, TouchableOpacity, View, ViewStyle } from "react-native";
+import { Alert, StyleSheet, TouchableOpacity, View, ViewStyle } from "react-native";
 import { Text } from "./Text";
 
 export type RadioItem = {
     label: string;
     description: string;
     value: string;
+    warning?: string;
 };
 
 export type RadioButtonProps = ThemeProps & {
@@ -37,6 +38,20 @@ export function RadioButton(props: RadioButtonProps) {
     const backgroundColor = useThemeColor({}, "backgroundSecondary")
     const borderColor = useThemeColor({}, "border");
     const tintColor = useThemeColor({}, "tint");
+    const warningColor = useThemeColor({}, "error");
+
+    const handleSelect = (item: RadioItem) => {
+        if (item.value === selected) return;
+
+        if (item.warning) {
+            Alert.alert("Warning", item.warning, [
+                { text: "Cancel", style: "cancel" },
+                { text: "Confirm", style: "destructive", onPress: () => onSelect?.(item.value) },
+            ]);
+        } else {
+            onSelect?.(item.value);
+        }
+    };
 
     return (
         <View style={[styles.wrapper , {borderColor: borderColor, backgroundColor: backgroundColor}]}>
@@ -57,8 +72,7 @@ export function RadioButton(props: RadioButtonProps) {
                         <TouchableOpacity
                             key={item.value}
                             style={[styles.option, {borderColor: borderColor, backgroundColor: backgroundColor}]}
-                            onPress={() => onSelect?.(item.value)}
-                            activeOpacity={0.8}
+                            onPress={() => handleSelect(item)}
                         >
                             <View style={styles.textContainer}>
                                 <Text style={[styles.optionText, { color: textColor }]}>
@@ -74,15 +88,15 @@ export function RadioButton(props: RadioButtonProps) {
                                 style={[
                                     styles.circle,
                                     {
-                                        borderColor: isSelected ? tintColor : borderColor,
+                                        borderColor: isSelected ? (item.warning ? warningColor :tintColor) : borderColor,
                                     },
                                 ]}
                             >
-                                {isSelected && (
+                                {isSelected &&  (
                                     <View
                                         style={[
                                             styles.filled,
-                                            { backgroundColor: tintColor },
+                                            { backgroundColor: item.warning ? warningColor : tintColor },
                                         ]}
                                     />
                                 )}
@@ -145,5 +159,5 @@ const styles = StyleSheet.create({
     },
     optionDescription:{
         fontSize: typography.sizes.sm
-    }
+    },
 });

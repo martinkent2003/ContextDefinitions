@@ -62,12 +62,16 @@ export const styles = StyleSheet.create({
     fontSize: typography.sizes.xl,
   },
 
-  // TODO: Reimplement Help link
+  // Help link
   helpContainer: {
     flexDirection: "row",
     alignItems: "center",
     alignSelf: "center",
     marginTop: "auto",
+  },
+  container:{
+    flex: 1,
+    padding: spacing.xs
   },
   
 });

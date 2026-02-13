@@ -5,9 +5,9 @@ export const styles = StyleSheet.create({
     // Screen
   screen: {
     flex: 1,
-    paddingHorizontal: 24,
-    paddingTop: 50,
-    paddingBottom: 32,
+    paddingHorizontal: spacing.md,
+    paddingTop: spacing.xxl,
+    paddingBottom: spacing.xl,
     //borderColor: "#FFFFFF",
     //borderWidth: 1,
   },
@@ -18,5 +18,7 @@ export const styles = StyleSheet.create({
   feed: {
     marginTop:spacing.md,
     gap: spacing.sm,
+    //borderColor: "#FFFFFF",
+    //borderWidth: 1,
   },
 });

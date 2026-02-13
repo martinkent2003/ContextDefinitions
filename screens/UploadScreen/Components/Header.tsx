@@ -8,24 +8,24 @@ import { styles } from "../styles";
 type Props = {
   title: string;
   iconName?: ComponentProps<typeof Ionicons>["name"];
-  onBack: () => void;
+  onBack?: () => void;
 };
 
 export default function Header({ title, iconName, onBack }: Props) {
   return (
     <View style={styles.headerRoot}>
-      <TouchableOpacity onPress={onBack} style={styles.backButton}>
+      {onBack && (<TouchableOpacity onPress={onBack} style={styles.backButton}>
         <Icon
           library="Ionicons"
           name = "chevron-back" 
           size = {22} 
           />
-      </TouchableOpacity>
+      </TouchableOpacity>)}
       <View style={styles.header}>
         <Text style={styles.title}>{title}</Text>
         <Icon
           library="Ionicons"
-          style={styles.bookIcon}
+          style={styles.headerIcon}
           name = { iconName ?? "book-outline"}
           size={40}
         />

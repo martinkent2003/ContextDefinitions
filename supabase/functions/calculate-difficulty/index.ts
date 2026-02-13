@@ -2,7 +2,7 @@ import "@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "jsr:@supabase/supabase-js@2";
 
 /*
-v1.0 (current) - Classic readability: single scalar difficulty score derived
+v1.0 (updated) - Classic readability: single scalar difficulty score derived
 from Flesch–Kincaid Grade Level. Works only for English text. Normalized 0-100
 
 Ideal version: more nuanced difficulty score, compatible with all languages the app supports
@@ -10,7 +10,7 @@ Ideal version: more nuanced difficulty score, compatible with all languages the 
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-const WEBHOOK_SECRET = Deno.env.get("TEMP_READINGS_DIFFICULTY_WEBHOOK_SECRET")!;
+const WEBHOOK_SECRET = Deno.env.get("READINGS_DIFFICULTY_WEBHOOK_SECRET")!;
 
 const supabase = createClient(SUPABASE_URL, SERVICE_ROLE_KEY);
 
@@ -71,7 +71,7 @@ function computeDifficultyScore(text: string): number {
 
 Deno.serve(async (req) => {
   try {
-    /* --- Authenticate caller (DB trigger) --- */
+    // Authenticate caller is DB trigger
     const secret = req.headers.get("x-webhook-secret");
     if (!secret || secret !== WEBHOOK_SECRET) {
       return new Response(
@@ -79,29 +79,54 @@ Deno.serve(async (req) => {
         { status: 401, headers: { "Content-Type": "application/json" } },
       );
     }
-    //TODO: database never set to failed, still pending so misleading
 
-    const { reading_id, content } = await req.json();
+    const { reading_id, storage_path, content_updated_at } = await req.json();
 
-    if (
-      typeof reading_id !== "string" ||
-      typeof content !== "string" ||
-      content.trim().length === 0
-    ) {
-      throw new Error("Invalid payload: expected reading_id and non-empty content");
+    if (typeof reading_id !== "string" || reading_id.trim().length === 0) {
+      throw new Error('Invalid payload: expected non-empty "reading_id"');
+    }
+    if (typeof storage_path !== "string" || storage_path.trim().length === 0) {
+      throw new Error('Invalid payload: expected non-empty "storage_path"');
+    }
+    if (typeof content_updated_at !== "string" || content_updated_at.trim().length === 0) {
+      throw new Error('Invalid payload: expected non-empty "content_updated_at"');
+    }
+
+    // Fetch content from Storage (S3)
+    const { data: file, error: dlErr } = await supabase.storage
+      .from("readings")
+      .download(storage_path);
+
+    if (dlErr || !file) throw dlErr ?? new Error("Failed to download reading content");
+
+    const content = await file.text();
+    if (!content || content.trim().length === 0) {
+      throw new Error("Downloaded content is empty");
     }
 
     const difficulty = computeDifficultyScore(content);
 
-    const { error } = await supabase
-      .from("temp_readings")
+    // Use content_updated_at to avoid writing results for stale content.
+    const { data: updated, error: updErr } = await supabase
+      .from("readings")
       .update({
         difficulty: Math.round(difficulty),
-        status: "complete",
+        status: "processed",
       })
-      .eq("id", reading_id);
+      .eq("id", reading_id)
+      .eq("content_updated_at", content_updated_at)
+      .select("id")
+      .maybeSingle();
 
-    if (error) throw error;
+    if (updErr) throw updErr;
+
+    // If nothing matched, content was likely updated again; don't overwrite newer results.
+    if (!updated) {
+      return new Response(
+        JSON.stringify({ ok: false, error: "Stale update", detail: "content_updated_at mismatch" }),
+        { status: 409, headers: { "Content-Type": "application/json" } },
+      );
+    }
 
     return new Response(
       JSON.stringify({
@@ -111,12 +136,12 @@ Deno.serve(async (req) => {
       { headers: { "Content-Type": "application/json" } },
     );
   } catch (err) {
-    /* Best-effort failure update */
+    // Best-effort failure update
     try {
       const body = await req.clone().json();
-      if (body?.reading_id) {
+      if (body?.reading_id && typeof body.reading_id === "string") {
         await supabase
-          .from("temp_readings")
+          .from("readings")
           .update({
             status: "failed",
           })
@@ -127,7 +152,7 @@ Deno.serve(async (req) => {
     return new Response(
       JSON.stringify({
         ok: false,
-        detail: String(err?.message ?? err),
+        detail: String((err as Error)?.message ?? err),
       }),
       { status: 500, headers: { "Content-Type": "application/json" } },
     );

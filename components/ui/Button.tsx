@@ -1,4 +1,4 @@
-import { radii, spacing, typography } from '@/constants/Themes';
+import { radii, shadows, spacing, typography } from '@/constants/Themes';
 import { ThemeProps, useThemeColor } from '@/hooks/useThemeColor';
 import {
     ActivityIndicator,
@@ -9,7 +9,7 @@ import {
 import { Text } from './Text';
 
 // Define variant types
-type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger';
+type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'upload';
 type ButtonSize = 'sm' | 'md' | 'lg';
 
 export type ButtonProps = ThemeProps & TouchableOpacityProps & {
@@ -63,6 +63,9 @@ export function Button(props: ButtonProps) {
   const ghostBg = useThemeColor({}, 'buttonBackgroundGhost');
   const errorColor = useThemeColor({}, 'error');
   
+  const uploadBg = useThemeColor({}, 'cardBackground');
+  const cardBorderColor = useThemeColor({}, 'cardBorder')
+  
   const primaryText = useThemeColor({}, 'textInverse');
   const secondaryText = useThemeColor({}, 'text');
   const ghostText = useThemeColor({}, 'tint');
@@ -93,6 +96,12 @@ export function Button(props: ButtonProps) {
       borderWidth: 0,
       borderColor: 'transparent',
     },
+    upload: {
+      backgroundColor: uploadBg,
+      textColor: primaryText,
+      borderWidth: 2,
+      borderColor: cardBorderColor
+    }
   };
 
   const currentVariant = variantStyles[variant];
@@ -112,6 +121,7 @@ export function Button(props: ButtonProps) {
           opacity: disabled ? 0.5 : 1,
           width: fullWidth ? '100%' : undefined,
         },
+        shadows.md,
         style,
       ]}
       disabled={disabled || loading}

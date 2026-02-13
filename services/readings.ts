@@ -1,4 +1,5 @@
 import { supabase } from '../utils/supabase';
+import { FunctionsFetchError, FunctionsHttpError, FunctionsRelayError } from "@supabase/supabase-js";
 
 export async function postReading(title: string, content: string) {
     const { data, error } = await supabase
@@ -11,6 +12,30 @@ export async function postReading(title: string, content: string) {
     }
 
     return data;
+}
+
+export async function uploadReading(content: string, title: string, genre: string, privacy: boolean) {
+    const newReading = {
+        title: title,
+        genre: genre,
+        language_code: "en",
+        visibility: privacy ? "private" : "public",
+        content: content,
+    };
+
+    const { data, error } = await supabase.functions.invoke('create-reading', {
+    body: JSON.stringify(newReading)
+    })
+    if (error instanceof FunctionsHttpError) {
+        const errorMessage = await error.context.json()
+        console.log('Function returned an error', errorMessage)
+    } else if (error instanceof FunctionsRelayError) {
+        console.log('Relay error:', error.message)
+    } else if (error instanceof FunctionsFetchError) {
+        console.log('Fetch error:', error.message)
+    } else {
+        console.log(data)
+    }
 }
 
 export async function insertSampleReadings() {

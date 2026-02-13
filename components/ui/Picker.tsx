@@ -54,7 +54,6 @@ export function Picker<T extends string>(props: PickerProps<T>) {
           itemStyle={Platform.select({
             ios: {
               fontSize: typography.sizes.md,
-              fontFamily: typography.fonts.excalifont,
               color: textColor,
             },
             android: undefined,
@@ -67,7 +66,6 @@ export function Picker<T extends string>(props: PickerProps<T>) {
               label={item.label}
               value={item.value}
               color={textColor}
-              style={{ fontFamily: typography.fonts.excalifont }}
             />
           ))}
         </DefaultPicker>

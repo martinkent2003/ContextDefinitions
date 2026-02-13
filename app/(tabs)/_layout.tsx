@@ -1,17 +1,19 @@
 import { Icon } from "@/components/ui";
-import { useClientOnlyValue } from "@/components/useClientOnlyValue";
+import { useClientOnlyValue } from "@/hooks/useClientOnlyValue";
 import Colors from "@/constants/Themes";
 import { useColorScheme } from "@/hooks/useColorScheme";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { Link, Tabs } from "expo-router";
+import { UploadProvider } from "@/hooks/useUpload";
+import { Tabs, useRouter } from "expo-router";
 import React from "react";
 import { Pressable } from "react-native";
 
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const router = useRouter();
 
   return (
+    <UploadProvider>
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
@@ -27,16 +29,17 @@ export default function TabLayout() {
         options={{
           tabBarIcon: ({ color, focused }) => (
             <Icon
+              library="FontAwesome"
               name= {focused? "home" : "home"}
               color={color}
               size={24}
             />
           ),
           headerRight: () => (
-            <Link href="/modal" asChild>
-              <Pressable>
+              <Pressable onPress={() => router.push("/modal")}>
                 {({ pressed }) => (
-                  <FontAwesome
+                  <Icon
+                    library="FontAwesome"
                     name="user"
                     size={40}
                     color={Colors[colorScheme ?? "light"].text}
@@ -44,7 +47,6 @@ export default function TabLayout() {
                   />
                 )}
               </Pressable>
-            </Link>
           ),
         }}
       />
@@ -52,7 +54,7 @@ export default function TabLayout() {
         name="create"
         options={{
           tabBarIcon: ({ color, focused }) => (
-            <Icon name="plus" color={color} size={24} />
+            <Icon library="FontAwesome" name="plus" color={color} size={24} />
           ),
           headerShown: false,
         }}
@@ -61,9 +63,10 @@ export default function TabLayout() {
         name="library"
         options={{
           tabBarIcon: ({color, focused}) => (
-            <Icon 
+            <Icon
+              library="FontAwesome"
               name={focused ? "folder-open" : "folder"}
-              color={color} 
+              color={color}
               size = {24}
             />
           ),
@@ -71,5 +74,6 @@ export default function TabLayout() {
         }}
       />
     </Tabs>
+    </UploadProvider>
   );
 }

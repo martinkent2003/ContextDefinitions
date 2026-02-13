@@ -1,20 +1,36 @@
-import { radii, spacing } from '@/constants/Themes';
-import { ThemeProps, useThemeColor } from '@/hooks/useThemeColor';
-import { Input as DefaultInput, InputProps as DefaultInputProps } from '@rneui/themed';
+import { radii, spacing } from "@/constants/Themes";
+import { ThemeProps, useThemeColor } from "@/hooks/useThemeColor";
+import {
+  Input as DefaultInput,
+  InputProps as DefaultInputProps,
+} from "@rneui/themed";
 
 export type InputProps = ThemeProps & DefaultInputProps;
 
 export function Input(props: InputProps) {
-  const { lightColor, darkColor, inputStyle, labelStyle, inputContainerStyle, ...otherProps } = props;
-  const color = useThemeColor({ light: lightColor, dark: darkColor }, 'text');
-  const labelColor = useThemeColor({}, 'textSecondary');
-  const borderColor = useThemeColor({}, 'border');
-  const backgroundColor = useThemeColor({}, 'backgroundSecondary');
+  const {
+    lightColor,
+    darkColor,
+    style,
+    inputStyle,
+    labelStyle,
+    containerStyle,
+    inputContainerStyle,
+    placeholderTextColor,
+    ...otherProps
+  } = props;
+  const color = useThemeColor({ light: lightColor, dark: darkColor }, "text");
+  const labelColor = useThemeColor({}, "textSecondary");
+  const borderColor = useThemeColor({}, "border");
+  const backgroundColor = useThemeColor({}, "backgroundSecondary");
+  const placeholderColor = useThemeColor({}, "textTertiary");
 
   return (
     <DefaultInput
-      inputStyle={[{ color, }, inputStyle]}
+      placeholderTextColor={placeholderTextColor ?? placeholderColor}
+      inputStyle={[{ color }, inputStyle]}
       labelStyle={[{ color: labelColor }, labelStyle]}
+      containerStyle={containerStyle}
       inputContainerStyle={[
         {
           borderWidth: 2,
@@ -22,10 +38,11 @@ export function Input(props: InputProps) {
           borderRadius: radii.md,
           backgroundColor: backgroundColor,
           paddingHorizontal: spacing.sm,
-          borderBottomWidth: 1,
+          borderBottomWidth: 2,
         },
         inputContainerStyle,
       ]}
+      errorStyle={{ height: 0, margin: 0 }}
       {...otherProps}
     />
   );

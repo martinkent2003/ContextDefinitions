@@ -1,20 +1,22 @@
+import { spacing } from "@/constants/Themes";
+import { useThemeColor } from "@/hooks/useThemeColor";
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
   // Screen
   screen: {
     flex: 1,
-    backgroundColor: "#050507",
     paddingHorizontal: 24,
     paddingTop: 40,
     paddingBottom: 32,
   },
   content: {
     flex: 1,
-    marginTop: 50,
+    marginTop: 30,
   },
   headerRoot: {
-    paddingTop: 40, // distance from very top
+    paddingTop: 40, 
+    paddingBottom: 20,
     paddingHorizontal: 24,
   },
   // Header
@@ -34,12 +36,10 @@ export const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: "#18181C",
     justifyContent: "center",
     alignItems: "center",
   },
   title: {
-    color: "#FFFFFF",
     fontSize: 24,
     fontWeight: "600",
     letterSpacing: 0.5,
@@ -50,7 +50,6 @@ export const styles = StyleSheet.create({
 
   // Upload buttons
   uploadButton: {
-    backgroundColor: "#18181C",
     borderRadius: 14,
     paddingVertical: 18,
     paddingHorizontal: 18,
@@ -59,12 +58,12 @@ export const styles = StyleSheet.create({
   uploadButtonRow: {
     flexDirection: "row",
     alignItems: "center",
+    backgroundColor: 'transparent',
   },
   uploadButtonIcon: {
     marginRight: 12,
   },
   uploadButtonLabel: {
-    color: "#FFFFFF",
     fontSize: 20,
     fontWeight: "500",
   },
@@ -76,4 +75,9 @@ export const styles = StyleSheet.create({
     alignSelf: "center",
     marginTop: "auto",
   },
+  container:{
+    flex: 1,
+    padding: spacing.xs
+  },
+  
 });

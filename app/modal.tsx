@@ -1,23 +1,23 @@
 import { Button, View } from '@/components/ui';
 import { signOut } from '@/services/auth';
+import { useLoading } from '@/hooks/useLoading';
 import { StatusBar } from 'expo-status-bar';
-import { useState } from 'react';
 import { Alert, Platform, StyleSheet } from 'react-native';
 
 export default function ModalScreen() {
-  const[loading, setLoading] = useState(false)
-  
+  const { showLoading, hideLoading } = useLoading()
+
   async function logOut(){
-    setLoading(true)
+    showLoading("Signing out...", "typing")
     const { error } = await signOut()
     if (error) Alert.alert(error.message)
-    setLoading(false)
+    hideLoading()
   }
 
   return (
     <View style={styles.container}>
       <View style = {[styles.verticallySpaced, styles.mt20]}>
-        <Button variant='danger' size = 'lg' disabled={loading} onPress={()=> logOut()}>Sign Out</Button>
+        <Button variant='danger' size = 'lg' onPress={()=> logOut()}>Sign Out</Button>
       </View>
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
       {/* Use a light status bar on iOS to account for the black space above the modal */}

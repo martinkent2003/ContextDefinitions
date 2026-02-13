@@ -1,8 +1,7 @@
 
 // DESIGN TOKENS - Single source of truth
-
 const palette = {
-  // Chose our brand colors here
+  // 
   primary: {
     50: '#e3f2fd',
     100: '#bbdefb',
@@ -15,7 +14,7 @@ const palette = {
     800: '#1565c0',
     900: '#0d47a1',
   },
-  // Neutral colors (what we will use since our app is mainly black and white)
+  // Neutral colors (what we will use since our app is simple black and white)
   gray: {
     50: '#fafafa',
     100: '#f5f5f5',

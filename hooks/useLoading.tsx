@@ -14,11 +14,12 @@ import Animated, {
   withTiming,
   Easing,
 } from "react-native-reanimated";
+//import LottieView from "lottie-react-native";
 import { Colors, spacing, radii, typography, shadows } from "@/constants/Themes";
 import { useColorScheme } from "@/hooks/useColorScheme";
 
 // ---- Public types ----
-export type LoadingStyle = "book" | "text" | "typing";
+export type LoadingStyle = "book" | "text" | "typing" | "lottie";
 
 type LoadingContextType = {
   isLoading: boolean;
@@ -220,6 +221,21 @@ function TypingAnimation({ message, textColor, tintColor }: { message: string; t
 }
 
 // ═══════════════════════════════════════════════════════
+// Animation 4: Lottie
+// ═══════════════════════════════════════════════════════
+/*function LottieAnimation() {
+  return (
+    <LottieView
+      source={require("@/assets/animations/loading.json")}
+      autoPlay
+      loop
+      style={{ width: 120, height: 120 }}
+    />
+  );
+}
+*/
+
+// ═══════════════════════════════════════════════════════
 // Provider + Hook
 // ═══════════════════════════════════════════════════════
 export function LoadingProvider({ children }: { children: React.ReactNode }) {
@@ -249,6 +265,8 @@ export function LoadingProvider({ children }: { children: React.ReactNode }) {
         return <RotatingTextAnimation tintColor={tintColor} textColor={textColor} />;
       case "typing":
         return <TypingAnimation message={loadingMessage ?? ""} textColor={textColor} tintColor={tintColor} />;
+      //case "lottie":
+        //return <LottieAnimation />;
       case "book":
       default:
         return <BookAnimation tintColor={tintColor} cardBg={cardBg} />;

@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from "react";
 import { ReadingMetadata } from "@/types/readings";
-import { fetchSavedReadings } from "@/services/readings";
+import { fetchAllAvailableReadings, fetchFeedReadings, fetchSavedReadings } from "@/services/readings";
 
 type HomeContextType = {
   // Data
@@ -41,7 +41,7 @@ export function HomeProvider({ children }: { children: React.ReactNode }) {
   const [readings, setReadings] = useState<ReadingMetadata[]>([]);
 
   const fetchFeed = async () => {
-    const data = await fetchSavedReadings()
+    const data = await fetchAllAvailableReadings()
     setReadings(data);
   };
 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Card, ScrollView } from '@/components/ui';
+import { Card, FadingScrollView } from '@/components/ui';
 import { useHome } from '@/hooks/useHome';
 import { styles } from '../styles';
 import { ReadingMetadata } from '@/types/readings';
@@ -13,7 +13,7 @@ export default function HomeFeed() {
   }, [readings]);
 
   return (
-    <ScrollView contentContainerStyle={styles.feed}>
+    <FadingScrollView contentContainerStyle={styles.feed}>
       {feed.map((reading, index) => (
         <Card
           key={index}
@@ -23,6 +23,6 @@ export default function HomeFeed() {
           body={reading.body}
         />
       ))}
-    </ScrollView>
+    </FadingScrollView>
   );
 }

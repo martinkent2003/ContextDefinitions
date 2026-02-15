@@ -36,20 +36,13 @@ export const styles = StyleSheet.create({
     borderRadius: radii.xl,
   },
   title: {
-    fontSize: 24,
-    fontWeight: "600",
-    letterSpacing: 0.5,
+    fontSize: typography.sizes.xxl,
   },
   headerIcon: {
     marginTop: spacing.md,
   },
 
   // Upload buttons
-  uploadButton: {
-    borderRadius: radii.xl,
-    paddingVertical: spacing.md,
-    paddingHorizontal: spacing.md,
-  },
   uploadButtonRow: {
     flexDirection: "row",
     alignItems: "center",

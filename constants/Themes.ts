@@ -62,6 +62,7 @@ export const typography = {
     excalifont: 'Excalifont'
   },
   sizes: {
+    xxs:1,
     xs: 12,
     sm: 14,
     md: 16,
@@ -87,12 +88,12 @@ export const typography = {
 // Border radius
 export const radii = {
   none: 0,
-  sm: 4,
-  md: 8,
-  lg: 12,
-  xl: 16,
-  xxl: 24,
-  xxxl: 36,
+  sm: 8,
+  md: 12,
+  lg: 16,
+  xl: 24,
+  xxl: 36,
+  xxxl: 48,
   full: 9999,
 } as const;
 

@@ -27,13 +27,13 @@ const sizeStyles = {
     paddingVertical: spacing.xs,
     paddingHorizontal: spacing.sm,
     fontSize: typography.sizes.sm,
-    borderRadius: radii.sm,
+    borderRadius: radii.md,
   },
   md: {
     paddingVertical: spacing.sm,
     paddingHorizontal: spacing.md,
     fontSize: typography.sizes.md,
-    borderRadius: radii.md,
+    borderRadius: radii.lg,
   },
   lg: {
     paddingVertical: spacing.md,

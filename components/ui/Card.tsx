@@ -100,7 +100,7 @@ export function Card(props: CardProps) {
 
 const styles = StyleSheet.create({
   container: {
-    borderRadius: radii.lg,
+    borderRadius: radii.xl,
     borderWidth: 1,
     padding: spacing.sm,
     margin: spacing.xs,

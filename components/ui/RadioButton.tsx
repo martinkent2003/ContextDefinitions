@@ -113,8 +113,8 @@ const styles = StyleSheet.create({
     wrapper: {
         padding: spacing.sm,
         marginHorizontal: spacing.sm,
-        borderRadius: radii.md,
-        borderWidth: 2
+        borderRadius: radii.lg,
+        borderWidth: 1
     },
     label: {
         fontSize: typography.sizes.xxl,

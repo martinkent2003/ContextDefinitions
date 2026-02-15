@@ -1,4 +1,5 @@
 export { Button, ButtonProps } from "./Button";
+export { FadingScrollView, FadingScrollViewProps } from "./FadingScrollView";
 export { Card, CardProps } from "./Card";
 export { Icon, IconProps } from "./Icon";
 export { Input, InputProps } from "./Input";
@@ -8,3 +9,4 @@ export { Text, TextProps } from "./Text";
 export { View, ViewProps } from "./View";
 export { TextArea, TextAreaProps} from "./TextArea";
 export { RadioButton, RadioButtonProps, RadioItem } from "./RadioButton";
+export { SegmentedControl, SegmentedControlProps } from "./SegmentedControl";

@@ -10,7 +10,7 @@ type Props = {
 export default function UploadActionButton({ label, icon, onPress }: Props) {
   return (
     <>
-      <Button variant="upload" style={styles.uploadButton} onPress={onPress}>
+      <Button size="md" variant="upload"  onPress={onPress}>
         <View style={styles.uploadButtonRow}>
           <Icon
             library="Ionicons"

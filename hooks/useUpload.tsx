@@ -5,7 +5,7 @@ import { uploadReading } from "@/services/readings";
 import { Alert } from "react-native";
 import { useLoading } from "./useLoading";
 import { useHome } from "./useHome";
-//import { convert } from "react-native-pdf-to-image";
+import { convert } from "react-native-pdf-to-image";
 
 type UploadContextType = {
   // Data
@@ -96,9 +96,9 @@ export function UploadProvider({ children }: { children: React.ReactNode }) {
         text = await runOcr(upload.images);
       } else if (upload.file) {
         //run the build before uncommenting this
-        //const { outputFiles } = await convert(upload.file.uri);
-        //text = await runOcr(outputFiles ?? []);
-        text = "not yet"
+        const { outputFiles } = await convert(upload.file.uri);
+        text = await runOcr(outputFiles ?? []);
+        //text = "not yet"
       }
       setUpload((prev) => ({ ...prev, text }));
       setTextModalVisible(true);

@@ -20,7 +20,7 @@ export {
 } from "expo-router";
 
 export const unstable_settings = {
-  initialRouteName: "(tabs)",
+  initialRouteName: "(private)",
 };
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -73,11 +73,11 @@ function RootLayoutNav() {
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="(private)" options={{ headerShown: false }} />
         <Stack.Screen name="(public)" options={{ headerShown: false }} />
       </Stack>
       {!session && !inAuthGroup && <Redirect href="/(public)/welcome" />}
-      {session && inAuthGroup && <Redirect href="/(tabs)/home" />}
+      {session && inAuthGroup && <Redirect href="/(private)/(tabs)/home" />}
     </ThemeProvider>
   );
 }

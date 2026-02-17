@@ -53,7 +53,7 @@ export default function ConfirmText() {
         onChangeText={(text) => setContent(text)}
       />
       <RadioButton
-        label="Privacy"
+        label="Privacy Settings"
         subLabel="Choose who can access"
         items={[
           { label: "Public", description: "Shared with everyone", value: "public" , warning: "This reading will be visible to everyone" },

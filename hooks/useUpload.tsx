@@ -51,7 +51,7 @@ export function UploadProvider({ children }: { children: React.ReactNode }) {
   const [isConfirmScanModalVisible, setConfirmScanVisible] = useState(false);
   const { showLoading, hideLoading } = useLoading();
 
-  const { fetchFeed } = useHome();
+  const { refreshReadings } = useHome();
 
   const setImages = (uris: string[]) => {
     setUpload({ images: uris, file: null, text: null });
@@ -69,11 +69,11 @@ export function UploadProvider({ children }: { children: React.ReactNode }) {
     //here trigger the supabase function since we already have what we need in upload and metadata
       //push to supabase shit
     try {
-      showLoading("Uploading Reading...", "typing")
+      showLoading("Uploading Reading...", "book")
       const result = await uploadReading(content, title, genre, privacy)
       hideLoading()
       Alert.alert("Successfully uploaded " + title)
-      fetchFeed()
+      refreshReadings()
     }
     catch (err) {
       Alert.alert("Error uploading " + title)

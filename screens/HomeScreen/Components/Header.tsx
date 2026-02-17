@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { SegmentedControl, View } from '@/components/ui';
 import { useHome } from '@/hooks/useHome';
 import { styles } from '../styles';
@@ -8,8 +7,7 @@ import UserIcon from './UserIcon';
 const SEGMENTS = ['Feed', 'Private'];
 
 export default function Header() {
-  const { showProfileModal } = useHome();
-  const [selectedSegment, setSelectedSegment] = useState(SEGMENTS[0]);
+  const { showProfileModal, selectedSegment, setSelectedSegment } = useHome();
 
   return (
     <View style={styles.header}>

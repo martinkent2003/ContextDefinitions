@@ -1,11 +1,14 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { ReadingMetadata } from "@/types/readings";
 import { fetchAllAvailableReadings, fetchFeedReadings, fetchSavedReadings } from "@/services/readings";
+import { useLoading } from "./useLoading";
 
 type HomeContextType = {
   // Data
   readings: ReadingMetadata[];
-  fetchFeed: () => Promise<void>;
+  selectedSegment: string;
+  setSelectedSegment: (segment: string) => void;
+  refreshReadings: () => Promise<void>;
 
   // Modal visibility
   isProfileModalVisible: boolean;
@@ -39,17 +42,44 @@ const HomeContext = createContext<HomeContextType | null>(null);
 export function HomeProvider({ children }: { children: React.ReactNode }) {
   const [isProfileModalVisible, setProfileModalVisible] = useState(false);
   const [readings, setReadings] = useState<ReadingMetadata[]>([]);
+  const [selectedSegment, setSelectedSegment] = useState('Feed');
+  const { showLoading, hideLoading } = useLoading();
 
   const fetchFeed = async () => {
-    const data = await fetchAllAvailableReadings()
+    const data = await fetchAllAvailableReadings();
     setReadings(data);
   };
+
+  const fetchPrivate = async () => {
+    const data = await fetchSavedReadings();
+    setReadings(data);
+  };
+
+  const refreshReadings = async () => {
+    showLoading("Loading...", "book");
+    try {
+      if (selectedSegment === 'Feed') {
+        await fetchFeed();
+      } else {
+        await fetchPrivate();
+      }
+      //await new Promise(r => setTimeout(r, 2000))
+    } finally {
+      hideLoading();
+    }
+  };
+
+  useEffect(() => {
+    refreshReadings();
+  }, [selectedSegment]);
 
   return (
     <HomeContext.Provider
       value={{
         readings,
-        fetchFeed,
+        selectedSegment,
+        setSelectedSegment,
+        refreshReadings,
         isProfileModalVisible,
         showProfileModal: () => setProfileModalVisible(true),
         hideProfileModal: () => setProfileModalVisible(false),

@@ -1,5 +1,4 @@
-import { useEffect } from 'react';
-import { View } from '@/components/ui';
+import { Keyboard, Pressable } from 'react-native';
 import { useHome } from '@/hooks/useHome';
 import ProfileModal from './Modals/ProfileModal';
 import { styles } from './styles';
@@ -7,17 +6,13 @@ import Header from './Components/Header';
 import HomeFeed from './Components/HomeFeed';
 
 export default function HomeScreen() {
-  const { isProfileModalVisible, hideProfileModal, fetchFeed } = useHome();
-
-  useEffect(() => {
-    fetchFeed();
-  }, []);
+  const { isProfileModalVisible, hideProfileModal } = useHome();
 
   return (
-    <View style={styles.screen}>
+    <Pressable style={styles.screen} onPress={Keyboard.dismiss}>
       <Header />
       <HomeFeed />
       <ProfileModal visible={isProfileModalVisible} onClose={hideProfileModal} />
-    </View>
+    </Pressable>
   );
 }

@@ -1,5 +1,5 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { View } from "@/components/ui";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { styles } from "./styles";
 import Header from "./Components/Header";
@@ -18,10 +18,10 @@ export default function ReadingScreen() {
   const backgroundColor = useThemeColor({}, "background");
 
   return (
-    <View style={[styles.screen, { backgroundColor }]}>
+    <SafeAreaView style={[styles.screen, { backgroundColor }]}>
       <Header title={title ?? ""} onBack={() => router.back()} />
       <ReadingContent genre={genre} body={body} />
       <WordsSheet />
-    </View>
+    </SafeAreaView>
   );
 }

@@ -13,6 +13,7 @@ import { useColorScheme } from "@/hooks/useColorScheme";
 import { SessionProvider, useSession } from "@/hooks/useSession";
 import { LoadingProvider } from "@/hooks/useLoading";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -50,11 +51,13 @@ export default function RootLayout() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <LoadingProvider>
-        <SessionProvider>
-          <RootLayoutNav />
-        </SessionProvider>
-      </LoadingProvider>
+      <SafeAreaProvider>
+        <LoadingProvider>
+          <SessionProvider>
+            <RootLayoutNav />
+          </SessionProvider>
+        </LoadingProvider>
+      </SafeAreaProvider>
     </GestureHandlerRootView>
   );
 }

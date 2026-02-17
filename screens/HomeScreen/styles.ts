@@ -5,11 +5,11 @@ export const styles = StyleSheet.create({
     // Screen
   screen: {
     flex: 1,
+  },
+  pressable: {
+    flex: 1,
     paddingHorizontal: spacing.md,
-    paddingTop: spacing.xxl,
     paddingBottom: spacing.xl,
-    //borderColor: "#FFFFFF",
-    //borderWidth: 1,
   },
   header: {
     marginBottom: spacing.md,

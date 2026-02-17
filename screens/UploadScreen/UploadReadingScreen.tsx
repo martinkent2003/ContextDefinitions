@@ -1,4 +1,5 @@
 import { useRouter } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useUpload } from "@/hooks/useUpload";
 import Header from "./Components/Header";
 import { styles } from "./styles";
@@ -14,7 +15,7 @@ export default function UploadReadingScreen() {
   const { setFile, showConfirmTextModal, showConfirmFileModal, showConfirmImageModal, showConfirmScanModal } = useUpload();
 
   return (
-    <View style={styles.screen}>
+    <SafeAreaView style={styles.screen}>
       <Header title="Upload Reading"  />
       <View style={styles.content}>
         <UploadActionButton
@@ -43,6 +44,6 @@ export default function UploadReadingScreen() {
         <ConfirmFile/>
         <ConfirmScan />
       </View>
-    </View>
+    </SafeAreaView>
   );
 }

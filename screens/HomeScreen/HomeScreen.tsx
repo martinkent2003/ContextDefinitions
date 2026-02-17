@@ -1,4 +1,5 @@
 import { Keyboard, Pressable } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useHome } from '@/hooks/useHome';
 import ProfileModal from './Modals/ProfileModal';
 import { styles } from './styles';
@@ -9,10 +10,12 @@ export default function HomeScreen() {
   const { isProfileModalVisible, hideProfileModal } = useHome();
 
   return (
-    <Pressable style={styles.screen} onPress={Keyboard.dismiss}>
-      <Header />
-      <HomeFeed />
-      <ProfileModal visible={isProfileModalVisible} onClose={hideProfileModal} />
-    </Pressable>
+    <SafeAreaView style={styles.screen}>
+      <Pressable style={styles.pressable} onPress={Keyboard.dismiss}>
+        <Header />
+        <HomeFeed />
+        <ProfileModal visible={isProfileModalVisible} onClose={hideProfileModal} />
+      </Pressable>
+    </SafeAreaView>
   );
 }

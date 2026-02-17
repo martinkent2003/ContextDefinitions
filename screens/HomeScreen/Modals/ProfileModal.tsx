@@ -3,7 +3,7 @@ import { signOut } from '@/services/auth';
 import { useLoading } from '@/hooks/useLoading';
 import { StatusBar } from 'expo-status-bar';
 import { Alert, Modal, Platform, StyleSheet } from 'react-native';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useThemeColor } from "@/hooks/useThemeColor";
 
 type Props = {
@@ -24,18 +24,16 @@ export default function ProfileModal({ visible, onClose }: Props) {
 
   return (
     <Modal visible={visible} animationType="slide">
-      <SafeAreaProvider>
-        <SafeAreaView style={[styles.container, {backgroundColor}]}>
-          <View style={[styles.verticallySpaced, styles.mt20]}>
-            <Button variant="secondary" size="lg" onPress={onClose}>Close</Button>
-          </View>
-          <View style={[styles.verticallySpaced]}>
-            <Button variant="danger" size="lg" onPress={() => logOut()}>Sign Out</Button>
-          </View>
-          <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-          {Platform.OS === 'ios' && <StatusBar style="light" />}
-        </SafeAreaView>
-      </SafeAreaProvider>
+      <SafeAreaView style={[styles.container, {backgroundColor}]}>
+        <View style={[styles.verticallySpaced, styles.mt20]}>
+          <Button variant="secondary" size="lg" onPress={onClose}>Close</Button>
+        </View>
+        <View style={[styles.verticallySpaced]}>
+          <Button variant="danger" size="lg" onPress={() => logOut()}>Sign Out</Button>
+        </View>
+        <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
+        {Platform.OS === 'ios' && <StatusBar style="light" />}
+      </SafeAreaView>
     </Modal>
   );
 }

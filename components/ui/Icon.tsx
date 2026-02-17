@@ -1,4 +1,4 @@
-import { ThemeProps, useThemeColor } from '@/hooks/useThemeColor';
+import { ThemeProps, useThemeColor } from '@hooks/useThemeColor';
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import { ComponentProps } from 'react';
 

@@ -1,12 +1,12 @@
-import { radii, shadows, spacing, typography } from '@/constants/Themes';
-import { ThemeProps, useThemeColor } from '@/hooks/useThemeColor';
+import { radii, shadows, spacing, typography } from '@constants/Themes';
+import { ThemeProps, useThemeColor } from '@hooks/useThemeColor';
 import {
   StyleSheet,
   TouchableOpacity,
   TouchableOpacityProps,
   View,
 } from 'react-native';
-import { Text } from './Text';
+import { Text } from '@components/ui/Text';
 
 export type CardProps = ThemeProps & Omit<TouchableOpacityProps, 'children'> & {
   title: string;
@@ -103,6 +103,7 @@ const styles = StyleSheet.create({
     borderRadius: radii.xl,
     borderWidth: 1,
     padding: spacing.sm,
+    paddingHorizontal: spacing.sm+spacing.xs,
     margin: spacing.xs,
   },
   header: {

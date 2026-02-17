@@ -2,8 +2,8 @@ import React from 'react';
 import { View, ScrollView as DefaultScrollView } from 'react-native';
 import MaskedView from '@react-native-masked-view/masked-view';
 import { LinearGradient } from 'expo-linear-gradient';
-import { ThemeProps, useThemeColor } from '@/hooks/useThemeColor';
-import { spacing } from '@/constants/Themes';
+import { ThemeProps, useThemeColor } from '@hooks/useThemeColor';
+import { spacing } from '@constants/Themes';
 
 const DEFAULT_FADE_HEIGHT = spacing.sm;
 
@@ -19,7 +19,8 @@ export function FadingScrollView(props: FadingScrollViewProps) {
     <MaskedView
       style={{ flex: 1 }}
       maskElement={
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1,     borderColor: "#FFFFFF",
+     borderWidth: 1, }}>
           <LinearGradient
             colors={['transparent', 'black']}
             style={{ height: fadeHeight }}

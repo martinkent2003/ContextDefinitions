@@ -1,12 +1,12 @@
-import { radii, shadows, spacing, typography } from '@/constants/Themes';
-import { ThemeProps, useThemeColor } from '@/hooks/useThemeColor';
+import { radii, shadows, spacing, typography } from '@constants/Themes';
+import { ThemeProps, useThemeColor } from '@hooks/useThemeColor';
 import {
     ActivityIndicator,
     StyleSheet,
     TouchableOpacity,
     TouchableOpacityProps
 } from 'react-native';
-import { Text } from './Text';
+import { Text } from '@components/ui/Text';
 
 // Define variant types
 type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'upload';

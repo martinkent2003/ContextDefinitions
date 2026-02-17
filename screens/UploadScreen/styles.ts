@@ -7,11 +7,13 @@ export const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: spacing.lg,
     paddingBottom: spacing.xl,
+    backgroundColor: 'transparent'
   },
   content: {
     flex: 1,
     marginTop: spacing.xl,
-    gap: spacing.md
+    gap: spacing.md,
+    backgroundColor: 'transparent'
   },
   headerRoot: {
     paddingTop: spacing.xl, 

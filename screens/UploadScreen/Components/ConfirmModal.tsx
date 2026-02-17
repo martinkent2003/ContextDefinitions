@@ -8,7 +8,7 @@ import {
   Modal,
   Platform,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import Header from "./Header";
 import { styles } from "../styles";
 

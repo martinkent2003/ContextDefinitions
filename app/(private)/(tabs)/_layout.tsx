@@ -1,5 +1,4 @@
 import { Icon } from "@/components/ui";
-import { useClientOnlyValue } from "@/hooks/useClientOnlyValue";
 import Colors from "@/constants/Themes";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { Tabs } from "expo-router";
@@ -13,12 +12,8 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
-        headerTransparent:true,
-        headerTitle:'',
-        // Disable the static render of the header on web
-        // to prevent a hydration error in React Navigation v6.
-        headerShown: useClientOnlyValue(false, true),
-        animation: 'shift'
+        headerShown: false,
+        animation:'shift'
       }}
     >
       <Tabs.Screen
@@ -31,8 +26,7 @@ export default function TabLayout() {
               color={color}
               size={24}
             />
-          ),
-          headerShown: false,
+          )
         }}
       />
       <Tabs.Screen
@@ -44,8 +38,7 @@ export default function TabLayout() {
             name="plus"
             color={color}
             size={24} />
-          ),
-          headerShown: false,
+          )
         }}
       />
       <Tabs.Screen
@@ -58,8 +51,7 @@ export default function TabLayout() {
               color={color}
               size = {24}
             />
-          ),
-          headerShown: false,
+          )
         }}
       />
     </Tabs>

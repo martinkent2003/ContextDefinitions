@@ -1,15 +1,12 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider,
-} from "@react-navigation/native";
+import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { Redirect, Stack, useSegments } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import "react-native-reanimated";
 import { useColorScheme } from "@/hooks/useColorScheme";
+import { Colors } from "@/constants/Themes";
 import { SessionProvider, useSession } from "@/hooks/useSession";
 import { LoadingProvider } from "@/hooks/useLoading";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -73,8 +70,22 @@ function RootLayoutNav() {
 
   const inAuthGroup = segments[0] === "(public)";
 
+  const scheme = colorScheme ?? "light";
+  const navTheme = {
+    ...DefaultTheme,
+    dark: scheme === "dark",
+    colors: {
+      primary: Colors[scheme].tint,
+      background: Colors[scheme].background,
+      card: Colors[scheme].cardBackground,
+      text: Colors[scheme].text,
+      border: Colors[scheme].border,
+      notification: Colors[scheme].error,
+    },
+  };
+
   return (
-    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+    <ThemeProvider value={navTheme}>
       <Stack>
         <Stack.Screen name="(private)" options={{ headerShown: false }} />
         <Stack.Screen name="(public)" options={{ headerShown: false }} />

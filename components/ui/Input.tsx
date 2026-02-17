@@ -1,5 +1,5 @@
-import { radii, spacing, typography } from "@/constants/Themes";
-import { ThemeProps, useThemeColor } from "@/hooks/useThemeColor";
+import { radii, spacing, typography } from "@constants/Themes";
+import { ThemeProps, useThemeColor } from "@hooks/useThemeColor";
 import {
   Input as DefaultInput,
   InputProps as DefaultInputProps,

@@ -1,6 +1,6 @@
 import { StyleSheet, TouchableOpacity, TouchableOpacityProps } from "react-native";
-import { Icon } from "./Icon";
-import { spacing } from "@/constants/Themes";
+import { Icon } from "@components/ui/Icon";
+import { spacing } from "@constants/Themes";
 
 export type BackButtonProps = Omit<TouchableOpacityProps, "children"> & {
   size?: number;

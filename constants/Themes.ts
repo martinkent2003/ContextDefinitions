@@ -16,6 +16,7 @@ const palette = {
   },
   // Neutral colors (what we will use since our app is simple black and white)
   gray: {
+    10: '#fbfbfb',
     50: '#fafafa',
     100: '#f5f5f5',
     200: '#eeeeee',
@@ -127,7 +128,7 @@ export const shadows = {
 export const Colors = {
   light: {
     // Backgrounds
-    background: palette.white,
+    background: palette.gray[10],
     backgroundSecondary: palette.gray[50],
     backgroundTertiary: palette.gray[100],
     

@@ -3,8 +3,8 @@ import { UploadedFile, UploadMetadata } from "@/types/upload";
 import { recognizeText } from "rn-mlkit-ocr";
 import { uploadReading } from "@/services/readings";
 import { Alert } from "react-native";
-import { useLoading } from "./useLoading";
-import { useHome } from "./useHome";
+import { useLoading } from "@hooks/useLoading";
+import { useHome } from "@hooks/useHome";
 import { convert } from "react-native-pdf-to-image";
 
 type UploadContextType = {

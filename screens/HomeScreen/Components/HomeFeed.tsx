@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'expo-router';
 import { Card, FadingScrollView } from '@/components/ui';
 import { useHome } from '@/hooks/useHome';
-import { styles } from '../styles';
+import { styles } from '@screens/HomeScreen/styles';
 import { ReadingMetadata } from '@/types/readings';
 
 export default function HomeFeed() {

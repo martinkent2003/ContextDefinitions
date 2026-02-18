@@ -1,6 +1,6 @@
 import { Icon, Input } from '@/components/ui';
 import { useThemeColor } from '@/hooks/useThemeColor';
-import { styles } from '../styles';
+import { styles } from '@screens/HomeScreen/styles';
 
 export default function SearchBar() {
   const iconColor = useThemeColor({}, 'textTertiary');

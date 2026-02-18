@@ -1,6 +1,6 @@
 import { Button, View, Text, Icon} from "@/components/ui";
 import { Ionicons } from "@expo/vector-icons";
-import { styles } from "../styles";
+import { styles } from "@screens/UploadScreen/styles";
 
 type Props = {
   label: string;

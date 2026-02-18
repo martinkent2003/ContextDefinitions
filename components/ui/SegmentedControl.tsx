@@ -9,7 +9,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import { Text } from './Text';
+import { Text } from '@components/ui/Text';
 
 type SegmentedControlSize = 'sm' | 'md' | 'lg';
 

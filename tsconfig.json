@@ -12,7 +12,6 @@
       "@services/*": ["services/*"],
       "@constants/*": ["constants/*"],
       "@assets/*": ["assets/*"],
-      "@types/*": ["types/*"]
     }
   },
   "include": [

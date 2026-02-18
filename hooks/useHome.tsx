@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { ReadingMetadata } from "@/types/readings";
 import { fetchAllAvailableReadings, fetchFeedReadings, fetchSavedReadings } from "@/services/readings";
-import { useLoading } from "./useLoading";
+import { useLoading } from "@hooks/useLoading";
 
 type HomeContextType = {
   // Data

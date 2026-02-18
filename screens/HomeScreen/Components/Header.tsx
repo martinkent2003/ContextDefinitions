@@ -1,8 +1,8 @@
 import { SegmentedControl, View } from '@/components/ui';
 import { useHome } from '@/hooks/useHome';
-import { styles } from '../styles';
-import SearchBar from './SearchBar';
-import UserIcon from './UserIcon';
+import { styles } from '@screens/HomeScreen/styles';
+import SearchBar from '@screens/HomeScreen/Components/SearchBar';
+import UserIcon from '@screens/HomeScreen/Components/UserIcon';
 
 const SEGMENTS = ['Feed', 'Private'];
 

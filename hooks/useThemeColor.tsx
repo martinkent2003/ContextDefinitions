@@ -4,7 +4,7 @@
  */
 
 import { Colors, ThemeColors } from '@/constants/Themes';
-import { useColorScheme } from './useColorScheme';
+import { useColorScheme } from '@hooks/useColorScheme';
 
 export type ThemeProps = {
   lightColor?: string;

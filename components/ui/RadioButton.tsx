@@ -1,7 +1,7 @@
 import { radii, spacing, theme, typography } from "@/constants/Themes";
 import { ThemeProps, useThemeColor } from "@/hooks/useThemeColor";
 import { Alert, StyleSheet, TouchableOpacity, View, ViewStyle } from "react-native";
-import { Text } from "./Text";
+import { Text } from "@components/ui/Text";
 
 export type RadioItem = {
     label: string;

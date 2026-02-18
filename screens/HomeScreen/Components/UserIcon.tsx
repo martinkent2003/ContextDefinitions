@@ -2,7 +2,7 @@ import { Pressable } from 'react-native';
 import { Icon, Text, View } from '@/components/ui';
 import Colors from '@/constants/Themes';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { styles } from '../styles';
+import { styles } from '@screens/HomeScreen/styles';
 
 type Props = {
   onPress: () => void;

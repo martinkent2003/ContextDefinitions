@@ -1,10 +1,10 @@
 import { Keyboard, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useHome } from '@/hooks/useHome';
-import ProfileModal from './Modals/ProfileModal';
-import { styles } from './styles';
-import Header from './Components/Header';
-import HomeFeed from './Components/HomeFeed';
+import ProfileModal from '@screens/HomeScreen/Modals/ProfileModal';
+import { styles } from '@screens/HomeScreen/styles';
+import Header from '@screens/HomeScreen/Components/Header';
+import HomeFeed from '@screens/HomeScreen/Components/HomeFeed';
 
 export default function HomeScreen() {
   const { isProfileModalVisible, hideProfileModal } = useHome();

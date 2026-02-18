@@ -1,5 +1,5 @@
 import { ReadingMetadata } from '@/types/readings';
-import { supabase } from '../utils/supabase';
+import { supabase } from '@utils/supabase';
 import { FunctionsFetchError, FunctionsHttpError, FunctionsRelayError } from "@supabase/supabase-js";
 
 export async function uploadReading(content: string, title: string, genre: string, privacy: boolean) {

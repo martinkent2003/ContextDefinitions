@@ -3,8 +3,8 @@ import { spacing } from "@/constants/Themes";
 import { useUpload } from "@/hooks/useUpload";
 import DocumentScanner from "react-native-document-scanner-plugin";
 import React from "react";
-import ConfirmModal from "../Components/ConfirmModal";
-import ImageCarousel from "../Components/ImageCarousel";
+import ConfirmModal from "@screens/UploadScreen/Components/ConfirmModal";
+import ImageCarousel from "@screens/UploadScreen/Components/ImageCarousel";
 
 export default function ConfirmScan() {
   const { upload, setImages, isConfirmScanModalVisible, hideConfirmScanModal, processUpload, clearUpload } = useUpload();

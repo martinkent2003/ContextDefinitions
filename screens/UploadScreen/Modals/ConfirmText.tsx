@@ -1,7 +1,7 @@
 import { Input, TextArea, RadioButton } from "@/components/ui";
 import { useUpload } from "@/hooks/useUpload";
 import React, { useEffect, useState } from "react";
-import ConfirmModal from "../Components/ConfirmModal";
+import ConfirmModal from "@screens/UploadScreen/Components/ConfirmModal";
 import { uploadReading } from "@/services/readings";
 
 export default function ConfirmText() {

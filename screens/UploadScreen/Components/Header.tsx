@@ -3,7 +3,7 @@ import React, { ComponentProps } from "react";
 import { BackButton, Icon, Text } from "@/components/ui";
 import { Ionicons } from "@expo/vector-icons";
 import { View } from "react-native";
-import { styles } from "../styles";
+import { styles } from "@screens/UploadScreen/styles";
 
 type Props = {
   title: string;

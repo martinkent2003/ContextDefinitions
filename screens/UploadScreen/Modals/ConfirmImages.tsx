@@ -3,8 +3,8 @@ import { spacing } from "@/constants/Themes";
 import { useUpload } from "@/hooks/useUpload";
 import * as ImagePicker from "expo-image-picker";
 import React from "react";
-import ConfirmModal from "../Components/ConfirmModal";
-import ImageCarousel from "../Components/ImageCarousel";
+import ConfirmModal from "@screens/UploadScreen/Components/ConfirmModal";
+import ImageCarousel from "@screens/UploadScreen/Components/ImageCarousel";
 
 export default function ConfirmImages() {
   const { upload, setImages, isConfirmImageModalVisible, hideConfirmImageModal, processUpload, clearUpload } = useUpload();

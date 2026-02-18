@@ -1,10 +1,10 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useThemeColor } from "@/hooks/useThemeColor";
-import { styles } from "./styles";
-import Header from "./Components/Header";
-import ReadingContent from "./Components/ReadingContent";
-import WordsSheet from "./Components/WordsSheet";
+import { styles } from "@screens/ReadingScreen/styles";
+import Header from "@screens/ReadingScreen/Components/Header";
+import ReadingContent from "@screens/ReadingScreen/Components/ReadingContent";
+import WordsSheet from "@screens/ReadingScreen/Components/WordsSheet";
 
 export default function ReadingScreen() {
   const router = useRouter();

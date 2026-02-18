@@ -1,6 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import {
-  Modal,
   StyleSheet,
   Text,
   View,
@@ -282,13 +281,10 @@ export function LoadingProvider({ children }: { children: React.ReactNode }) {
     >
       {children}
 
-      <Modal
-        visible={isLoading}
-        transparent={true}
-        animationType="fade"
-        statusBarTranslucent={true}
-      >
-        <View
+      {isLoading && (
+        <Animated.View
+          entering={FadeIn.duration(200)}
+          exiting={FadeOut.duration(200)}
           style={styles.overlay}
         >
           <View style={[styles.card, { backgroundColor: cardBg }, shadows.md]}>
@@ -299,8 +295,8 @@ export function LoadingProvider({ children }: { children: React.ReactNode }) {
               </Text>
             )}
           </View>
-        </View>
-      </Modal>
+      </Animated.View>
+      )}
     </LoadingContext.Provider>
   );
 }

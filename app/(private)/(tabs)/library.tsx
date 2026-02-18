@@ -1,4 +1,4 @@
-import { Text, View } from '@/components/ui';
+import { Text, View } from '@components/ui';
 import { StyleSheet } from 'react-native';
 
 export default function Library() {

@@ -35,41 +35,43 @@ export default function ConfirmModal({
 
   return (
     <Modal visible={visible} animationType="slide">
-      <SafeAreaView style={[{ backgroundColor }, styles.container]}>
-        <KeyboardAvoidingView
-          style={styles.container}
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-        >
-          <ScrollView style={styles.container} keyboardShouldPersistTaps="never">
-            <Header title={title} iconName={icon} onBack={onCancel} />
-            <View style={{ gap: spacing.md, paddingVertical: spacing.sm }}>
-              {children}
-            </View>
-            <View
-              style={[
-                {
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  padding: spacing.sm,
-                  marginBottom: spacing.md,
-                },
-                { backgroundColor },
-              ]}
-            >
-              <Button variant="secondary" onPress={onCancel}>
-                Cancel
-              </Button>
-              <Button
-                variant={confirmDisabled ? "secondary" : "primary"}
-                disabled={confirmDisabled}
-                onPress={onConfirm}
+      <SafeAreaProvider>
+        <SafeAreaView style={[{ backgroundColor }, styles.container]}>
+          <KeyboardAvoidingView
+            style={styles.container}
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+          >
+            <ScrollView style={styles.container} keyboardShouldPersistTaps="handled">
+              <Header title={title} iconName={icon} onBack={onCancel} />
+              <View style={{ gap: spacing.md, paddingVertical: spacing.sm }}>
+                {children}
+              </View>
+              <View
+                style={[
+                  {
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    padding: spacing.sm,
+                    marginBottom: spacing.md,
+                  },
+                  { backgroundColor },
+                ]}
               >
-                Confirm
-              </Button>
-            </View>
-          </ScrollView>
-        </KeyboardAvoidingView>
-      </SafeAreaView>
+                <Button variant="secondary" onPress={onCancel}>
+                  Cancel
+                </Button>
+                <Button
+                  variant={confirmDisabled ? "secondary" : "primary"}
+                  disabled={confirmDisabled}
+                  onPress={onConfirm}
+                >
+                  Confirm
+                </Button>
+              </View>
+            </ScrollView>
+          </KeyboardAvoidingView>
+        </SafeAreaView>
+      </SafeAreaProvider>
     </Modal>
   );
 }

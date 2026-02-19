@@ -15,7 +15,7 @@ export default function TabLayout() {
         headerShown: false,
         animation:'shift'
       }}
-      detachInactiveScreens={true}
+      detachInactiveScreens={false}
     >
       <Tabs.Screen
         name="home"

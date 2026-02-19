@@ -1,39 +1,21 @@
-import { StyleSheet } from "react-native";
+import { useRouter } from "expo-router";
 import { View, Text, BackButton } from "@/components/ui";
 import { useThemeColor } from "@/hooks/useThemeColor";
-import { spacing, typography } from "@/constants/Themes";
+import { useReading } from "@/hooks/useReading";
+import { styles } from "@/screens/ReadingScreen/styles";
 
-type HeaderProps = {
-  title: string;
-  onBack: () => void;
-};
-
-export default function Header({ title, onBack }: HeaderProps) {
+export default function Header() {
+  const { reading } = useReading();
+  const router = useRouter();
   const textColor = useThemeColor({}, "text");
 
   return (
     <View style={styles.header}>
-      <BackButton onPress={onBack} style={styles.backButton} />
+      <BackButton onPress={() => router.back()} style={styles.backButton} />
       <Text style={[styles.title, { color: textColor }]} numberOfLines={1}>
-        {title}
+        {reading?.title ?? ""}
       </Text>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: spacing.md,
-    paddingBottom: spacing.md,
-  },
-  backButton: {
-    marginRight: spacing.sm,
-  },
-  title: {
-    fontSize: typography.sizes.xxl,
-    fontWeight: typography.weights.bold,
-    flex: 1,
-  },
-});

@@ -1,11 +1,15 @@
-import { useMemo } from "react";
-import { StyleSheet } from "react-native";
+import { useEffect, useMemo, useRef } from "react";
 import BottomSheet from "@gorhom/bottom-sheet";
 import { View, Text } from "@/components/ui";
 import { useThemeColor } from "@/hooks/useThemeColor";
-import { spacing, typography } from "@/constants/Themes";
+import { useReading } from "@/hooks/useReading";
+import { styles } from "@/screens/ReadingScreen/styles";
+
 
 export default function WordsSheet() {
+  const { selection, selectedText, sentenceText } = useReading();
+  const sheetRef = useRef<BottomSheet>(null);
+
   const cardBackground = useThemeColor({}, "cardBackground");
   const textColor = useThemeColor({}, "text");
   const textSecondary = useThemeColor({}, "textSecondary");
@@ -13,37 +17,33 @@ export default function WordsSheet() {
 
   const snapPoints = useMemo(() => ["12%", "50%", "90%"], []);
 
+  useEffect(() => {
+    if (selection !== null) {
+      console.log("sheet")
+      sheetRef.current?.snapToIndex(1);
+    } else {
+      sheetRef.current?.snapToIndex(0);
+    }
+  }, [selection]);
+
   return (
     <BottomSheet
+      ref={sheetRef}
       snapPoints={snapPoints}
       index={0}
-      enablePanDownToClose={false}
+      enableDynamicSizing={false}
+      enablePanDownToClose={true}
       backgroundStyle={{ backgroundColor: cardBackground }}
       handleIndicatorStyle={{ backgroundColor: handleColor }}
     >
       <View style={styles.sheetContent}>
         <Text style={[styles.sheetTitle, { color: textColor }]}>
-          Definitions
+          {selectedText ?? "Definitions"}
         </Text>
         <Text style={[styles.sheetPlaceholder, { color: textSecondary }]}>
-          Context definitions will appear here.
+          {sentenceText ?? "Context definitions will appear here."}
         </Text>
       </View>
     </BottomSheet>
   );
 }
-
-const styles = StyleSheet.create({
-  sheetContent: {
-    flex: 1,
-    paddingHorizontal: spacing.md,
-  },
-  sheetTitle: {
-    fontSize: typography.sizes.lg,
-    fontWeight: typography.weights.semibold,
-    marginBottom: spacing.sm,
-  },
-  sheetPlaceholder: {
-    fontSize: typography.sizes.md,
-  },
-});

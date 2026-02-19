@@ -89,6 +89,7 @@ export const typography = {
 // Border radius
 export const radii = {
   none: 0,
+  xs: 4,
   sm: 8,
   md: 12,
   lg: 16,
@@ -164,9 +165,9 @@ export const Colors = {
   },
   dark: {
     // Backgrounds
-    background: palette.black,
-    backgroundSecondary: palette.gray[900],
-    backgroundTertiary: palette.gray[800],
+    background: palette.gray[900],
+    backgroundSecondary: palette.gray[800],
+    backgroundTertiary: palette.gray[700],
     
     // Text
     text: palette.white,
@@ -177,7 +178,7 @@ export const Colors = {
     // Interactive
     tint: palette.primary[400],
     buttonBackground: palette.primary[500],
-    buttonBackgroundSecondary: palette.gray[700],
+    buttonBackgroundSecondary: palette.gray[600],
     buttonBackgroundGhost: 'transparent',
     
     // Borders

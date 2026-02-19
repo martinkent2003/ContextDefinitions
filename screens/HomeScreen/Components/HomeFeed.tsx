@@ -2,11 +2,13 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'expo-router';
 import { Card, FadingScrollView } from '@/components/ui';
 import { useHome } from '@/hooks/useHome';
+import { useReading } from '@/hooks/useReading';
 import { styles } from '@screens/HomeScreen/styles';
 import { ReadingMetadata } from '@/types/readings';
 
 export default function HomeFeed() {
   const { readings } = useHome();
+  const { setSelection, setReading } = useReading();
   const [feed, setFeed] = useState<ReadingMetadata[]>([]);
   const router = useRouter();
 
@@ -23,10 +25,11 @@ export default function HomeFeed() {
           subtitle={reading.genre}
           rating={reading.rating}
           body={reading.body}
-          onPress={() => router.push({
-            pathname: '/(private)/reading',
-            params: { id: reading.id, title: reading.title, genre: reading.genre, body: reading.body },
-          })}
+          onPress={() => {
+            setSelection(null);
+            setReading(reading);
+            router.push('/(private)/reading');
+          }}
         />
       ))}
     </FadingScrollView>

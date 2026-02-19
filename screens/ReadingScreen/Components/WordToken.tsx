@@ -1,4 +1,5 @@
-import { LayoutRectangle, StyleSheet, Text } from "react-native";
+import { Text } from "@/components/ui";
+import { LayoutRectangle, StyleSheet } from "react-native";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { radii, spacing, typography } from "@/constants/Themes";
 
@@ -12,10 +13,11 @@ type WordTokenProps = {
   };
   addLeadingSpace: boolean;
   isHighlighted: boolean;
+  fontSize: number;
   onLayout: (layout: LayoutRectangle) => void;
 };
 
-export default function WordToken({ token, addLeadingSpace, isHighlighted, onLayout }: WordTokenProps) {
+export default function WordToken({ token, addLeadingSpace, isHighlighted, fontSize, onLayout }: WordTokenProps) {
   const textColor = useThemeColor({}, "text");
   const tintColor = useThemeColor({}, "tint");
 
@@ -24,7 +26,7 @@ export default function WordToken({ token, addLeadingSpace, isHighlighted, onLay
       onLayout={(e) => onLayout(e.nativeEvent.layout)}
       style={[
         styles.token,
-        { color: textColor },
+        { color: textColor, fontSize },
         addLeadingSpace && styles.leadingSpace,
         isHighlighted && { backgroundColor: tintColor + "44" },
       ]}
@@ -36,7 +38,6 @@ export default function WordToken({ token, addLeadingSpace, isHighlighted, onLay
 
 const styles = StyleSheet.create({
   token: {
-    fontSize: typography.sizes.lg,
     lineHeight: typography.sizes.md * typography.lineHeights.relaxed,
     borderRadius: radii.xs,
   },

@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { LayoutRectangle, StyleSheet, View } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import { useReading } from "@/hooks/useReading";
@@ -20,7 +20,7 @@ function hitTest(x: number, y: number, map: LayoutMap): number | null {
 }
 
 export default function ReadingContent() {
-  const { readingContent, setSelection } = useReading();
+  const { readingContent, setSelection, fontSize, setWordsPerPage } = useReading();
 
   const layoutMap = useRef<LayoutMap>(new Map());
   const selectionStartRef = useRef<number | null>(null);
@@ -29,6 +29,18 @@ export default function ReadingContent() {
 
   const [selectionStart, setSelectionStart] = useState<number | null>(null);
   const [selectionEnd, setSelectionEnd] = useState<number | null>(null);
+  const [containerHeight, setContainerHeight] = useState<number>(0);
+
+
+  //setting words per page based on container and font size changes
+  useEffect(() => {
+    if (containerHeight === 0) return;
+    let count = 0;
+    for (const [, rect] of layoutMap.current.entries()) {
+      if (rect.y + rect.height <= containerHeight) count++;
+    }
+    setWordsPerPage(count);
+  }, [containerHeight, fontSize]);
 
   const tokens = readingContent?.tokens ?? [];
   const sentences = readingContent?.sentences ?? [];
@@ -55,7 +67,8 @@ export default function ReadingContent() {
       .map(s => s.id);
     setSelection({ tokenIndices, sentenceIndices, spanIds });
   }
-
+  
+  //words selection gesture
   const pan = Gesture.Pan()
     .runOnJS(true)
     .onBegin((e) => {
@@ -98,7 +111,7 @@ export default function ReadingContent() {
     });
 
   return (
-    <View style={screenStyles.readingContent}>
+    <View style={screenStyles.readingContent} onLayout={(e) => setContainerHeight(e.nativeEvent.layout.height)}>
       <GestureDetector gesture={pan}>
         <View style={styles.tokenContainer}>
           {tokens.map((token, idx) => {
@@ -110,6 +123,7 @@ export default function ReadingContent() {
                 token={token}
                 addLeadingSpace={addLeadingSpace}
                 isHighlighted={isHighlighted(token.i)}
+                fontSize={fontSize}
                 onLayout={(layout) => layoutMap.current.set(token.i, layout)}
               />
             );

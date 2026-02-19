@@ -1,12 +1,19 @@
 import { createContext, useContext, useMemo, useState } from "react";
 import { ReadingMetadata, ReadingSelection, ReadingStructureV1 } from "@/types/readings";
+import { typography } from "@/constants/Themes";
 
 type ReadingContextType = {
   reading: ReadingMetadata | null;
   readingContent: ReadingStructureV1 | null;
   selection: ReadingSelection | null;
-  setReading: (reading: ReadingMetadata) => void;
+  handleReadingChange: (reading: ReadingMetadata) => void;
   setSelection: (sel: ReadingSelection | null) => void;
+  fontSize: number;
+  setFontSize: (size: number) => void;
+  wordsPerPage: number;
+  setWordsPerPage: (count: number) => void;
+  currentPage: number;
+  setCurrentPage: (page: number) => void;
 };
 
 const seedReadingContent : ReadingStructureV1 ={
@@ -107,11 +114,32 @@ const ReadingContext = createContext<ReadingContextType | null>(null);
 
 export function ReadingProvider({ children }: { children: React.ReactNode }) {
   const [reading, setReading] = useState<ReadingMetadata | null>(null);
-  const [readingContent] = useState<ReadingStructureV1 | null>(seedReadingContent);
+  const [readingContent, setReadingContent] = useState<ReadingStructureV1 | null>(seedReadingContent);
   const [selection, setSelection] = useState<ReadingSelection | null>(null);
+  const [fontSize, setFontSize] = useState<number>(typography.sizes.xxxl);
+  const [wordsPerPage, setWordsPerPage] = useState<number>(0);
+  const [currentPage, setCurrentPage] = useState<number>(0);
+
+  function handleReadingChange(reading: ReadingMetadata) {
+    setReading(reading);
+    // TODO: API call to fetch reading content for reading.reading_id
+    setReadingContent(seedReadingContent);
+  }
 
   return (
-    <ReadingContext.Provider value={{ reading, setReading, readingContent, selection, setSelection }}>
+    <ReadingContext.Provider value={{
+      reading,
+      readingContent,
+      selection,
+      handleReadingChange,
+      setSelection,
+      fontSize,
+      setFontSize,
+      wordsPerPage,
+      setWordsPerPage,
+      currentPage,
+      setCurrentPage,
+    }}>
       {children}
     </ReadingContext.Provider>
   );

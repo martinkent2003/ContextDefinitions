@@ -11,6 +11,8 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: spacing.md,
     paddingBottom: spacing.md,
+     borderColor: "#FFFFFF",
+     borderWidth: 1,
   },
   //header
   backButton: {

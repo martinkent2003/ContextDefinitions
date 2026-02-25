@@ -13,8 +13,8 @@ type ReadingContextType = {
   setSelection: (sel: ReadingSelection | null) => void;
   fontSize: number;
   setFontSize: (size: number) => void;
-  wordsPerPage: number;
-  setWordsPerPage: (count: number) => void;
+  totalPages: number;
+  setTotalPages: (count: number) => void;
   currentPage: number;
   setCurrentPage: (page: number) => void;
 };
@@ -26,14 +26,14 @@ export function ReadingProvider({ children }: { children: React.ReactNode }) {
   const [reading, setReading] = useState<ReadingMetadata | null>(null);
   const [readingContent, setReadingContent] = useState<ReadingPackageV1 | null>(null)
   const [selection, setSelection] = useState<ReadingSelection | null>(null);
-  const [fontSize, setFontSize] = useState<number>(typography.sizes.xxxl);
-  const [wordsPerPage, setWordsPerPage] = useState<number>(0);
+  const [fontSize, setFontSize] = useState<number>(typography.sizes.xl);
+  const [totalPages, setTotalPages] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(0);
 
   function handleReadingChange(reading: ReadingMetadata) {
+    setSelection(null);
     setReading(reading);
     setReadingContent(koreeda as ReadingPackageV1);
-    console.log("Words per page"+wordsPerPage)
   }
 
   return (
@@ -45,8 +45,8 @@ export function ReadingProvider({ children }: { children: React.ReactNode }) {
       setSelection,
       fontSize,
       setFontSize,
-      wordsPerPage,
-      setWordsPerPage,
+      totalPages,
+      setTotalPages,
       currentPage,
       setCurrentPage,
     }}>

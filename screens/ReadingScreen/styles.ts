@@ -11,8 +11,8 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: spacing.md,
     paddingBottom: spacing.md,
-     borderColor: "#FFFFFF",
-     borderWidth: 1,
+    //  borderColor: "#FFFFFF",
+    //  borderWidth: 1,
   },
   //header
   backButton: {
@@ -27,11 +27,47 @@ export const styles = StyleSheet.create({
   readingContent: {
     flex: 1,
     paddingHorizontal: spacing.md,
-    paddingBottom: spacing.xxl,
-    //  borderColor: "#FFFFFF",
-    //  borderWidth: 1,
+    paddingBottom: spacing.xxxl,
+    // borderColor: "#FFFFFF",
+    // borderWidth: 1,
+    overflow: "hidden"
   },
   //footer
+  footer: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.lg,
+  },  
+  footerButton: {
+    padding: spacing.xs,
+  },
+  footerButtonDisabled: {
+    opacity: 0.3,
+  },
+  footerFontSizeGroup: {
+    flex:1,
+    flexDirection: "row",
+    alignItems: "center",
+    marginRight: spacing.sm,
+  },
+  footerFontSizeLabel: {
+    fontSize: typography.sizes.sm,
+    fontWeight: typography.weights.semibold,
+    marginHorizontal: spacing.xs,
+  },
+  footerPaginationGroup: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  footerPageLabel: {
+    flex: 1,
+    textAlign: "center",
+    fontSize: typography.sizes.md,
+    fontWeight: "600",
+  },
+
   //wordsheetwrapper
   absoluteFillObject : {
     position: 'absolute', 

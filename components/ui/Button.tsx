@@ -1,5 +1,6 @@
 import { radii, shadows, spacing, typography } from '@constants/Themes';
 import { ThemeProps, useThemeColor } from '@hooks/useThemeColor';
+import * as Haptics from 'expo-haptics';
 import {
     ActivityIndicator,
     StyleSheet,
@@ -54,8 +55,22 @@ export function Button(props: ButtonProps) {
     fullWidth = false,
     style,
     children,
+    onPress,
     ...otherProps
   } = props;
+
+  const hapticStyles: Record<ButtonVariant, Haptics.ImpactFeedbackStyle> = {
+    primary: Haptics.ImpactFeedbackStyle.Medium,
+    secondary: Haptics.ImpactFeedbackStyle.Medium,
+    ghost: Haptics.ImpactFeedbackStyle.Light,
+    danger: Haptics.ImpactFeedbackStyle.Heavy,
+    upload: Haptics.ImpactFeedbackStyle.Medium,
+  };
+
+  const handlePress: TouchableOpacityProps['onPress'] = (e) => {
+    Haptics.impactAsync(hapticStyles[variant]);
+    onPress?.(e);
+  };
 
   //theme colors for each variant
   const primaryBg = useThemeColor({}, 'buttonBackground');
@@ -124,6 +139,7 @@ export function Button(props: ButtonProps) {
         shadows.md,
         style,
       ]}
+      onPress={handlePress}
       disabled={disabled || loading}
       {...otherProps}
     >

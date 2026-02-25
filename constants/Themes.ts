@@ -63,7 +63,6 @@ export const typography = {
     excalifont: 'Excalifont'
   },
   sizes: {
-    xxs:1,
     xs: 12,
     sm: 14,
     md: 16,
@@ -71,7 +70,6 @@ export const typography = {
     xl: 20,
     xxl: 24,
     xxxl: 30,
-    xxxxl: 36,
   },
   lineHeights: {
     tight: 1.2,

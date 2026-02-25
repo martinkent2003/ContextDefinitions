@@ -8,7 +8,7 @@ import { ReadingMetadata } from '@/types/readings';
 
 export default function HomeFeed() {
   const { readings } = useHome();
-  const { setSelection, handleReadingChange } = useReading();
+  const { handleReadingChange } = useReading();
   const [feed, setFeed] = useState<ReadingMetadata[]>([]);
   const router = useRouter();
 
@@ -26,8 +26,8 @@ export default function HomeFeed() {
           rating={reading.rating}
           body={reading.body}
           onPress={() => {
-            setSelection(null);
             handleReadingChange(reading);
+
             router.push('/(private)/reading');
           }}
         />

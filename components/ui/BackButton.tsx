@@ -9,7 +9,7 @@ export type BackButtonProps = Omit<TouchableOpacityProps, "children"> & {
 export function BackButton({ size = 22, style, ...otherProps }: BackButtonProps) {
   return (
     <TouchableOpacity style={[styles.base, style]} {...otherProps}>
-      <Icon library="Ionicons" name="chevron-back" size={size} />
+      <Icon library="Ionicons" name="chevron-back-circle-outline" size={size} />
     </TouchableOpacity>
   );
 }

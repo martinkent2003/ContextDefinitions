@@ -54,7 +54,7 @@ export const styles = StyleSheet.create({
   feed: {
     marginTop:spacing.xs,
     gap: spacing.sm,
-    borderColor: "#FFFFFF",
-    borderWidth: 1,
+    // borderColor: "#FFFFFF",
+    // borderWidth: 1,
   },
 });

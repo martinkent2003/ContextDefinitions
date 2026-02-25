@@ -1,5 +1,6 @@
 import { radii, shadows, spacing, typography } from '@constants/Themes';
 import { ThemeProps, useThemeColor } from '@hooks/useThemeColor';
+import * as Haptics from 'expo-haptics';
 import {
   StyleSheet,
   TouchableOpacity,
@@ -24,8 +25,14 @@ export function Card(props: CardProps) {
     rating,
     body,
     style,
+    onPress,
     ...otherProps
   } = props;
+
+  const handlePress: TouchableOpacityProps['onPress'] = (e) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    onPress?.(e);
+  };
 
   const cardBackground = useThemeColor({}, 'cardBackground');
   const cardBorder = useThemeColor({}, 'cardBorder');
@@ -61,6 +68,7 @@ export function Card(props: CardProps) {
         shadows.md,
         style,
       ]}
+      onPress={handlePress}
       activeOpacity={0.7}
       {...otherProps}
     >

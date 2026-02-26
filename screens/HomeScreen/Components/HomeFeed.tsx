@@ -5,11 +5,13 @@ import { useHome } from '@/hooks/useHome';
 import { useReading } from '@/hooks/useReading';
 import { styles } from '@screens/HomeScreen/styles';
 import { ReadingMetadata } from '@/types/readings';
+import { useLoading } from '@/hooks/useLoading';
 
 export default function HomeFeed() {
   const { readings } = useHome();
   const { handleReadingChange } = useReading();
   const [feed, setFeed] = useState<ReadingMetadata[]>([]);
+  const { showLoading } = useLoading();
   const router = useRouter();
 
   useEffect(() => {
@@ -26,6 +28,7 @@ export default function HomeFeed() {
           rating={reading.rating}
           body={reading.body}
           onPress={() => {
+            showLoading();
             handleReadingChange(reading);
             router.push('/(private)/reading');
           }}

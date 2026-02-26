@@ -1,4 +1,5 @@
 import { TouchableOpacity } from "react-native";
+import * as Haptics from "expo-haptics";
 import { View, Text, Icon } from "@/components/ui";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { useReading } from "@/hooks/useReading";
@@ -27,7 +28,7 @@ export default function Footer() {
       {/* Font size control */}
       <View style={styles.footerFontSizeGroup}>
         <TouchableOpacity
-          onPress={() => setFontSize(FONT_SIZES[fontSizeIdx - 1])}
+          onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); setFontSize(FONT_SIZES[fontSizeIdx - 1]); }}
           disabled={!canDecrease}
           style={[styles.footerButton, !canDecrease && styles.footerButtonDisabled]}
           hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
@@ -40,7 +41,7 @@ export default function Footer() {
         </Text>
 
         <TouchableOpacity
-          onPress={() => setFontSize(FONT_SIZES[fontSizeIdx + 1])}
+          onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); setFontSize(FONT_SIZES[fontSizeIdx + 1]); }}
           disabled={!canIncrease}
           style={[styles.footerButton, !canIncrease && styles.footerButtonDisabled]}
           hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
@@ -52,7 +53,7 @@ export default function Footer() {
       {/* Page navigation */}
       <View style={styles.footerPaginationGroup}>
         <TouchableOpacity
-          onPress={() => setCurrentPage(currentPage - 1)}
+          onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium); setCurrentPage(currentPage - 1); }}
           disabled={isFirst}
           style={[styles.footerButton, isFirst && styles.footerButtonDisabled]}
           hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
@@ -65,7 +66,7 @@ export default function Footer() {
         </Text>
 
         <TouchableOpacity
-          onPress={() => setCurrentPage(currentPage + 1)}
+          onPress={() => { Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium); setCurrentPage(currentPage + 1); }}
           disabled={isLast}
           style={[styles.footerButton, isLast && styles.footerButtonDisabled]}
           hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}

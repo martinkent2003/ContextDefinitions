@@ -1,6 +1,7 @@
 import { radii, spacing, theme, typography } from "@/constants/Themes";
 import { ThemeProps, useThemeColor } from "@/hooks/useThemeColor";
 import { Alert, StyleSheet, TouchableOpacity, View, ViewStyle } from "react-native";
+import * as Haptics from "expo-haptics";
 import { Text } from "@components/ui/Text";
 
 export type RadioItem = {
@@ -44,6 +45,7 @@ export function RadioButton(props: RadioButtonProps) {
         if (item.value === selected) return;
 
         if (item.warning) {
+            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
             Alert.alert("Warning", item.warning, [
                 { text: "Cancel", style: "cancel" },
                 { text: "Confirm", style: "destructive", onPress: () => onSelect?.(item.value) },

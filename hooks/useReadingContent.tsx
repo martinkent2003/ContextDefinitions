@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { LayoutChangeEvent, LayoutRectangle } from "react-native";
 import { Gesture } from "react-native-gesture-handler";
+import * as Haptics from "expo-haptics";
 import { useReading } from "@/hooks/useReading";
 import { useLoading } from "@/hooks/useLoading";
 import { ReadingPackageV1 } from "@/types/readings";
@@ -248,13 +249,15 @@ export function useReadingContent(): UseReadingContentReturn {
         selectionEndRef.current = hit;
         setSelectionStart(hit);
         setSelectionEnd(hit);
+        Haptics.selectionAsync();
       }
     })
     .onUpdate((e) => {
       const hit = hitTest(e.x, e.y, layoutMap.current, visibleTokenIdsRef.current);
-      if (hit !== null) {
+      if (hit !== null && hit !== selectionEndRef.current) {
         selectionEndRef.current = hit;
         setSelectionEnd(hit);
+        Haptics.selectionAsync();
       }
     })
     .onEnd(() => {
@@ -275,6 +278,7 @@ export function useReadingContent(): UseReadingContentReturn {
       selectionEndRef.current = null;
       setSelectionStart(null);
       setSelectionEnd(null);
+      Haptics.selectionAsync();
     });
 
   function onContainerLayout(e: LayoutChangeEvent): void {

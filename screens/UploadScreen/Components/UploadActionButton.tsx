@@ -1,6 +1,6 @@
 import { Button, View, Text, Icon} from "@/components/ui";
 import { Ionicons } from "@expo/vector-icons";
-import { styles } from "../styles";
+import { styles } from "@screens/UploadScreen/styles";
 
 type Props = {
   label: string;
@@ -10,7 +10,7 @@ type Props = {
 export default function UploadActionButton({ label, icon, onPress }: Props) {
   return (
     <>
-      <Button variant="upload" style={styles.uploadButton} onPress={onPress}>
+      <Button size="md" variant="upload"  onPress={onPress}>
         <View style={styles.uploadButtonRow}>
           <Icon
             library="Ionicons"

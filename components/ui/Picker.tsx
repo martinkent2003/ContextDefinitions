@@ -1,8 +1,8 @@
-import { radii, spacing, typography } from '@/constants/Themes';
-import { ThemeProps, useThemeColor } from '@/hooks/useThemeColor';
+import { radii, spacing, typography } from '@constants/Themes';
+import { ThemeProps, useThemeColor } from '@hooks/useThemeColor';
 import { Picker as DefaultPicker, PickerProps as DefaultPickerProps } from '@react-native-picker/picker';
 import { Platform, StyleSheet, View, ViewStyle } from 'react-native';
-import { Text } from './Text';
+import { Text } from '@components/ui/Text';
 
 export type PickerItem = {
   label: string;

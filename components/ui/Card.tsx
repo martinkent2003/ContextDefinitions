@@ -1,12 +1,13 @@
-import { radii, shadows, spacing, typography } from '@/constants/Themes';
-import { ThemeProps, useThemeColor } from '@/hooks/useThemeColor';
+import { radii, shadows, spacing, typography } from '@constants/Themes';
+import { ThemeProps, useThemeColor } from '@hooks/useThemeColor';
+import * as Haptics from 'expo-haptics';
 import {
   StyleSheet,
   TouchableOpacity,
   TouchableOpacityProps,
   View,
 } from 'react-native';
-import { Text } from './Text';
+import { Text } from '@components/ui/Text';
 
 export type CardProps = ThemeProps & Omit<TouchableOpacityProps, 'children'> & {
   title: string;
@@ -24,8 +25,14 @@ export function Card(props: CardProps) {
     rating,
     body,
     style,
+    onPress,
     ...otherProps
   } = props;
+
+  const handlePress: TouchableOpacityProps['onPress'] = (e) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    onPress?.(e);
+  };
 
   const cardBackground = useThemeColor({}, 'cardBackground');
   const cardBorder = useThemeColor({}, 'cardBorder');
@@ -40,11 +47,11 @@ export function Card(props: CardProps) {
     const numericRating = typeof rating === 'string' ? parseFloat(rating) : rating;
     if (numericRating === undefined || isNaN(numericRating)) return textColor;
 
-    if (numericRating >= 0 && numericRating < 100) {
+    if (numericRating >= 0 && numericRating < 35) {
       return successColor; // Green for easy (0-100)
-    } else if (numericRating >= 100 && numericRating < 200) {
+    } else if (numericRating >= 35 && numericRating < 65) {
       return warningColor; // Yellow for medium (100-200)
-    } else if (numericRating >= 200 && numericRating <= 300) {
+    } else if (numericRating >= 65) {
       return errorColor; // Red for hard (200-300)
     }
     return textColor; // Default for out of range
@@ -61,6 +68,7 @@ export function Card(props: CardProps) {
         shadows.md,
         style,
       ]}
+      onPress={handlePress}
       activeOpacity={0.7}
       {...otherProps}
     >
@@ -100,10 +108,11 @@ export function Card(props: CardProps) {
 
 const styles = StyleSheet.create({
   container: {
-    borderRadius: radii.lg,
+    borderRadius: radii.xl,
     borderWidth: 1,
-    padding: spacing.md,
-    margin: spacing.sm,
+    padding: spacing.sm,
+    paddingHorizontal: spacing.sm+spacing.xs,
+    margin: spacing.xs,
   },
   header: {
     flexDirection: 'row',
@@ -112,10 +121,10 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     flex: 1,
-    marginRight: spacing.sm,
+    marginRight: spacing.xs,
   },
   title: {
-    fontSize: typography.sizes.xxl,
+    fontSize: typography.sizes.xl,
     fontWeight: typography.weights.bold,
   },
   subtitle: {
@@ -128,7 +137,7 @@ const styles = StyleSheet.create({
   },
   body: {
     fontSize: typography.sizes.sm,
-    marginTop: spacing.md,
+    marginTop: spacing.sm,
     lineHeight: typography.sizes.sm * typography.lineHeights.normal,
   },
 });

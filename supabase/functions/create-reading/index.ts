@@ -151,6 +151,26 @@ Deno.serve(async (req) => {
 
     const reading_id = String(reading.id);
 
+    // --- 1.5) Add to user's Library (explicit membership) ---
+    const { error: saveErr } = await supabase
+      .from("user_saved_readings")
+      .insert({
+        user_id: owner_id,
+        reading_id,
+      });
+
+    if (saveErr) {
+      console.error("Failed to create library entry:", saveErr);
+
+      // Best-effort: clean up reading to avoid orphaned row
+      await supabase.from("readings").delete().eq("id", reading_id);
+
+      return jsonResponse(
+        { ok: false, error: "Failed to create library entry", detail: saveErr.message },
+        500,
+      );
+    }
+
     // --- 2) Upload full content to Storage ---
     const objectName = `readings/${reading_id}`;
     const bytes = new TextEncoder().encode(content);

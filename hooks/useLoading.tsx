@@ -252,7 +252,6 @@ export function LoadingProvider({ children }: { children: React.ReactNode }) {
 
   const hideLoading = useCallback(() => {
     setIsLoading(false);
-    setLoadingMessage(null);
   }, []);
 
   const cardBg = Colors[colorScheme].cardBackground;
@@ -296,7 +295,7 @@ export function LoadingProvider({ children }: { children: React.ReactNode }) {
               </Text>
             )}
           </View>
-        </Animated.View>
+      </Animated.View>
       )}
     </LoadingContext.Provider>
   );

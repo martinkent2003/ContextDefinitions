@@ -9,8 +9,8 @@ import {
   Platform,
 } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import Header from "./Header";
-import { styles } from "../styles";
+import Header from "@screens/UploadScreen/Components/Header";
+import { styles } from "@screens/UploadScreen/styles";
 
 type Props = {
   visible: boolean;

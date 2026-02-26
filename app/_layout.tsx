@@ -1,18 +1,16 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider,
-} from "@react-navigation/native";
+import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { Redirect, Stack, useSegments } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import "react-native-reanimated";
 import { useColorScheme } from "@/hooks/useColorScheme";
+import { Colors } from "@/constants/Themes";
 import { SessionProvider, useSession } from "@/hooks/useSession";
 import { LoadingProvider } from "@/hooks/useLoading";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -20,8 +18,7 @@ export {
 } from "expo-router";
 
 export const unstable_settings = {
-  // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: "(tabs)",
+  initialRouteName: "(private)",
 };
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -51,11 +48,13 @@ export default function RootLayout() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <LoadingProvider>
-        <SessionProvider>
-          <RootLayoutNav />
-        </SessionProvider>
-      </LoadingProvider>
+      <SafeAreaProvider>
+        <LoadingProvider>
+          <SessionProvider>
+            <RootLayoutNav />
+          </SessionProvider>
+        </LoadingProvider>
+      </SafeAreaProvider>
     </GestureHandlerRootView>
   );
 }
@@ -71,15 +70,28 @@ function RootLayoutNav() {
 
   const inAuthGroup = segments[0] === "(public)";
 
+  const scheme = colorScheme ?? "light";
+  const navTheme = {
+    ...DefaultTheme,
+    dark: scheme === "dark",
+    colors: {
+      primary: Colors[scheme].tint,
+      background: Colors[scheme].background,
+      card: Colors[scheme].cardBackground,
+      text: Colors[scheme].text,
+      border: Colors[scheme].border,
+      notification: Colors[scheme].error,
+    },
+  };
+
   return (
-    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+    <ThemeProvider value={navTheme}>
       <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="(private)" options={{ headerShown: false }} />
         <Stack.Screen name="(public)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: "modal" }} />
       </Stack>
       {!session && !inAuthGroup && <Redirect href="/(public)/welcome" />}
-      {session && inAuthGroup && <Redirect href="/(tabs)/home" />}
+      {session && inAuthGroup && <Redirect href="/(private)/(tabs)/home" />}
     </ThemeProvider>
   );
 }

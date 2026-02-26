@@ -1,21 +1,22 @@
 import { useRouter } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useUpload } from "@/hooks/useUpload";
-import Header from "./Components/Header";
-import { styles } from "./styles";
-import UploadActionButton from "./Components/UploadActionButton";
-import ConfirmImages from "./Modals/ConfirmImages";
+import Header from "@screens/UploadScreen/Components/Header";
+import { styles } from "@screens/UploadScreen/styles";
+import UploadActionButton from "@screens/UploadScreen/Components/UploadActionButton";
+import ConfirmImages from "@screens/UploadScreen/Modals/ConfirmImages";
 import { View } from "@/components/ui";
-import ConfirmText from "./Modals/ConfirmText";
-import ConfirmFile from "./Modals/ConfirmFile";
-import ConfirmScan from "./Modals/ConfirmScan";
+import ConfirmText from "@screens/UploadScreen/Modals/ConfirmText";
+import ConfirmFile from "@screens/UploadScreen/Modals/ConfirmFile";
+import ConfirmScan from "@screens/UploadScreen/Modals/ConfirmScan";
 
 export default function UploadReadingScreen() {
   const router = useRouter();
   const { setFile, showConfirmTextModal, showConfirmFileModal, showConfirmImageModal, showConfirmScanModal } = useUpload();
 
   return (
-    <View style={styles.screen}>
-      <Header title="Upload Reading" onBack={() => router.back()} />
+    <SafeAreaView style={styles.screen}>
+      <Header title="Upload Reading"  />
       <View style={styles.content}>
         <UploadActionButton
           label="Scan"
@@ -43,6 +44,6 @@ export default function UploadReadingScreen() {
         <ConfirmFile/>
         <ConfirmScan />
       </View>
-    </View>
+    </SafeAreaView>
   );
 }

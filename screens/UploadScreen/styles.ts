@@ -1,29 +1,30 @@
-import { spacing } from "@/constants/Themes";
-import { useThemeColor } from "@/hooks/useThemeColor";
+import { radii, spacing, typography } from "@/constants/Themes";
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
   // Screen
   screen: {
     flex: 1,
-    paddingHorizontal: 24,
-    paddingTop: 40,
-    paddingBottom: 32,
+    paddingHorizontal: spacing.lg,
+    paddingBottom: spacing.xl,
+    backgroundColor: 'transparent'
   },
   content: {
     flex: 1,
-    marginTop: 30,
+    marginTop: spacing.xl,
+    gap: spacing.md,
+    backgroundColor: 'transparent'
   },
   headerRoot: {
-    paddingTop: 40, 
-    paddingBottom: 20,
-    paddingHorizontal: 24,
+    paddingTop: spacing.xl, 
+    paddingBottom: spacing.lg,
+    paddingHorizontal: spacing.lg,
   },
   // Header
   header: {
     alignItems: "center",
-    marginBottom: 8,
-    marginTop: 20,
+    marginBottom: spacing.sm,
+    marginTop: spacing.md,
   },
   headerWrapper: {
     flex: 1 / 3, // top third of the screen
@@ -31,30 +32,18 @@ export const styles = StyleSheet.create({
   },
   backButton: {
     position: "absolute",
-    left: 0,
-    top: 0,
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    justifyContent: "center",
-    alignItems: "center",
+    width: radii.xxl,
+    height: radii.xxl,
+    borderRadius: radii.xl,
   },
   title: {
-    fontSize: 24,
-    fontWeight: "600",
-    letterSpacing: 0.5,
+    fontSize: typography.sizes.xxl,
   },
-  bookIcon: {
-    marginTop: 16,
+  headerIcon: {
+    marginTop: spacing.md,
   },
 
   // Upload buttons
-  uploadButton: {
-    borderRadius: 14,
-    paddingVertical: 18,
-    paddingHorizontal: 18,
-    marginBottom: 14,
-  },
   uploadButtonRow: {
     flexDirection: "row",
     alignItems: "center",
@@ -64,8 +53,7 @@ export const styles = StyleSheet.create({
     marginRight: 12,
   },
   uploadButtonLabel: {
-    fontSize: 20,
-    fontWeight: "500",
+    fontSize: typography.sizes.xl,
   },
 
   // Help link

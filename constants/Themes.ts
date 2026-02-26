@@ -16,6 +16,7 @@ const palette = {
   },
   // Neutral colors (what we will use since our app is simple black and white)
   gray: {
+    10: '#fbfbfb',
     50: '#fafafa',
     100: '#f5f5f5',
     200: '#eeeeee',
@@ -69,7 +70,6 @@ export const typography = {
     xl: 20,
     xxl: 24,
     xxxl: 30,
-    xxxxl: 36,
   },
   lineHeights: {
     tight: 1.2,
@@ -87,10 +87,13 @@ export const typography = {
 // Border radius
 export const radii = {
   none: 0,
-  sm: 4,
-  md: 8,
-  lg: 12,
-  xl: 16,
+  xs: 4,
+  sm: 8,
+  md: 12,
+  lg: 16,
+  xl: 24,
+  xxl: 36,
+  xxxl: 48,
   full: 9999,
 } as const;
 
@@ -124,7 +127,7 @@ export const shadows = {
 export const Colors = {
   light: {
     // Backgrounds
-    background: palette.white,
+    background: palette.gray[10],
     backgroundSecondary: palette.gray[50],
     backgroundTertiary: palette.gray[100],
     
@@ -160,9 +163,9 @@ export const Colors = {
   },
   dark: {
     // Backgrounds
-    background: palette.black,
-    backgroundSecondary: palette.gray[900],
-    backgroundTertiary: palette.gray[800],
+    background: palette.gray[900],
+    backgroundSecondary: palette.gray[800],
+    backgroundTertiary: palette.gray[700],
     
     // Text
     text: palette.white,
@@ -173,7 +176,7 @@ export const Colors = {
     // Interactive
     tint: palette.primary[400],
     buttonBackground: palette.primary[500],
-    buttonBackgroundSecondary: palette.gray[700],
+    buttonBackgroundSecondary: palette.gray[600],
     buttonBackgroundGhost: 'transparent',
     
     // Borders

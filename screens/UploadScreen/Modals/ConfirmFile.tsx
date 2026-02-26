@@ -3,8 +3,8 @@ import { spacing } from "@/constants/Themes";
 import { useUpload } from "@/hooks/useUpload";
 import * as DocumentPicker from "expo-document-picker";
 import React from "react";
-import ConfirmModal from "../Components/ConfirmModal";
-import DocumentPreview from "../Components/DocumentPreview";
+import ConfirmModal from "@screens/UploadScreen/Components/ConfirmModal";
+import DocumentPreview from "@screens/UploadScreen/Components/DocumentPreview";
 
 export default function ConfirmFile() {
   const { upload, setFile, isConfirmFileModalVisible, hideConfirmFileModal, processUpload, clearUpload } = useUpload();

@@ -1,0 +1,54 @@
+{
+  "schema": "reading_structure_v1",
+  "reading_id": "uuid",
+  "language_code": "en",
+
+  "text": {
+    "storage_path": "readings/{reading_id}",
+    "format": "text/plain",
+    "offset_unit": "codepoint"
+  },
+
+  "processor": {
+    "tokenizer": "wink-tokenizer",
+    "tokenizer_version": "5",
+    "phrase_rules_version": "1.0.0",
+    "generated_at": "2026-02-17T00:00:00.000Z"
+  },
+
+  "blocks": [
+    { "i": 0, "type": "paragraph", "start": 0, "end": 120 },
+    { "i": 1, "type": "paragraph", "start": 122, "end": 260 }
+  ],
+
+  "sentences": [
+    { "i": 0, "start": 0, "end": 42 },
+    { "i": 1, "start": 43, "end": 96 }
+  ],
+
+  "tokens": [
+    { "i": 0, "start": 0, "end": 1, "surface": "I", "norm": "i", "kind": "word" },
+    { "i": 1, "start": 2, "end": 5, "surface": "ran", "norm": "ran", "kind": "word" },
+    { "i": 2, "start": 6, "end": 7, "surface": "5", "norm": "5", "kind": "number" },
+    { "i": 3, "start": 7, "end": 8, "surface": ".", "norm": ".", "kind": "punct" }
+  ],
+
+  "spans": [
+    {
+      "id": "s0",
+      "type": "phrase",
+      "start": 10,
+      "end": 21,
+      "surface": "put up with",
+      "token_range": [2, 4]
+    },
+    {
+      "id": "c16",
+      "type": "contraction",
+      "start": 81,
+      "end": 87,
+      "surface": "you'll",
+      "token_range": [16, 17]
+    }
+  ]
+}

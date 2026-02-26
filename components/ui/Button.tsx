@@ -1,12 +1,13 @@
-import { radii, shadows, spacing, typography } from '@/constants/Themes';
-import { ThemeProps, useThemeColor } from '@/hooks/useThemeColor';
+import { radii, shadows, spacing, typography } from '@constants/Themes';
+import { ThemeProps, useThemeColor } from '@hooks/useThemeColor';
+import * as Haptics from 'expo-haptics';
 import {
     ActivityIndicator,
     StyleSheet,
     TouchableOpacity,
     TouchableOpacityProps
 } from 'react-native';
-import { Text } from './Text';
+import { Text } from '@components/ui/Text';
 
 // Define variant types
 type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'upload';
@@ -27,13 +28,13 @@ const sizeStyles = {
     paddingVertical: spacing.xs,
     paddingHorizontal: spacing.sm,
     fontSize: typography.sizes.sm,
-    borderRadius: radii.sm,
+    borderRadius: radii.md,
   },
   md: {
     paddingVertical: spacing.sm,
     paddingHorizontal: spacing.md,
     fontSize: typography.sizes.md,
-    borderRadius: radii.md,
+    borderRadius: radii.lg,
   },
   lg: {
     paddingVertical: spacing.md,
@@ -54,8 +55,22 @@ export function Button(props: ButtonProps) {
     fullWidth = false,
     style,
     children,
+    onPress,
     ...otherProps
   } = props;
+
+  const hapticStyles: Record<ButtonVariant, Haptics.ImpactFeedbackStyle> = {
+    primary: Haptics.ImpactFeedbackStyle.Light,
+    secondary: Haptics.ImpactFeedbackStyle.Light,
+    ghost: Haptics.ImpactFeedbackStyle.Light,
+    danger: Haptics.ImpactFeedbackStyle.Rigid,
+    upload: Haptics.ImpactFeedbackStyle.Medium,
+  };
+
+  const handlePress: TouchableOpacityProps['onPress'] = (e) => {
+    Haptics.impactAsync(hapticStyles[variant]);
+    onPress?.(e);
+  };
 
   //theme colors for each variant
   const primaryBg = useThemeColor({}, 'buttonBackground');
@@ -124,6 +139,7 @@ export function Button(props: ButtonProps) {
         shadows.md,
         style,
       ]}
+      onPress={handlePress}
       disabled={disabled || loading}
       {...otherProps}
     >

@@ -30,8 +30,8 @@ export function TextArea(props: TextAreaProps) {
                     padding: spacing.sm,
                     marginHorizontal: spacing.sm,
                     borderColor: borderColor,
-                    borderWidth: 2,
-                    borderRadius: radii.md,
+                    borderWidth: 1,
+                    borderRadius: radii.lg,
                     fontSize: typography.sizes.md,
                     backgroundColor: backgroundColor,
                     color: color

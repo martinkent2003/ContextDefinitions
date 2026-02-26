@@ -5,8 +5,8 @@ export const styles = StyleSheet.create({
     // Screen
   screen: {
     flex: 1,
-    // borderColor: "#FFFFFF",
-    // borderWidth: 1,
+    borderColor: "#FFFFFF",
+    borderWidth: 1,
   },
   pressable: {
     flex: 1,
@@ -53,7 +53,7 @@ export const styles = StyleSheet.create({
   },
   feed: {
     marginTop:spacing.xs,
-    gap: spacing.sm,
+    gap: spacing.xs,
     // borderColor: "#FFFFFF",
     // borderWidth: 1,
   },

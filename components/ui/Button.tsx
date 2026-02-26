@@ -60,10 +60,10 @@ export function Button(props: ButtonProps) {
   } = props;
 
   const hapticStyles: Record<ButtonVariant, Haptics.ImpactFeedbackStyle> = {
-    primary: Haptics.ImpactFeedbackStyle.Medium,
-    secondary: Haptics.ImpactFeedbackStyle.Medium,
+    primary: Haptics.ImpactFeedbackStyle.Light,
+    secondary: Haptics.ImpactFeedbackStyle.Light,
     ghost: Haptics.ImpactFeedbackStyle.Light,
-    danger: Haptics.ImpactFeedbackStyle.Heavy,
+    danger: Haptics.ImpactFeedbackStyle.Rigid,
     upload: Haptics.ImpactFeedbackStyle.Medium,
   };
 

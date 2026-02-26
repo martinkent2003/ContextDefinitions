@@ -10,7 +10,7 @@ export default function HomeScreen() {
   const { isProfileModalVisible, hideProfileModal } = useHome();
 
   return (
-    <SafeAreaView style={styles.screen}>
+    <SafeAreaView style={styles.screen} edges={['top']}>
       <Pressable style={styles.pressable} onPress={Keyboard.dismiss}>
         <Header />
         <HomeFeed />

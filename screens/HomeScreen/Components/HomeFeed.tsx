@@ -27,7 +27,6 @@ export default function HomeFeed() {
           body={reading.body}
           onPress={() => {
             handleReadingChange(reading);
-
             router.push('/(private)/reading');
           }}
         />

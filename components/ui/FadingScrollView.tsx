@@ -19,8 +19,7 @@ export function FadingScrollView(props: FadingScrollViewProps) {
     <MaskedView
       style={{ flex: 1 }}
       maskElement={
-        <View style={{ flex: 1,     borderColor: "#FFFFFF",
-     borderWidth: 1, }}>
+        <View style={{ flex: 1, borderColor: "#FFFFFF", borderWidth: 1, }}>
           <LinearGradient
             colors={['transparent', 'black']}
             style={{ height: fadeHeight }}

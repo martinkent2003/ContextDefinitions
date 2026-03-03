@@ -4,12 +4,13 @@ import { typography } from "@/constants/Themes";
 import nba from '@/shared/reading-structure/nba.json';
 import llm from '@/shared/reading-structure/llm.json';
 import koreeda from '@/shared/reading-structure/koreeda.json';
+import { getReadingStructure } from "@/services/readings";
 
 type ReadingContextType = {
   reading: ReadingMetadata | null;
   readingContent: ReadingPackageV1 | null;
   selection: ReadingSelection | null;
-  handleReadingChange: (reading: ReadingMetadata) => void;
+  handleReadingChange: (reading: ReadingMetadata) => Promise<boolean>;
   setSelection: (sel: ReadingSelection | null) => void;
   fontSize: number;
   setFontSize: (size: number) => void;
@@ -30,10 +31,16 @@ export function ReadingProvider({ children }: { children: React.ReactNode }) {
   const [totalPages, setTotalPages] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(0);
 
-  function handleReadingChange(reading: ReadingMetadata) {
+  async function handleReadingChange(reading: ReadingMetadata): Promise<boolean> {
     setSelection(null);
     setReading(reading);
-    setReadingContent(koreeda as ReadingPackageV1);
+    const result = await getReadingStructure(reading.id);
+    if (result === null) {
+      setReading(null);
+      return false;
+    }
+    setReadingContent(result);
+    return true;
   }
 
   return (

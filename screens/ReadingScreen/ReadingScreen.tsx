@@ -14,6 +14,7 @@ export default function ReadingScreen() {
 
   if (!reading) return null;
 
+  console.log("rendering reading screen")
   return (
     <SafeAreaView style={[styles.readingScreen, { backgroundColor }]}>
       <Header />

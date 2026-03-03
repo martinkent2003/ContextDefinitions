@@ -1,6 +1,16 @@
-import { ReadingMetadata } from '@/types/readings';
+import { ReadingMetadata, ReadingPackageV1 } from '@/types/readings';
 import { supabase } from '@utils/supabase';
 import { FunctionsFetchError, FunctionsHttpError, FunctionsRelayError } from "@supabase/supabase-js";
+
+//since blob.text() is a web-only api
+function blobToText(blob: Blob): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => resolve(reader.result as string);
+    reader.onerror = reject;
+    reader.readAsText(blob);
+  });
+}
 
 export async function uploadReading(content: string, title: string, genre: string, privacy: boolean) {
     const newReading = {
@@ -108,4 +118,36 @@ export async function fetchAllAvailableReadings(): Promise<ReadingMetadata[]> {
   for (const r of [...saved, ...feed]) map.set(r.id, r);
 
   return Array.from(map.values());
+}
+
+export async function getReadingStructure(readingId: string): Promise<ReadingPackageV1 | null>{
+  console.log(readingId)
+  const filePath = `readings/${readingId}.structure.v1.json`;
+  console.log(filePath);
+  const { data, error } = await supabase
+    .storage
+    .from('readings')
+    .download(filePath);
+
+  if (error) {
+    console.log('Failed to download reading structure:', error.message);
+    return null;
+  }
+
+  if (!data) {
+    console.log('No file data returned from storage.');
+    return null;
+  }
+  console.log('blob size: ', data.size, '\n type: ', data.type)
+  // Convert Blob → text → JSON
+  const text = await blobToText(data);
+  const parsed = JSON.parse(text) as ReadingPackageV1;
+
+  // Optional: runtime schema guard
+  if (parsed.schema !== "reading_package_v1") {
+    console.log('Invalid schema:', parsed.schema);
+    return null;
+  }
+  console.log("returned structure")
+  return parsed;
 }

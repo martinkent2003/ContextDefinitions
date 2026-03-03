@@ -5,8 +5,8 @@ export const styles = StyleSheet.create({
     // Screen
   screen: {
     flex: 1,
-    borderColor: "#FFFFFF",
-    borderWidth: 1,
+    // borderColor: "#FFFFFF",
+    // borderWidth: 1,
   },
   pressable: {
     flex: 1,

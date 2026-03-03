@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { LayoutChangeEvent, LayoutRectangle } from "react-native";
 import { Gesture } from "react-native-gesture-handler";
 import { useReading } from "@/hooks/useReading";
@@ -172,7 +172,8 @@ export function useReadingContent(): UseReadingContentReturn {
   // Reset measurement state whenever the reading content or font size changes.
   // This re-renders all tokens so they re-measure at the new size/content.
   // Show loading overlay to hide the re-measurement reflow from the user.
-  useEffect(() => {
+  useLayoutEffect(() => {
+    //console.log('Effect 1 fired, readingContent:', readingContent ? `${allTokens.length} tokens` : 'null')
     const isNewReading = readingContent !== prevReadingContentRef.current;
     prevReadingContentRef.current = readingContent;
 
@@ -194,6 +195,7 @@ export function useReadingContent(): UseReadingContentReturn {
   // Once all token layouts are collected AND container height is known,
   // compute the paginated token array, then dismiss the loading overlay.
   useEffect(() => {
+    //console.log('Effect 2:', { layoutsComplete, containerHeight, tokenCount: allTokens.length });
     if (!layoutsComplete || containerHeight === 0 || allTokens.length === 0) return;
     const computed = buildPages(layoutMap.current, allTokens, sentences, containerHeight);
     setPages(computed);
@@ -283,6 +285,7 @@ export function useReadingContent(): UseReadingContentReturn {
 
   function onTokenLayout(tokenIdx: number, layout: LayoutRectangle): void {
     layoutMap.current.set(tokenIdx, layout);
+    //console.log(`token layouts: ${layoutMap.current.size} / ${allTokens.length}`);
     // Signal completion once every token has reported its layout.
     // Guard with !layoutsComplete so this only fires once per measurement pass.
     if (!layoutsComplete && layoutMap.current.size >= allTokens.length && allTokens.length > 0) {

@@ -6,15 +6,14 @@ import { styles } from "@screens/ReadingScreen/styles";
 import Header from "@screens/ReadingScreen/Components/Header";
 import ReadingContent from "@screens/ReadingScreen/Components/ReadingContent";
 import Footer from "@screens/ReadingScreen/Components/Footer";
-import WordsSheet from "@screens/ReadingScreen/Components/WordsSheet";
+import WordsSheet from "@/components/WordsSheet";
 
 export default function ReadingScreen() {
   const { reading } = useReading();
   const backgroundColor = useThemeColor({}, "background");
 
   if (!reading) return null;
-
-  console.log("rendering reading screen")
+  
   return (
     <SafeAreaView style={[styles.readingScreen, { backgroundColor }]}>
       <Header />

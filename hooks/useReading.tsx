@@ -33,12 +33,12 @@ export function ReadingProvider({ children }: { children: React.ReactNode }) {
 
   async function handleReadingChange(reading: ReadingMetadata): Promise<boolean> {
     setSelection(null);
-    setReading(reading);
     const result = await getReadingStructure(reading.id);
     if (result === null) {
       setReading(null);
       return false;
     }
+    setReading(reading);
     setReadingContent(result);
     return true;
   }

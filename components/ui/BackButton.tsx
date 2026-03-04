@@ -1,21 +1,16 @@
-import { StyleSheet, TouchableOpacity, TouchableOpacityProps } from "react-native";
-import { Icon } from "@components/ui/Icon";
-import { spacing } from "@constants/Themes";
+import { TouchableOpacityProps } from "react-native";
+import { IconButton } from "@components/ui/IconButton";
 
 export type BackButtonProps = Omit<TouchableOpacityProps, "children"> & {
   size?: number;
 };
 
-export function BackButton({ size = 22, style, ...otherProps }: BackButtonProps) {
+export function BackButton({ size = 24, ...otherProps }: BackButtonProps) {
   return (
-    <TouchableOpacity style={[styles.base, style]} {...otherProps}>
-      <Icon library="Ionicons" name="chevron-back-circle-outline" size={size} />
-    </TouchableOpacity>
+    <IconButton
+      icon={{ library: "Ionicons", name: "arrow-back-outline", size }}
+      label="Return"
+      {...otherProps}
+    />
   );
 }
-
-const styles = StyleSheet.create({
-  base: {
-    padding: spacing.xs,
-  },
-});

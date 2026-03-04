@@ -2,7 +2,9 @@ import { radii, spacing, typography } from "@/constants/Themes";
 import { ThemeProps, useThemeColor } from "@/hooks/useThemeColor";
 import { TextInput as DefaultInput, TextInputProps as DefaultInputProps } from "react-native";
 
-export type TextAreaProps = ThemeProps & DefaultInputProps;
+export type TextAreaProps = ThemeProps & DefaultInputProps & {
+    minHeight?: number;
+};
 
 export function TextArea(props: TextAreaProps) {
     const {
@@ -10,6 +12,7 @@ export function TextArea(props: TextAreaProps) {
         darkColor,
         style,
         placeholderTextColor,
+        minHeight = 300,
         ...otherProps
     } = props;
 
@@ -25,8 +28,7 @@ export function TextArea(props: TextAreaProps) {
             placeholderTextColor={placeholderTextColor ?? placeholderColor}
             style={[
                 {
-                    flex: 1,
-                    minHeight: 300,
+                    minHeight,
                     padding: spacing.sm,
                     marginHorizontal: spacing.sm,
                     borderColor: borderColor,

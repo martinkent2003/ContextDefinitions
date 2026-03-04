@@ -285,7 +285,7 @@ export function useReadingContent(): UseReadingContentReturn {
 
   function onTokenLayout(tokenIdx: number, layout: LayoutRectangle): void {
     layoutMap.current.set(tokenIdx, layout);
-    //console.log(`token layouts: ${layoutMap.current.size} / ${allTokens.length}`);
+    // console.log(`token layouts: ${layoutMap.current.size} / ${allTokens.length}`);
     // Signal completion once every token has reported its layout.
     // Guard with !layoutsComplete so this only fires once per measurement pass.
     if (!layoutsComplete && layoutMap.current.size >= allTokens.length && allTokens.length > 0) {
@@ -293,5 +293,15 @@ export function useReadingContent(): UseReadingContentReturn {
     }
   }
 
-  return { tokens: visibleTokens, sentences, spans, fontSize, isMeasuring, isHighlighted, pan, onContainerLayout, onTokenLayout };
+  return { 
+      tokens: visibleTokens, 
+      sentences, 
+      spans, 
+      fontSize, 
+      isMeasuring, 
+      isHighlighted, 
+      pan, 
+      onContainerLayout, 
+      onTokenLayout
+   };
 }

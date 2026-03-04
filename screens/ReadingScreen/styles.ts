@@ -22,6 +22,7 @@ export const styles = StyleSheet.create({
     fontSize: typography.sizes.xxl,
     fontWeight: typography.weights.bold,
     flex: 1,
+    marginRight:spacing.xs
   },
   //reading content
   readingContent: {
@@ -32,12 +33,20 @@ export const styles = StyleSheet.create({
     // borderWidth: 1,
     overflow: "hidden"
   },
+
+  //token 
+    tokenContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+  },
+  tokenContainerHidden: {
+    opacity: 0,
+  },
   //footer
   footer: {
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.lg,
   },  
   footerButton: {
     padding: spacing.xs,
@@ -52,7 +61,7 @@ export const styles = StyleSheet.create({
     marginRight: spacing.sm,
   },
   footerFontSizeLabel: {
-    fontSize: typography.sizes.sm,
+    fontSize: typography.sizes.xxxl,
     fontWeight: typography.weights.semibold,
     marginHorizontal: spacing.xs,
   },
@@ -64,7 +73,7 @@ export const styles = StyleSheet.create({
   footerPageLabel: {
     flex: 1,
     textAlign: "center",
-    fontSize: typography.sizes.md,
+    fontSize: typography.sizes.xxxl,
     fontWeight: "600",
   },
 
@@ -76,19 +85,4 @@ export const styles = StyleSheet.create({
     right: 0, 
     bottom: 0 
   },
-  //wordsSheet
-    sheetContent: {
-    flex: 1,
-    paddingHorizontal: spacing.md,
-    backgroundColor: 'transparent'
-  },
-  sheetTitle: {
-    fontSize: typography.sizes.lg,
-    fontWeight: typography.weights.semibold,
-    marginBottom: spacing.sm,
-  },
-  sheetPlaceholder: {
-    fontSize: typography.sizes.md,
-  },
-
 });

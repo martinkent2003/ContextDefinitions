@@ -11,3 +11,4 @@ export { View, ViewProps } from "@components/ui/View";
 export { TextArea, TextAreaProps} from "@components/ui/TextArea";
 export { RadioButton, RadioButtonProps, RadioItem } from "@components/ui/RadioButton";
 export { SegmentedControl, SegmentedControlProps } from "@components/ui/SegmentedControl";
+export { IconButton, IconButtonProps } from "@components/ui/IconButton";

@@ -15,7 +15,7 @@ Process reading (orchestrator):
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-//const WEBHOOK_SECRET = Deno.env.get("READINGS_DIFFICULTY_WEBHOOK_SECRET")!;
+const WEBHOOK_SECRET = Deno.env.get("READINGS_DIFFICULTY_WEBHOOK_SECRET")!;
 
 const supabase = createClient(SUPABASE_URL, SERVICE_ROLE_KEY);
 
@@ -31,13 +31,16 @@ Deno.serve(async (req) => {
 
   try {
     // 1) Verify caller (DB trigger via pg_net) using shared secret
-    // const secret = req.headers.get("x-webhook-secret");
-    // if (!secret || secret !== WEBHOOK_SECRET) {
-    //   return new Response(JSON.stringify({ ok: false, error: "Unauthorized" }), {
-    //     status: 401,
-    //     headers: { "Content-Type": "application/json" },
-    //   });
-    // }
+    const secret = req.headers.get("x-webhook-secret");
+    if (!secret || secret !== WEBHOOK_SECRET) {
+      return new Response(
+        JSON.stringify({ ok: false, error: "Unauthorized" }),
+        {
+          status: 401,
+          headers: { "Content-Type": "application/json" },
+        },
+      );
+    }
 
     // 2) Parse payload
     const body = (await req.json()) as Partial<Payload>;

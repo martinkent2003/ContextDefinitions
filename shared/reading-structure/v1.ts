@@ -11,7 +11,6 @@ export interface ReadingStructureV1 {
     tokenizer: string;
     tokenizer_version: string;
     phrase_rules_version: string;
-    generated_at: string;
   };
   blocks: {
     i: number;

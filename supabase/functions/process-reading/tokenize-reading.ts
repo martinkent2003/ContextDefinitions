@@ -6,7 +6,7 @@ import type { ProcessingContext, ReadingStructureV1 } from "./types.ts";
 /**
  * Tokenization + structural packaging (pure).
  * - DOES NOT know about reading_id or storage_path (index.ts injects those).
- * - Returns a ReadingPackageV1-ish object (ReadingPackageV1 is `any` for now).
+ * - Returns a ReadingStructureV1-ish object (ReadingStructureV1 is `any` for now).
  * - Offsets are codepoint-based (implicit, as decided).
  */
 
@@ -229,7 +229,7 @@ export function tokenizeReading(ctx: ProcessingContext): ReadingStructureV1 {
 
   // index.ts injects reading_id + text.storage_path.
   const readingStructure = {
-    schema: "reading_package_v1",
+    schema: "reading_structure_v1",
     reading_id: null, // index.ts should overwrite
     language_code,
     text: {

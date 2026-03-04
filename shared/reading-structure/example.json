@@ -10,8 +10,7 @@
   "processor": {
     "tokenizer": "example-tokenizer",
     "tokenizer_version": "0.2.0",
-    "phrase_rules_version": "0.2.0",
-    "generated_at": "2026-02-18T22:30:00Z"
+    "phrase_rules_version": "0.2.0"
   },
   "blocks": [
     {

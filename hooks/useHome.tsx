@@ -1,4 +1,6 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+import { useRouter } from 'expo-router'
+import { createContext, useContext, useEffect, useRef, useState } from 'react'
+import { Alert } from 'react-native'
 import {
   fetchAllAvailableReadings,
   fetchFeedReadings,
@@ -6,6 +8,7 @@ import {
 } from '@/services/readings'
 import type { ReadingMetadata } from '@/types/readings'
 import { useLoading } from '@hooks/useLoading'
+import { useReading } from '@hooks/useReading'
 
 type HomeContextType = {
   // Data
@@ -13,6 +16,7 @@ type HomeContextType = {
   selectedSegment: string
   setSelectedSegment: (segment: string) => void
   refreshReadings: () => Promise<void>
+  handleCardPress: (reading: ReadingMetadata) => Promise<void>
 
   // Modal visibility
   isProfileModalVisible: boolean
@@ -27,6 +31,23 @@ export function HomeProvider({ children }: { children: React.ReactNode }) {
   const [readings, setReadings] = useState<ReadingMetadata[]>([])
   const [selectedSegment, setSelectedSegment] = useState('Feed')
   const { showLoading, hideLoading } = useLoading()
+  const { handleReadingChange } = useReading()
+  const router = useRouter()
+  const isNavigating = useRef(false)
+
+  const handleCardPress = async (reading: ReadingMetadata) => {
+    if (isNavigating.current) return
+    isNavigating.current = true
+    showLoading()
+    const success = await handleReadingChange(reading)
+    if (success) {
+      router.push('/(private)/reading')
+    } else {
+      Alert.alert('File was not found \n' + reading.title)
+      hideLoading()
+    }
+    isNavigating.current = false
+  }
 
   const fetchFeed = async () => {
     const data = await fetchAllAvailableReadings()
@@ -63,6 +84,7 @@ export function HomeProvider({ children }: { children: React.ReactNode }) {
         selectedSegment,
         setSelectedSegment,
         refreshReadings,
+        handleCardPress,
         isProfileModalVisible,
         showProfileModal: () => setProfileModalVisible(true),
         hideProfileModal: () => setProfileModalVisible(false),

@@ -11,7 +11,7 @@ type LayoutMap = Map<number, LayoutRectangle>
 
 // visibleIds restricts the search to tokens currently rendered on screen,
 // preventing stale measurement-pass positions from other pages being hit.
-function hitTest(
+export function hitTest(
   x: number,
   y: number,
   map: LayoutMap,
@@ -34,7 +34,7 @@ function hitTest(
 type Sentence = ReadingPackageV1['sentences'][number]
 
 // Build a token→sentence lookup by walking both arrays together.O(n+m)
-function buildTokenSentenceMap(
+export function buildTokenSentenceMap(
   allTokens: Token[],
   sentences: Sentence[],
 ): Map<number, number> {
@@ -61,7 +61,7 @@ function buildTokenSentenceMap(
 // Sentence-aware: when a greedy break would split a sentence across pages,
 // the current page is trimmed back to the start of that sentence so the whole
 // sentence begins on the next page instead.
-function buildPages(
+export function buildPages(
   map: LayoutMap,
   allTokens: Token[],
   sentences: Sentence[],

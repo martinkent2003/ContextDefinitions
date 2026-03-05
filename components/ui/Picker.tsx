@@ -1,19 +1,23 @@
-import { radii, spacing, typography } from '@constants/Themes';
-import { ThemeProps, useThemeColor } from '@hooks/useThemeColor';
-import { Picker as DefaultPicker, PickerProps as DefaultPickerProps } from '@react-native-picker/picker';
-import { Platform, StyleSheet, View, ViewStyle } from 'react-native';
-import { Text } from '@components/ui/Text';
+import { radii, spacing, typography } from "@constants/Themes";
+import { ThemeProps, useThemeColor } from "@hooks/useThemeColor";
+import {
+  Picker as DefaultPicker,
+  PickerProps as DefaultPickerProps,
+} from "@react-native-picker/picker";
+import { Platform, StyleSheet, View, ViewStyle } from "react-native";
+import { Text } from "@components/ui/Text";
 
 export type PickerItem = {
   label: string;
   value: string;
 };
 
-export type PickerProps<T> = ThemeProps & DefaultPickerProps<T> & {
-  label?: string;
-  items: PickerItem[];
-  containerStyle?: ViewStyle;
-};
+export type PickerProps<T> = ThemeProps &
+  DefaultPickerProps<T> & {
+    label?: string;
+    items: PickerItem[];
+    containerStyle?: ViewStyle;
+  };
 
 export function Picker<T extends string>(props: PickerProps<T>) {
   const {
@@ -26,17 +30,18 @@ export function Picker<T extends string>(props: PickerProps<T>) {
     ...otherProps
   } = props;
 
-  const textColor = useThemeColor({ light: lightColor, dark: darkColor }, 'text');
-  const labelColor = useThemeColor({}, 'textSecondary');
-  const borderColor = useThemeColor({}, 'border');
-  const backgroundColor = useThemeColor({}, 'backgroundSecondary');
+  const textColor = useThemeColor(
+    { light: lightColor, dark: darkColor },
+    "text",
+  );
+  const labelColor = useThemeColor({}, "textSecondary");
+  const borderColor = useThemeColor({}, "border");
+  const backgroundColor = useThemeColor({}, "backgroundSecondary");
 
   return (
     <View style={styles.wrapper}>
       {label && (
-        <Text style={[styles.label, { color: labelColor }]}>
-          {label}
-        </Text>
+        <Text style={[styles.label, { color: labelColor }]}>{label}</Text>
       )}
       <View
         style={[
@@ -87,10 +92,10 @@ const styles = StyleSheet.create({
   container: {
     borderWidth: 2,
     borderRadius: radii.md,
-    overflow: 'hidden',
+    overflow: "hidden",
     ...Platform.select({
       ios: {
-        height: 100, 
+        height: 100,
       },
       android: {},
     }),

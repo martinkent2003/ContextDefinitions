@@ -35,11 +35,25 @@ export function WordEdit({
         </Text>
       </View>
       <Text style={[styles.sheetLabel, { color: textColor }]}>Definition:</Text>
-      <TextArea value={definitionDraft} onChangeText={setDefinitionDraft} minHeight={30} />
-      <Text style={[styles.sheetLabel, { color: textColor }]}>Translation:</Text>
-      <TextArea value={translationDraft} onChangeText={setTranslationDraft} minHeight={30} />
+      <TextArea
+        value={definitionDraft}
+        onChangeText={setDefinitionDraft}
+        minHeight={30}
+      />
+      <Text style={[styles.sheetLabel, { color: textColor }]}>
+        Translation:
+      </Text>
+      <TextArea
+        value={translationDraft}
+        onChangeText={setTranslationDraft}
+        minHeight={30}
+      />
       <Text style={[styles.sheetLabel, { color: textColor }]}>Context:</Text>
-      <TextArea value={contextDraft} onChangeText={setContextDraft} minHeight={30} />
+      <TextArea
+        value={contextDraft}
+        onChangeText={setContextDraft}
+        minHeight={30}
+      />
       <View style={styles.sheetEditActions}>
         <Button variant="secondary" onPress={onCancel}>
           Cancel

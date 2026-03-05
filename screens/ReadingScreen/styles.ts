@@ -74,7 +74,7 @@ export const styles = StyleSheet.create({
     flex: 1,
     textAlign: "center",
     fontSize: typography.sizes.xxxl,
-    fontWeight: "600",
+    fontWeight: typography.weights.medium,
   },
 
   //wordsheetwrapper

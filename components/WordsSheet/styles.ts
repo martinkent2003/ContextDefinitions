@@ -5,25 +5,25 @@ export const styles = StyleSheet.create({
   sheetContent: {
     flex: 1,
     paddingHorizontal: spacing.md,
-    backgroundColor: 'transparent'
+    backgroundColor: "transparent",
   },
   sheetHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: spacing.md,
-    backgroundColor: 'transparent'
+    backgroundColor: "transparent",
   },
   sheetHeaderCenter: {
     flex: 1,
-    textAlign: 'center',
+    textAlign: "center",
     fontSize: typography.sizes.xl,
     fontWeight: typography.weights.semibold,
   },
   sheetHeaderActions: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: spacing.xs,
-    backgroundColor: 'transparent'
+    backgroundColor: "transparent",
   },
   sheetLabel: {
     fontSize: typography.sizes.sm,
@@ -36,11 +36,11 @@ export const styles = StyleSheet.create({
     marginTop: spacing.xs,
   },
   sheetEditActions: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     padding: spacing.sm,
     marginTop: spacing.md,
-    backgroundColor:'transparent'
+    backgroundColor: "transparent",
   },
   feedTitle: {
     fontSize: typography.sizes.xl,
@@ -49,20 +49,7 @@ export const styles = StyleSheet.create({
   },
   feedEmpty: {
     fontSize: typography.sizes.md,
-    textAlign: 'center',
+    textAlign: "center",
     marginTop: spacing.xl,
-  },
-  feedItem: {
-    paddingVertical: spacing.sm,
-    borderBottomWidth: 1,
-    backgroundColor: 'transparent',
-  },
-  feedItemText: {
-    fontSize: typography.sizes.md,
-    fontWeight: typography.weights.semibold,
-  },
-  feedItemDefinition: {
-    fontSize: typography.sizes.sm,
-    marginTop: spacing.xs,
   },
 });

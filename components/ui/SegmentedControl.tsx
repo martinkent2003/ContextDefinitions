@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
-import { radii, spacing, typography } from '@/constants/Themes';
-import { ThemeProps, useThemeColor } from '@/hooks/useThemeColor';
+import { useEffect, useRef, useState } from "react";
+import { radii, spacing, typography } from "@/constants/Themes";
+import { ThemeProps, useThemeColor } from "@/hooks/useThemeColor";
 import {
   Animated,
   LayoutChangeEvent,
@@ -8,10 +8,10 @@ import {
   TouchableOpacity,
   View,
   ViewStyle,
-} from 'react-native';
-import { Text } from '@components/ui/Text';
+} from "react-native";
+import { Text } from "@components/ui/Text";
 
-type SegmentedControlSize = 'sm' | 'md' | 'lg';
+type SegmentedControlSize = "sm" | "md" | "lg";
 
 const sizeStyles = {
   sm: {
@@ -46,15 +46,18 @@ export function SegmentedControl(props: SegmentedControlProps) {
     segments,
     selected,
     onSelect,
-    size = 'md',
+    size = "md",
     style,
   } = props;
 
-  const backgroundColor = useThemeColor({}, 'backgroundSecondary');
-  const borderColor = useThemeColor({}, 'border');
-  const selectedBg = useThemeColor({}, 'tint');
-  const selectedText = useThemeColor({}, 'textInverse');
-  const unselectedText = useThemeColor({ light: lightColor, dark: darkColor }, 'text');
+  const backgroundColor = useThemeColor({}, "backgroundSecondary");
+  const borderColor = useThemeColor({}, "border");
+  const selectedBg = useThemeColor({}, "tint");
+  const selectedText = useThemeColor({}, "textInverse");
+  const unselectedText = useThemeColor(
+    { light: lightColor, dark: darkColor },
+    "text",
+  );
 
   const currentSize = sizeStyles[size];
 
@@ -72,7 +75,7 @@ export function SegmentedControl(props: SegmentedControlProps) {
       tension: 68,
       friction: 7,
     }).start();
-  }, [selectedIndex, segmentWidth]);
+  }, [selectedIndex, segmentWidth]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const onLayout = (e: LayoutChangeEvent) => {
     const width = e.nativeEvent.layout.width;
@@ -139,24 +142,24 @@ export function SegmentedControl(props: SegmentedControlProps) {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
+    flexDirection: "row",
     borderWidth: 1,
     borderRadius: radii.lg,
-    overflow: 'hidden',
+    overflow: "hidden",
   },
   slider: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     bottom: 0,
     borderRadius: radii.md,
   },
   segment: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   text: {
     fontWeight: typography.weights.semibold,
-    textAlign: 'center',
+    textAlign: "center",
   },
 });

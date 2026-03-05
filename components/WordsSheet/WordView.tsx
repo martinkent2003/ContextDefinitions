@@ -14,7 +14,17 @@ type WordViewProps = {
   onRemove: () => void;
 };
 
-export function WordView({ selectedText, definition, translation, sentenceText, isSaved, onBack, onEdit, onAdd, onRemove }: WordViewProps) {
+export function WordView({
+  selectedText,
+  definition,
+  translation,
+  sentenceText,
+  isSaved,
+  onBack,
+  onEdit,
+  onAdd,
+  onRemove,
+}: WordViewProps) {
   const textColor = useThemeColor({}, "text");
   const textSecondary = useThemeColor({}, "textSecondary");
 
@@ -33,7 +43,12 @@ export function WordView({ selectedText, definition, translation, sentenceText, 
           />
           {isSaved ? (
             <IconButton
-              icon={{ library: "Ionicons", name: "trash-outline", size: 24, color: "#B33" }}
+              icon={{
+                library: "Ionicons",
+                name: "trash-outline",
+                size: 24,
+                color: "#B33",
+              }}
               label="Remove"
               onPress={onRemove}
             />
@@ -47,11 +62,19 @@ export function WordView({ selectedText, definition, translation, sentenceText, 
         </View>
       </View>
       <Text style={[styles.sheetLabel, { color: textColor }]}>Definition:</Text>
-      <Text style={[styles.sheetValue, { color: textSecondary }]}>{definition ?? "—"}</Text>
-      <Text style={[styles.sheetLabel, { color: textColor }]}>Translation:</Text>
-      <Text style={[styles.sheetValue, { color: textSecondary }]}>{translation ?? "—"}</Text>
+      <Text style={[styles.sheetValue, { color: textSecondary }]}>
+        {definition ?? "—"}
+      </Text>
+      <Text style={[styles.sheetLabel, { color: textColor }]}>
+        Translation:
+      </Text>
+      <Text style={[styles.sheetValue, { color: textSecondary }]}>
+        {translation ?? "—"}
+      </Text>
       <Text style={[styles.sheetLabel, { color: textColor }]}>Context:</Text>
-      <Text style={[styles.sheetValue, { color: textSecondary }]}>{sentenceText ?? "—"}</Text>
+      <Text style={[styles.sheetValue, { color: textSecondary }]}>
+        {sentenceText ?? "—"}
+      </Text>
     </>
   );
 }

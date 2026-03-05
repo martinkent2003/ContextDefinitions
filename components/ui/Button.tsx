@@ -1,28 +1,29 @@
-import { radii, shadows, spacing, typography } from '@constants/Themes';
-import { ThemeProps, useThemeColor } from '@hooks/useThemeColor';
-import * as Haptics from 'expo-haptics';
+import { radii, shadows, spacing, typography } from "@constants/Themes";
+import { ThemeProps, useThemeColor } from "@hooks/useThemeColor";
+import * as Haptics from "expo-haptics";
 import {
-    ActivityIndicator,
-    StyleSheet,
-    TouchableOpacity,
-    TouchableOpacityProps
-} from 'react-native';
-import { Text } from '@components/ui/Text';
+  ActivityIndicator,
+  StyleSheet,
+  TouchableOpacity,
+  TouchableOpacityProps,
+} from "react-native";
+import { Text } from "@components/ui/Text";
 
 // Define variant types
-type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'upload';
-type ButtonSize = 'sm' | 'md' | 'lg';
+type ButtonVariant = "primary" | "secondary" | "ghost" | "danger" | "upload";
+type ButtonSize = "sm" | "md" | "lg";
 
-export type ButtonProps = ThemeProps & TouchableOpacityProps & {
-  variant?: ButtonVariant;
-  size?: ButtonSize;
-  loading?: boolean;
-  disabled?: boolean;
-  fullWidth?: boolean;
-  children: React.ReactNode;
-};
+export type ButtonProps = ThemeProps &
+  TouchableOpacityProps & {
+    variant?: ButtonVariant;
+    size?: ButtonSize;
+    loading?: boolean;
+    disabled?: boolean;
+    fullWidth?: boolean;
+    children: React.ReactNode;
+  };
 
-// Size configurations 
+// Size configurations
 const sizeStyles = {
   sm: {
     paddingVertical: spacing.xs,
@@ -48,8 +49,8 @@ export function Button(props: ButtonProps) {
   const {
     lightColor,
     darkColor,
-    variant = 'primary',
-    size = 'md',
+    variant = "primary",
+    size = "md",
     loading = false,
     disabled = false,
     fullWidth = false,
@@ -67,23 +68,23 @@ export function Button(props: ButtonProps) {
     upload: Haptics.ImpactFeedbackStyle.Medium,
   };
 
-  const handlePress: TouchableOpacityProps['onPress'] = (e) => {
+  const handlePress: TouchableOpacityProps["onPress"] = (e) => {
     Haptics.impactAsync(hapticStyles[variant]);
     onPress?.(e);
   };
 
   //theme colors for each variant
-  const primaryBg = useThemeColor({}, 'buttonBackground');
-  const secondaryBg = useThemeColor({}, 'buttonBackgroundSecondary');
-  const ghostBg = useThemeColor({}, 'buttonBackgroundGhost');
-  const errorColor = useThemeColor({}, 'error');
-  
-  const uploadBg = useThemeColor({}, 'cardBackground');
-  const cardBorderColor = useThemeColor({}, 'cardBorder')
-  
-  const primaryText = useThemeColor({}, 'textInverse');
-  const secondaryText = useThemeColor({}, 'text');
-  const ghostText = useThemeColor({}, 'tint');
+  const primaryBg = useThemeColor({}, "buttonBackground");
+  const secondaryBg = useThemeColor({}, "buttonBackgroundSecondary");
+  const ghostBg = useThemeColor({}, "buttonBackgroundGhost");
+  const errorColor = useThemeColor({}, "error");
+
+  const uploadBg = useThemeColor({}, "cardBackground");
+  const cardBorderColor = useThemeColor({}, "cardBorder");
+
+  const primaryText = useThemeColor({}, "textInverse");
+  const secondaryText = useThemeColor({}, "text");
+  const ghostText = useThemeColor({}, "tint");
 
   // Variant configurations
   const variantStyles = {
@@ -91,32 +92,32 @@ export function Button(props: ButtonProps) {
       backgroundColor: primaryBg,
       textColor: primaryText,
       borderWidth: 0,
-      borderColor: 'transparent',
+      borderColor: "transparent",
     },
     secondary: {
       backgroundColor: secondaryBg,
       textColor: secondaryText,
       borderWidth: 1,
-      borderColor: useThemeColor({}, 'border'),
+      borderColor: useThemeColor({}, "border"),
     },
     ghost: {
       backgroundColor: ghostBg,
       textColor: ghostText,
       borderWidth: 0,
-      borderColor: 'transparent',
+      borderColor: "transparent",
     },
     danger: {
       backgroundColor: errorColor,
       textColor: primaryText,
       borderWidth: 0,
-      borderColor: 'transparent',
+      borderColor: "transparent",
     },
     upload: {
       backgroundColor: uploadBg,
       textColor: primaryText,
       borderWidth: 2,
-      borderColor: cardBorderColor
-    }
+      borderColor: cardBorderColor,
+    },
   };
 
   const currentVariant = variantStyles[variant];
@@ -134,7 +135,7 @@ export function Button(props: ButtonProps) {
           paddingHorizontal: currentSize.paddingHorizontal,
           borderRadius: currentSize.borderRadius,
           opacity: disabled ? 0.5 : 1,
-          width: fullWidth ? '100%' : undefined,
+          width: fullWidth ? "100%" : undefined,
         },
         shadows.md,
         style,
@@ -164,12 +165,12 @@ export function Button(props: ButtonProps) {
 
 const styles = StyleSheet.create({
   base: {
-    flexDirection: 'column-reverse',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: "column-reverse",
+    alignItems: "center",
+    justifyContent: "center",
   },
   text: {
     fontWeight: typography.weights.bold,
-    textAlign: 'center',
+    textAlign: "center",
   },
 });

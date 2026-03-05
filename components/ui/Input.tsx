@@ -5,7 +5,7 @@ import {
   InputProps as DefaultInputProps,
 } from "@rneui/themed";
 
-type InputSize = 'sm' | 'md' | 'lg';
+type InputSize = "sm" | "md" | "lg";
 
 const sizeStyles = {
   sm: {
@@ -28,15 +28,16 @@ const sizeStyles = {
   },
 };
 
-export type InputProps = ThemeProps & DefaultInputProps & {
-  size?: InputSize;
-};
+export type InputProps = ThemeProps &
+  DefaultInputProps & {
+    size?: InputSize;
+  };
 
 export function Input(props: InputProps) {
   const {
     lightColor,
     darkColor,
-    size = 'md',
+    size = "md",
     style,
     inputStyle,
     labelStyle,
@@ -68,7 +69,6 @@ export function Input(props: InputProps) {
           paddingHorizontal: currentSize.paddingHorizontal,
           borderBottomWidth: 2,
           height: currentSize.height,
-          
         },
         inputContainerStyle,
       ]}

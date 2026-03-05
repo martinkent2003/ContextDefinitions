@@ -1,4 +1,8 @@
-import { StyleSheet, TouchableOpacity, TouchableOpacityProps } from "react-native";
+import {
+  StyleSheet,
+  TouchableOpacity,
+  TouchableOpacityProps,
+} from "react-native";
 import { Icon, IconProps } from "@components/ui/Icon";
 import { Text } from "@components/ui/Text";
 import { View } from "@components/ui/View";
@@ -10,9 +14,14 @@ export type IconButtonProps = Omit<TouchableOpacityProps, "children"> & {
   label?: string;
 };
 
-export function IconButton({ icon, label, style, ...touchableProps }: IconButtonProps) {
+export function IconButton({
+  icon,
+  label,
+  style,
+  ...touchableProps
+}: IconButtonProps) {
   const borderColor = useThemeColor({}, "border");
-  const backgroundColor = useThemeColor({},"buttonBackgroundSecondary")
+  const backgroundColor = useThemeColor({}, "buttonBackgroundSecondary");
 
   return (
     <TouchableOpacity style={[styles.container, style]} {...touchableProps}>

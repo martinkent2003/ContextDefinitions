@@ -77,20 +77,22 @@ export default function WordsSheet() {
     sheetRef.current?.snapToIndex(1);
   }
 
-  const isSaved = savedWords.some(w => w.text === selectedText);
+  const isSaved = savedWords.some((w) => w.text === selectedText);
 
   function handleRemove() {
     if (!selectedText) return;
     Alert.alert(selectedText, "Remove this word from your list?", [
       { text: "Cancel", style: "cancel" },
       {
-        text: "Remove", style: "destructive", onPress: () => {
+        text: "Remove",
+        style: "destructive",
+        onPress: () => {
           setSavedWords((prev) => {
-            const idx = prev.findIndex(w => w.text === selectedText);
+            const idx = prev.findIndex((w) => w.text === selectedText);
             if (idx === -1) return prev;
             return [...prev.slice(0, idx), ...prev.slice(idx + 1)];
           });
-        }
+        },
       },
     ]);
   }
@@ -98,20 +100,24 @@ export default function WordsSheet() {
   function handleAdd() {
     if (!selection || !selectedText) return;
     Alert.alert(selectedText, "add word to list", [
-                { text: "Cancel", style: "destructive" },
-                { text: "Confirm", style: "default", onPress: () => {
-                  setSavedWords((prev) => [
-                    ...prev,
-                    {
-                      text: selectedText ?? "",
-                      definition: definition ?? "",
-                      translation: translation ?? "",
-                      context: sentenceText ?? "",
-                      selection,
-                    },
-                  ]);} 
-                },
-            ]);
+      { text: "Cancel", style: "destructive" },
+      {
+        text: "Confirm",
+        style: "default",
+        onPress: () => {
+          setSavedWords((prev) => [
+            ...prev,
+            {
+              text: selectedText ?? "",
+              definition: definition ?? "",
+              translation: translation ?? "",
+              context: sentenceText ?? "",
+              selection,
+            },
+          ]);
+        },
+      },
+    ]);
   }
 
   return (
@@ -125,11 +131,9 @@ export default function WordsSheet() {
       handleIndicatorStyle={{ backgroundColor: handleColor }}
     >
       <View style={styles.sheetContent}>
-        {mode === "feed" && 
-        <WordFeed 
-          savedWords={savedWords} 
-          handleView={handleView}
-        />}
+        {mode === "feed" && (
+          <WordFeed savedWords={savedWords} handleView={handleView} />
+        )}
         {mode === "view" && (
           <WordView
             selectedText={selectedText}

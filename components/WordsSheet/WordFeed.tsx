@@ -10,7 +10,6 @@ type WordFeedProps = {
   handleView: (savedWord: SavedWord) => void;
 };
 
-
 export function WordFeed({ savedWords, handleView }: WordFeedProps) {
   const textColor = useThemeColor({}, "text");
   const textSecondary = useThemeColor({}, "textSecondary");
@@ -25,7 +24,14 @@ export function WordFeed({ savedWords, handleView }: WordFeedProps) {
       ) : (
         <ScrollView>
           {savedWords.map((word, index) => (
-            <WordCard key={index} text={word.text} definition={word.definition} onPress={()=>{handleView(word)}} />
+            <WordCard
+              key={index}
+              text={word.text}
+              definition={word.definition}
+              onPress={() => {
+                handleView(word);
+              }}
+            />
           ))}
         </ScrollView>
       )}

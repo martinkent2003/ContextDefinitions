@@ -157,8 +157,9 @@ export async function getReadingStructure(
   const text = await blobToText(data)
   const parsed = JSON.parse(text) as ReadingPackageV1
 
-  // Optional: runtime schema guard
-  if (parsed.schema !== 'reading_package_v1') {
+  //TODO: Standardize schemas in supabase
+  const validSchemas = ['reading_package_v1', 'reading_structure_v1']
+  if (!validSchemas.includes(parsed.schema)) {
     console.log('Invalid schema:', parsed.schema)
     return null
   }

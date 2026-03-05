@@ -1,3 +1,4 @@
+import * as Haptics from 'expo-haptics'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import type { LayoutChangeEvent, LayoutRectangle } from 'react-native'
 import { Gesture } from 'react-native-gesture-handler'
@@ -260,6 +261,7 @@ export function useReadingContent(): UseReadingContentReturn {
       committedRef.current = false
       const hit = hitTest(e.x, e.y, layoutMap.current, visibleTokenIdsRef.current)
       if (hit !== null) {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
         selectionStartRef.current = hit
         selectionEndRef.current = hit
         setSelectionStart(hit)
@@ -277,6 +279,7 @@ export function useReadingContent(): UseReadingContentReturn {
       const start = selectionStartRef.current
       const end = selectionEndRef.current
       if (start !== null && end !== null) {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
         commitSelection(start, end)
         committedRef.current = true
       }

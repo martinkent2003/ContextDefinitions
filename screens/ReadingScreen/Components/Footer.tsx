@@ -27,7 +27,10 @@ export default function Footer() {
       <View style={styles.footerFontSizeGroup}>
         <IconButton
           icon={{ library: 'Ionicons', name: 'remove-outline', size: 24 }}
-          onPress={() => setFontSize(FONT_SIZES[fontSizeIdx - 1])}
+          onPress={() => {
+            setFontSize(FONT_SIZES[fontSizeIdx - 1])
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+          }}
           disabled={!canDecrease}
           style={[styles.footerButton, !canDecrease && styles.footerButtonDisabled]}
           hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
@@ -37,7 +40,10 @@ export default function Footer() {
 
         <IconButton
           icon={{ library: 'Ionicons', name: 'add-outline', size: 24 }}
-          onPress={() => setFontSize(FONT_SIZES[fontSizeIdx + 1])}
+          onPress={() => {
+            setFontSize(FONT_SIZES[fontSizeIdx + 1])
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+          }}
           disabled={!canIncrease}
           style={[styles.footerButton, !canIncrease && styles.footerButtonDisabled]}
           hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
@@ -48,7 +54,10 @@ export default function Footer() {
       <View style={styles.footerPaginationGroup}>
         <IconButton
           icon={{ library: 'Ionicons', name: 'chevron-back-outline', size: 24 }}
-          onPress={() => setCurrentPage(currentPage - 1)}
+          onPress={() => {
+            setCurrentPage(currentPage - 1)
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+          }}
           disabled={isFirst}
           style={[styles.footerButton, isFirst && styles.footerButtonDisabled]}
           hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
@@ -60,7 +69,10 @@ export default function Footer() {
 
         <IconButton
           icon={{ library: 'Ionicons', name: 'chevron-forward-outline', size: 24 }}
-          onPress={() => setCurrentPage(currentPage + 1)}
+          onPress={() => {
+            setCurrentPage(currentPage + 1)
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+          }}
           disabled={isLast}
           style={[styles.footerButton, isLast && styles.footerButtonDisabled]}
           hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}

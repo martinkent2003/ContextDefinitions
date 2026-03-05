@@ -6,15 +6,15 @@ import { UploadProvider } from '@/hooks/useUpload'
 
 export default function PrivateLayout() {
   return (
-    <HomeProvider>
-      <UploadProvider>
-        <ReadingProvider>
+    <ReadingProvider>
+      <HomeProvider>
+        <UploadProvider>
           <Stack screenOptions={{ headerShown: false }}>
             <Stack.Screen name="(tabs)" />
             <Stack.Screen name="reading" />
           </Stack>
-        </ReadingProvider>
-      </UploadProvider>
-    </HomeProvider>
+        </UploadProvider>
+      </HomeProvider>
+    </ReadingProvider>
   )
 }

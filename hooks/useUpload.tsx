@@ -1,11 +1,10 @@
 import { createContext, useContext, useState } from "react";
 import { UploadedFile, UploadMetadata } from "@/types/upload";
-import { recognizeText } from "rn-mlkit-ocr";
 import { uploadReading } from "@/services/readings";
 import { Alert } from "react-native";
 import { useLoading } from "@hooks/useLoading";
 import { useHome } from "@hooks/useHome";
-import { convert } from "react-native-pdf-to-image";
+import { ocrExtract } from "@/services/ocr";
 
 type UploadContextType = {
   // Data
@@ -80,25 +79,14 @@ export function UploadProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const runOcr = async (sources: string[]): Promise<string> => {
-    //TODO: add specific language capabilities as it currently only works with english/spanish
-    const results = await Promise.all(
-      sources.map((uri) => recognizeText(uri))
-    );
-    return results.map((r) => r.text).join("\n");
-  };
-
   const processUpload = async () => {
     showLoading("Processing document...", "book");
     try {
       let text = "";
       if (upload.images.length > 0) {
-        text = await runOcr(upload.images);
+        text = await ocrExtract("en", upload.images);
       } else if (upload.file) {
-        //run the build before uncommenting this
-        const { outputFiles } = await convert(upload.file.uri);
-        text = await runOcr(outputFiles ?? []);
-        //text = "not yet"
+        text = await ocrExtract("en", [upload.file.uri]);
       }
       setUpload((prev) => ({ ...prev, text }));
       setTextModalVisible(true);

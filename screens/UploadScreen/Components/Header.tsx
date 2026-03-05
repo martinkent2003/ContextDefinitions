@@ -1,5 +1,5 @@
 import type { Ionicons } from '@expo/vector-icons'
-import type { ComponentProps } from 'react';
+import type { ComponentProps } from 'react'
 import React from 'react'
 import { View } from 'react-native'
 import { BackButton, Icon, Text } from '@/components/ui'

@@ -1,4 +1,4 @@
-import type { LayoutRectangle} from 'react-native';
+import type { LayoutRectangle } from 'react-native'
 import { StyleSheet } from 'react-native'
 import { Text } from '@/components/ui'
 import { radii, spacing, typography } from '@/constants/Themes'

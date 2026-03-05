@@ -1,3 +1,4 @@
+import * as Haptics from 'expo-haptics'
 import { useEffect, useRef, useState } from 'react'
 import type { LayoutChangeEvent, ViewStyle } from 'react-native'
 import { Animated, StyleSheet, TouchableOpacity, View } from 'react-native'
@@ -62,6 +63,7 @@ export function SegmentedControl(props: SegmentedControlProps) {
 
   useEffect(() => {
     if (containerWidth === 0) return
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Soft)
     Animated.spring(translateX, {
       toValue: selectedIndex * segmentWidth,
       useNativeDriver: true,

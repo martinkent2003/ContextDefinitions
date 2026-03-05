@@ -1,5 +1,5 @@
 import type { Ionicons } from '@expo/vector-icons'
-import type { ComponentProps } from 'react';
+import type { ComponentProps } from 'react'
 import React from 'react'
 import { KeyboardAvoidingView, Modal, Platform } from 'react-native'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'

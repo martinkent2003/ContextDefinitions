@@ -1,3 +1,4 @@
+import * as Haptics from 'expo-haptics'
 import type { ViewStyle } from 'react-native'
 import { Alert, StyleSheet, TouchableOpacity, View } from 'react-native'
 
@@ -47,6 +48,7 @@ export function RadioButton(props: RadioButtonProps) {
     if (item.value === selected) return
 
     if (item.warning) {
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning)
       Alert.alert('Warning', item.warning, [
         { text: 'Cancel', style: 'cancel' },
         {

@@ -1,3 +1,4 @@
+import * as Haptics from 'expo-haptics'
 import { View, Text, IconButton } from '@/components/ui'
 import { typography } from '@/constants/Themes'
 import { useReading } from '@/hooks/useReading'

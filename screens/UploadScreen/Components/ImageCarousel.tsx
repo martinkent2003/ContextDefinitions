@@ -1,13 +1,7 @@
 import { Zoomable } from '@likashefqet/react-native-image-zoom'
 import React, { useState } from 'react'
-import type {
-  NativeScrollEvent,
-  NativeSyntheticEvent} from 'react-native';
-import {
-  FlatList,
-  Image,
-  useWindowDimensions,
-} from 'react-native'
+import type { NativeScrollEvent, NativeSyntheticEvent } from 'react-native'
+import { FlatList, Image, useWindowDimensions } from 'react-native'
 import { View } from '@/components/ui'
 import { spacing, radii } from '@/constants/Themes'
 import { useThemeColor } from '@/hooks/useThemeColor'

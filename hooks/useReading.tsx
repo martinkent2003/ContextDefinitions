@@ -4,7 +4,11 @@ import { getReadingStructure } from '@/services/readings'
 import koreeda from '@/shared/reading-structure/koreeda.json'
 import llm from '@/shared/reading-structure/llm.json'
 import nba from '@/shared/reading-structure/nba.json'
-import type { ReadingMetadata, ReadingSelection, ReadingPackageV1 } from '@/types/readings'
+import type {
+  ReadingMetadata,
+  ReadingSelection,
+  ReadingPackageV1,
+} from '@/types/readings'
 
 type ReadingContextType = {
   reading: ReadingMetadata | null

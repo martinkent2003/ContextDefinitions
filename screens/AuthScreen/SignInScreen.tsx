@@ -1,7 +1,7 @@
-import { signInWithEmail } from '@/services/auth'
-import { useLoading } from '@/hooks/useLoading'
 import React, { useState } from 'react'
 import { Alert, AppState, StyleSheet } from 'react-native'
+import { useLoading } from '@/hooks/useLoading'
+import { signInWithEmail } from '@/services/auth'
 import { Button, Icon, Input, ScrollView, View } from '@components/ui'
 import { supabase } from '@utils/supabase'
 
@@ -23,7 +23,7 @@ export default function SignIn() {
   const { showLoading, hideLoading } = useLoading()
 
   async function signIn() {
-    showLoading("Signing in...", "typing")
+    showLoading('Signing in...', 'typing')
     const { error } = await signInWithEmail(email, password)
     if (error) Alert.alert(error.message)
     hideLoading()
@@ -33,7 +33,7 @@ export default function SignIn() {
     <ScrollView style={styles.container} keyboardShouldPersistTaps="handled">
       <View style={styles.verticallySpaced}>
         <Input
-          leftIcon={<Icon library="FontAwesome" name='envelope' size={20}/> }
+          leftIcon={<Icon library="FontAwesome" name="envelope" size={20} />}
           onChangeText={(text) => setEmail(text)}
           value={email}
           placeholder="email@address.com"
@@ -42,7 +42,7 @@ export default function SignIn() {
       </View>
       <View style={styles.verticallySpaced}>
         <Input
-          leftIcon={<Icon library="FontAwesome" name="lock" size={20}/>}
+          leftIcon={<Icon library="FontAwesome" name="lock" size={20} />}
           onChangeText={(text) => setPassword(text)}
           value={password}
           secureTextEntry={true}
@@ -50,11 +50,12 @@ export default function SignIn() {
           autoCapitalize={'none'}
         />
       </View>
-      
+
       <View style={styles.verticallySpaced}>
-        <Button variant="primary" size = "lg" onPress={() => signIn()}>Sign In</Button>
+        <Button variant="primary" size="lg" onPress={() => signIn()}>
+          Sign In
+        </Button>
       </View>
-      
     </ScrollView>
   )
 }

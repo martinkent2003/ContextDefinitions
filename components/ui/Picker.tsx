@@ -1,43 +1,37 @@
-import { radii, spacing, typography } from '@constants/Themes';
-import { ThemeProps, useThemeColor } from '@hooks/useThemeColor';
-import { Picker as DefaultPicker, PickerProps as DefaultPickerProps } from '@react-native-picker/picker';
-import { Platform, StyleSheet, View, ViewStyle } from 'react-native';
-import { Text } from '@components/ui/Text';
+import type { PickerProps as DefaultPickerProps } from '@react-native-picker/picker'
+import { Picker as DefaultPicker } from '@react-native-picker/picker'
+import type { ViewStyle } from 'react-native'
+import { Platform, StyleSheet, View } from 'react-native'
+
+import { Text } from '@components/ui/Text'
+import { radii, spacing, typography } from '@constants/Themes'
+import { useThemeColor } from '@hooks/useThemeColor'
+import type { ThemeProps } from '@hooks/useThemeColor'
 
 export type PickerItem = {
-  label: string;
-  value: string;
-};
+  label: string
+  value: string
+}
 
-export type PickerProps<T> = ThemeProps & DefaultPickerProps<T> & {
-  label?: string;
-  items: PickerItem[];
-  containerStyle?: ViewStyle;
-};
+export type PickerProps<T> = ThemeProps &
+  DefaultPickerProps<T> & {
+    label?: string
+    items: PickerItem[]
+    containerStyle?: ViewStyle
+  }
 
 export function Picker<T extends string>(props: PickerProps<T>) {
-  const {
-    lightColor,
-    darkColor,
-    label,
-    items,
-    containerStyle,
-    style,
-    ...otherProps
-  } = props;
+  const { lightColor, darkColor, label, items, containerStyle, style, ...otherProps } =
+    props
 
-  const textColor = useThemeColor({ light: lightColor, dark: darkColor }, 'text');
-  const labelColor = useThemeColor({}, 'textSecondary');
-  const borderColor = useThemeColor({}, 'border');
-  const backgroundColor = useThemeColor({}, 'backgroundSecondary');
+  const textColor = useThemeColor({ light: lightColor, dark: darkColor }, 'text')
+  const labelColor = useThemeColor({}, 'textSecondary')
+  const borderColor = useThemeColor({}, 'border')
+  const backgroundColor = useThemeColor({}, 'backgroundSecondary')
 
   return (
     <View style={styles.wrapper}>
-      {label && (
-        <Text style={[styles.label, { color: labelColor }]}>
-          {label}
-        </Text>
-      )}
+      {label && <Text style={[styles.label, { color: labelColor }]}>{label}</Text>}
       <View
         style={[
           styles.container,
@@ -71,7 +65,7 @@ export function Picker<T extends string>(props: PickerProps<T>) {
         </DefaultPicker>
       </View>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -90,7 +84,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     ...Platform.select({
       ios: {
-        height: 100, 
+        height: 100,
       },
       android: {},
     }),
@@ -106,4 +100,4 @@ const styles = StyleSheet.create({
       },
     }),
   },
-});
+})

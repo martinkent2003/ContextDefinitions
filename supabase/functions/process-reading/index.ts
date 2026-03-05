@@ -1,8 +1,8 @@
-import { createClient } from "supabase";
+import { createClient } from 'supabase'
 
-import { tokenizeReading } from "./tokenize-reading.ts";
-import { calculateDifficulty } from "./calculate-difficulty.ts";
-import type { ProcessingContext } from "./types.ts";
+import { tokenizeReading } from './tokenize-reading.ts'
+import { calculateDifficulty } from './calculate-difficulty.ts'
+import type { ProcessingContext } from './types.ts'
 
 /*
 Process reading (orchestrator):
@@ -13,21 +13,21 @@ Process reading (orchestrator):
 - mark processed ONLY if all succeeded (single DB update)
 */
 
-const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
-const SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!
+const SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
 //const WEBHOOK_SECRET = Deno.env.get("READINGS_DIFFICULTY_WEBHOOK_SECRET")!;
 
-const supabase = createClient(SUPABASE_URL, SERVICE_ROLE_KEY);
+const supabase = createClient(SUPABASE_URL, SERVICE_ROLE_KEY)
 
 type Payload = {
-  reading_id: string;
-  storage_path: string;
-  content_updated_at: string;
-  language_code: string;
-};
+  reading_id: string
+  storage_path: string
+  content_updated_at: string
+  language_code: string
+}
 
 Deno.serve(async (req) => {
-  let reading_id: string | null = null;
+  let reading_id: string | null = null
 
   try {
     // 1) Verify caller (DB trigger via pg_net) using shared secret
@@ -40,106 +40,96 @@ Deno.serve(async (req) => {
     // }
 
     // 2) Parse payload
-    const body = (await req.json()) as Partial<Payload>;
+    const body = (await req.json()) as Partial<Payload>
 
-    if (
-      typeof body.reading_id !== "string" || body.reading_id.trim().length === 0
-    ) {
-      throw new Error('Invalid payload: expected non-empty "reading_id"');
+    if (typeof body.reading_id !== 'string' || body.reading_id.trim().length === 0) {
+      throw new Error('Invalid payload: expected non-empty "reading_id"')
+    }
+    if (typeof body.storage_path !== 'string' || body.storage_path.trim().length === 0) {
+      throw new Error('Invalid payload: expected non-empty "storage_path"')
+    }
+    if (typeof body.language_code !== 'string' || body.reading_id.trim().length === 0) {
+      throw new Error('Invalid payload: expected non-empty "language_code"')
     }
     if (
-      typeof body.storage_path !== "string" ||
-      body.storage_path.trim().length === 0
-    ) {
-      throw new Error('Invalid payload: expected non-empty "storage_path"');
-    }
-    if (
-      typeof body.language_code !== "string" ||
-      body.reading_id.trim().length === 0
-    ) {
-      throw new Error('Invalid payload: expected non-empty "language_code"');
-    }
-    if (
-      typeof body.content_updated_at !== "string" ||
+      typeof body.content_updated_at !== 'string' ||
       body.content_updated_at.trim().length === 0
     ) {
-      throw new Error(
-        'Invalid payload: expected non-empty "content_updated_at"',
-      );
+      throw new Error('Invalid payload: expected non-empty "content_updated_at"')
     }
 
-    reading_id = body.reading_id.trim();
-    const language_code = body.language_code.trim();
-    const storage_path = body.storage_path.trim();
-    const content_updated_at = body.content_updated_at.trim();
+    reading_id = body.reading_id.trim()
+    const language_code = body.language_code.trim()
+    const storage_path = body.storage_path.trim()
+    const content_updated_at = body.content_updated_at.trim()
 
     // 3) Download raw text from Storage
     const { data: file, error: dlErr } = await supabase.storage
-      .from("readings")
-      .download(storage_path);
+      .from('readings')
+      .download(storage_path)
 
     if (dlErr || !file) {
-      throw dlErr ?? new Error("Failed to download reading content");
+      throw dlErr ?? new Error('Failed to download reading content')
     }
 
-    const text = await file.text();
+    const text = await file.text()
     if (!text || text.trim().length === 0) {
-      throw new Error("Downloaded content is empty");
+      throw new Error('Downloaded content is empty')
     }
 
     const ctx: ProcessingContext = {
       language_code,
       text,
-    } satisfies ProcessingContext;
+    } satisfies ProcessingContext
 
     // 4) Deterministic structure + difficulty (pure)
-    const structure = tokenizeReading(ctx);
-    const { score } = calculateDifficulty(ctx);
+    const structure = tokenizeReading(ctx)
+    const { score } = calculateDifficulty(ctx)
 
     // Inject identifiers (module stays pure; orchestrator adds identity)
-    structure.reading_id = reading_id;
-    structure.text = structure.text ?? {};
-    structure.text.storage_path = storage_path;
+    structure.reading_id = reading_id
+    structure.text = structure.text ?? {}
+    structure.text.storage_path = storage_path
 
     // 5) Upload structure JSON
-    const structurePath = `${storage_path}.structure.v1.json`;
+    const structurePath = `${storage_path}.structure.v1.json`
 
     const { error: upErr } = await supabase.storage
-      .from("readings")
+      .from('readings')
       .upload(
         structurePath,
-        new Blob([JSON.stringify(structure)], { type: "application/json" }),
-        { upsert: true, contentType: "application/json" },
-      );
+        new Blob([JSON.stringify(structure)], { type: 'application/json' }),
+        { upsert: true, contentType: 'application/json' },
+      )
 
-    if (upErr) throw upErr;
+    if (upErr) throw upErr
 
     // 6) Single DB update (guard against stale content)
-    const difficultyInt = Math.round(score);
+    const difficultyInt = Math.round(score)
 
     const { data: updated, error: updErr } = await supabase
-      .from("readings")
+      .from('readings')
       .update({
         difficulty: difficultyInt,
-        status: "processed",
+        status: 'processed',
         error_message: null,
       })
-      .eq("id", reading_id)
-      .eq("content_updated_at", content_updated_at)
-      .select("id")
-      .maybeSingle();
+      .eq('id', reading_id)
+      .eq('content_updated_at', content_updated_at)
+      .select('id')
+      .maybeSingle()
 
-    if (updErr) throw updErr;
+    if (updErr) throw updErr
 
     if (!updated) {
       return new Response(
         JSON.stringify({
           ok: false,
-          error: "Stale update",
-          detail: "content_updated_at mismatch",
+          error: 'Stale update',
+          detail: 'content_updated_at mismatch',
         }),
-        { status: 409, headers: { "Content-Type": "application/json" } },
-      );
+        { status: 409, headers: { 'Content-Type': 'application/json' } },
+      )
     }
 
     return new Response(
@@ -148,19 +138,19 @@ Deno.serve(async (req) => {
         difficulty: difficultyInt,
         structure_path: structurePath,
       }),
-      { headers: { "Content-Type": "application/json" } },
-    );
+      { headers: { 'Content-Type': 'application/json' } },
+    )
   } catch (err) {
     // Best-effort failure update (fail-fast model)
     try {
       if (reading_id) {
         await supabase
-          .from("readings")
+          .from('readings')
           .update({
-            status: "error",
+            status: 'error',
             error_message: String((err as Error)?.message ?? err),
           })
-          .eq("id", reading_id);
+          .eq('id', reading_id)
       }
     } catch (_) {
       //
@@ -171,7 +161,7 @@ Deno.serve(async (req) => {
         ok: false,
         detail: String((err as Error)?.message ?? err),
       }),
-      { status: 500, headers: { "Content-Type": "application/json" } },
-    );
+      { status: 500, headers: { 'Content-Type': 'application/json' } },
+    )
   }
-});
+})

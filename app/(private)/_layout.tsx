@@ -1,7 +1,8 @@
-import { Stack } from "expo-router";
-import { HomeProvider } from "@/hooks/useHome";
-import { UploadProvider } from "@/hooks/useUpload";
-import { ReadingProvider } from "@/hooks/useReading";
+import { Stack } from 'expo-router'
+
+import { HomeProvider } from '@/hooks/useHome'
+import { ReadingProvider } from '@/hooks/useReading'
+import { UploadProvider } from '@/hooks/useUpload'
 
 export default function PrivateLayout() {
   return (
@@ -15,5 +16,5 @@ export default function PrivateLayout() {
         </ReadingProvider>
       </UploadProvider>
     </HomeProvider>
-  );
+  )
 }

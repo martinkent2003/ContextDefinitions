@@ -1,15 +1,15 @@
-import { Pressable } from 'react-native';
-import { Icon, Text, View } from '@/components/ui';
-import Colors from '@/constants/Themes';
-import { useColorScheme } from '@/hooks/useColorScheme';
-import { styles } from '@screens/HomeScreen/styles';
+import { Pressable } from 'react-native'
+import { Icon, Text, View } from '@/components/ui'
+import Colors from '@/constants/Themes'
+import { useColorScheme } from '@/hooks/useColorScheme'
+import { styles } from '@screens/HomeScreen/styles'
 
 type Props = {
-  onPress: () => void;
-};
+  onPress: () => void
+}
 
 export default function UserIcon({ onPress }: Props) {
-  const colorScheme = useColorScheme();
+  const colorScheme = useColorScheme()
 
   return (
     <Pressable onPress={onPress}>
@@ -25,5 +25,5 @@ export default function UserIcon({ onPress }: Props) {
         </View>
       )}
     </Pressable>
-  );
+  )
 }

@@ -1,9 +1,9 @@
-import { Icon, Input } from '@/components/ui';
-import { useThemeColor } from '@/hooks/useThemeColor';
-import { styles } from '@screens/HomeScreen/styles';
+import { Icon, Input } from '@/components/ui'
+import { useThemeColor } from '@/hooks/useThemeColor'
+import { styles } from '@screens/HomeScreen/styles'
 
 export default function SearchBar() {
-  const iconColor = useThemeColor({}, 'textTertiary');
+  const iconColor = useThemeColor({}, 'textTertiary')
 
   return (
     <Input
@@ -14,5 +14,5 @@ export default function SearchBar() {
       }
       containerStyle={styles.searchBar}
     />
-  );
+  )
 }

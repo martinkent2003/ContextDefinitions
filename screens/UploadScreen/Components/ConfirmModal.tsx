@@ -1,26 +1,23 @@
-import { Button, View, ScrollView } from "@/components/ui";
-import { spacing } from "@/constants/Themes";
-import { useThemeColor } from "@/hooks/useThemeColor";
-import { Ionicons } from "@expo/vector-icons";
-import React, { ComponentProps } from "react";
-import {
-  KeyboardAvoidingView,
-  Modal,
-  Platform,
-} from "react-native";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import Header from "@screens/UploadScreen/Components/Header";
-import { styles } from "@screens/UploadScreen/styles";
+import type { Ionicons } from '@expo/vector-icons'
+import type { ComponentProps } from 'react';
+import React from 'react'
+import { KeyboardAvoidingView, Modal, Platform } from 'react-native'
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
+import { Button, View, ScrollView } from '@/components/ui'
+import { spacing } from '@/constants/Themes'
+import { useThemeColor } from '@/hooks/useThemeColor'
+import Header from '@screens/UploadScreen/Components/Header'
+import { styles } from '@screens/UploadScreen/styles'
 
 type Props = {
-  visible: boolean;
-  title: string;
-  icon?: ComponentProps<typeof Ionicons>["name"];
-  onCancel: () => void;
-  onConfirm: () => void;
-  confirmDisabled?: boolean;
-  children: React.ReactNode;
-};
+  visible: boolean
+  title: string
+  icon?: ComponentProps<typeof Ionicons>['name']
+  onCancel: () => void
+  onConfirm: () => void
+  confirmDisabled?: boolean
+  children: React.ReactNode
+}
 
 export default function ConfirmModal({
   visible,
@@ -31,7 +28,7 @@ export default function ConfirmModal({
   confirmDisabled = false,
   children,
 }: Props) {
-  const backgroundColor = useThemeColor({}, "background");
+  const backgroundColor = useThemeColor({}, 'background')
 
   return (
     <Modal visible={visible} animationType="slide">
@@ -39,7 +36,7 @@ export default function ConfirmModal({
         <SafeAreaView style={[{ backgroundColor }, styles.container]}>
           <KeyboardAvoidingView
             style={styles.container}
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           >
             <ScrollView style={styles.container} keyboardShouldPersistTaps="handled">
               <Header title={title} iconName={icon} onBack={onCancel} />
@@ -49,8 +46,8 @@ export default function ConfirmModal({
               <View
                 style={[
                   {
-                    flexDirection: "row",
-                    justifyContent: "space-between",
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
                     padding: spacing.sm,
                     marginBottom: spacing.md,
                   },
@@ -61,7 +58,7 @@ export default function ConfirmModal({
                   Cancel
                 </Button>
                 <Button
-                  variant={confirmDisabled ? "secondary" : "primary"}
+                  variant={confirmDisabled ? 'secondary' : 'primary'}
                   disabled={confirmDisabled}
                   onPress={onConfirm}
                 >
@@ -73,5 +70,5 @@ export default function ConfirmModal({
         </SafeAreaView>
       </SafeAreaProvider>
     </Modal>
-  );
+  )
 }

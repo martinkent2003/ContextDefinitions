@@ -1,29 +1,29 @@
-import { View } from "@/components/ui";
-import { spacing, radii } from "@/constants/Themes";
-import { useThemeColor } from "@/hooks/useThemeColor";
-import React from "react";
-import { useWindowDimensions } from "react-native";
-import Pdf from "react-native-pdf";
+import React from 'react'
+import { useWindowDimensions } from 'react-native'
+import Pdf from 'react-native-pdf'
+import { View } from '@/components/ui'
+import { spacing, radii } from '@/constants/Themes'
+import { useThemeColor } from '@/hooks/useThemeColor'
 
 type Props = {
-  fileUri: string;
-};
+  fileUri: string
+}
 
 export default function DocumentPreview({ fileUri }: Props) {
-  const border = useThemeColor({}, "border");
-  const { width } = useWindowDimensions();
-  const previewWidth = width - spacing.md * 2;
+  const border = useThemeColor({}, 'border')
+  const { width } = useWindowDimensions()
+  const previewWidth = width - spacing.md * 2
 
   return (
     <View
       style={{
         width: previewWidth,
         height: previewWidth * 1.3,
-        alignSelf: "center",
+        alignSelf: 'center',
         borderRadius: radii.lg,
         borderWidth: 1,
         borderColor: border,
-        overflow: "hidden",
+        overflow: 'hidden',
       }}
     >
       <Pdf
@@ -33,5 +33,5 @@ export default function DocumentPreview({ fileUri }: Props) {
         horizontal
       />
     </View>
-  );
+  )
 }

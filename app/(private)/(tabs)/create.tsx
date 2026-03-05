@@ -1,5 +1,5 @@
-import UploadReadingScreen from "@screens/UploadScreen/UploadReadingScreen";
+import UploadReadingScreen from '@screens/UploadScreen/UploadReadingScreen'
 
 export default function TabTwoScreen() {
-  return <UploadReadingScreen />;
+  return <UploadReadingScreen />
 }

@@ -1,5 +1,5 @@
-import { radii, spacing, typography } from "@/constants/Themes";
-import { StyleSheet } from "react-native";
+import { StyleSheet } from 'react-native'
+import { radii, spacing, typography } from '@/constants/Themes'
 
 export const styles = StyleSheet.create({
   // Screen
@@ -7,31 +7,31 @@ export const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: spacing.lg,
     paddingBottom: spacing.xl,
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   },
   content: {
     flex: 1,
     marginTop: spacing.xl,
     gap: spacing.md,
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   },
   headerRoot: {
-    paddingTop: spacing.xl, 
+    paddingTop: spacing.xl,
     paddingBottom: spacing.lg,
     paddingHorizontal: spacing.lg,
   },
   // Header
   header: {
-    alignItems: "center",
+    alignItems: 'center',
     marginBottom: spacing.sm,
     marginTop: spacing.md,
   },
   headerWrapper: {
     flex: 1 / 3, // top third of the screen
-    justifyContent: "center", // center header within that third
+    justifyContent: 'center', // center header within that third
   },
   backButton: {
-    position: "absolute",
+    position: 'absolute',
     width: radii.xxl,
     height: radii.xxl,
     borderRadius: radii.xl,
@@ -45,8 +45,8 @@ export const styles = StyleSheet.create({
 
   // Upload buttons
   uploadButtonRow: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: 'transparent',
   },
   uploadButtonIcon: {
@@ -58,14 +58,13 @@ export const styles = StyleSheet.create({
 
   // Help link
   helpContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    alignSelf: "center",
-    marginTop: "auto",
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'center',
+    marginTop: 'auto',
   },
-  container:{
+  container: {
     flex: 1,
-    padding: spacing.xs
+    padding: spacing.xs,
   },
-  
-});
+})

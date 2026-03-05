@@ -1,21 +1,19 @@
-import { radii, shadows, spacing, typography } from "@constants/Themes";
-import { ThemeProps, useThemeColor } from "@hooks/useThemeColor";
-import * as Haptics from "expo-haptics";
-import {
-  StyleSheet,
-  TouchableOpacity,
-  TouchableOpacityProps,
-  View,
-} from "react-native";
-import { Text } from "@components/ui/Text";
+import * as Haptics from 'expo-haptics'
+import type { TouchableOpacityProps } from 'react-native'
+import { StyleSheet, TouchableOpacity, View } from 'react-native'
+
+import { Text } from '@components/ui/Text'
+import { radii, shadows, spacing, typography } from '@constants/Themes'
+import { useThemeColor } from '@hooks/useThemeColor'
+import type { ThemeProps } from '@hooks/useThemeColor'
 
 export type CardProps = ThemeProps &
-  Omit<TouchableOpacityProps, "children"> & {
-    title: string;
-    subtitle?: string;
-    rating?: number | string;
-    body?: string;
-  };
+  Omit<TouchableOpacityProps, 'children'> & {
+    title: string
+    subtitle?: string
+    rating?: number | string
+    body?: string
+  }
 
 export function Card(props: CardProps) {
   const {
@@ -28,36 +26,35 @@ export function Card(props: CardProps) {
     style,
     onPress,
     ...otherProps
-  } = props;
+  } = props
 
-  const handlePress: TouchableOpacityProps["onPress"] = (e) => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    onPress?.(e);
-  };
+  const handlePress: TouchableOpacityProps['onPress'] = (e) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+    onPress?.(e)
+  }
 
-  const cardBackground = useThemeColor({}, "cardBackground");
-  const cardBorder = useThemeColor({}, "cardBorder");
-  const textColor = useThemeColor({}, "text");
-  const textSecondary = useThemeColor({}, "textSecondary");
-  const successColor = useThemeColor({}, "success");
-  const warningColor = useThemeColor({}, "warning");
-  const errorColor = useThemeColor({}, "error");
+  const cardBackground = useThemeColor({}, 'cardBackground')
+  const cardBorder = useThemeColor({}, 'cardBorder')
+  const textColor = useThemeColor({}, 'text')
+  const textSecondary = useThemeColor({}, 'textSecondary')
+  const successColor = useThemeColor({}, 'success')
+  const warningColor = useThemeColor({}, 'warning')
+  const errorColor = useThemeColor({}, 'error')
 
   // Determine rating color based on difficulty value
   const getRatingColor = () => {
-    const numericRating =
-      typeof rating === "string" ? parseFloat(rating) : rating;
-    if (numericRating === undefined || isNaN(numericRating)) return textColor;
+    const numericRating = typeof rating === 'string' ? parseFloat(rating) : rating
+    if (numericRating === undefined || isNaN(numericRating)) return textColor
 
     if (numericRating >= 0 && numericRating < 35) {
-      return successColor; // Green for easy (0-100)
+      return successColor // Green for easy (0-100)
     } else if (numericRating >= 35 && numericRating < 65) {
-      return warningColor; // Yellow for medium (100-200)
+      return warningColor // Yellow for medium (100-200)
     } else if (numericRating >= 65) {
-      return errorColor; // Red for hard (200-300)
+      return errorColor // Red for hard (200-300)
     }
-    return textColor; // Default for out of range
-  };
+    return textColor // Default for out of range
+  }
 
   return (
     <TouchableOpacity
@@ -81,15 +78,11 @@ export function Card(props: CardProps) {
             {title}
           </Text>
           {subtitle && (
-            <Text style={[styles.subtitle, { color: textSecondary }]}>
-              {subtitle}
-            </Text>
+            <Text style={[styles.subtitle, { color: textSecondary }]}>{subtitle}</Text>
           )}
         </View>
         {rating !== undefined && (
-          <Text style={[styles.rating, { color: getRatingColor() }]}>
-            {rating}
-          </Text>
+          <Text style={[styles.rating, { color: getRatingColor() }]}>{rating}</Text>
         )}
       </View>
 
@@ -100,7 +93,7 @@ export function Card(props: CardProps) {
         </Text>
       )}
     </TouchableOpacity>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -112,9 +105,9 @@ const styles = StyleSheet.create({
     margin: spacing.xs,
   },
   header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
   },
   titleContainer: {
     flex: 1,
@@ -137,4 +130,4 @@ const styles = StyleSheet.create({
     marginTop: spacing.sm,
     lineHeight: typography.sizes.sm * typography.lineHeights.normal,
   },
-});
+})

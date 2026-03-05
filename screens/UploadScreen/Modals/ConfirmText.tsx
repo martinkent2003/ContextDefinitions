@@ -1,32 +1,38 @@
-import { Input, TextArea, RadioButton } from "@/components/ui";
-import { useUpload } from "@/hooks/useUpload";
-import React, { useEffect, useState } from "react";
-import ConfirmModal from "@screens/UploadScreen/Components/ConfirmModal";
-import { uploadReading } from "@/services/readings";
+import React, { useEffect, useState } from 'react'
+import { Input, TextArea, RadioButton } from '@/components/ui'
+import { useUpload } from '@/hooks/useUpload'
+import { uploadReading } from '@/services/readings'
+import ConfirmModal from '@screens/UploadScreen/Components/ConfirmModal'
 
 export default function ConfirmText() {
-  const { upload, isConfirmTextModalVisible, hideConfirmTextModal, setText, clearUpload } = useUpload();
+  const {
+    upload,
+    isConfirmTextModalVisible,
+    hideConfirmTextModal,
+    setText,
+    clearUpload,
+  } = useUpload()
 
-  const [title, setTitle] = useState<string>("");
-  const [genre, setGenre] = useState<string>("");
-  const [content, setContent] = useState<string>("");
-  const [privacy, setPrivacy] = useState<boolean>(true);
+  const [title, setTitle] = useState<string>('')
+  const [genre, setGenre] = useState<string>('')
+  const [content, setContent] = useState<string>('')
+  const [privacy, setPrivacy] = useState<boolean>(true)
 
   useEffect(() => {
     if (upload.text !== null) {
-      setContent(upload.text);
+      setContent(upload.text)
     }
-  }, [upload.text]);
+  }, [upload.text])
 
   const handleConfirm = () => {
-    setText(content, title, genre, privacy);
-    hideConfirmTextModal();
-  };
+    setText(content, title, genre, privacy)
+    hideConfirmTextModal()
+  }
 
   const handleCancel = () => {
-    clearUpload();
-    hideConfirmTextModal();
-  };
+    clearUpload()
+    hideConfirmTextModal()
+  }
 
   return (
     <ConfirmModal
@@ -42,10 +48,7 @@ export default function ConfirmText() {
         onChangeText={(text) => setTitle(text)}
         autoCapitalize={'words'}
       />
-      <Input
-        placeholder="Enter Genre"
-        onChangeText={(text) => setGenre(text)}
-      />
+      <Input placeholder="Enter Genre" onChangeText={(text) => setGenre(text)} />
       <TextArea
         multiline
         placeholder="Enter Content"
@@ -56,12 +59,17 @@ export default function ConfirmText() {
         label="Privacy Settings"
         subLabel="Choose who can access"
         items={[
-          { label: "Public", description: "Shared with everyone", value: "public" , warning: "This reading will be visible to everyone" },
-          { label: "Private", description: "Only yours ;)", value: "private" },
+          {
+            label: 'Public',
+            description: 'Shared with everyone',
+            value: 'public',
+            warning: 'This reading will be visible to everyone',
+          },
+          { label: 'Private', description: 'Only yours ;)', value: 'private' },
         ]}
-        selected={privacy ? "private" : "public"}
-        onSelect={(value) => setPrivacy(value === "private")}
+        selected={privacy ? 'private' : 'public'}
+        onSelect={(value) => setPrivacy(value === 'private')}
       />
     </ConfirmModal>
-  );
+  )
 }

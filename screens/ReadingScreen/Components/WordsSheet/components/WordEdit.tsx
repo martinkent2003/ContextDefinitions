@@ -1,18 +1,18 @@
-import { View, Text, TextArea, Button } from "@/components/ui";
-import { useThemeColor } from "@/hooks/useThemeColor";
-import { styles } from "@/components/WordsSheet/styles";
+import { View, Text, TextArea, Button } from '@/components/ui'
+import { useThemeColor } from '@/hooks/useThemeColor'
+import { styles } from '@/screens/ReadingScreen/Components/WordsSheet/styles'
 
 type WordEditProps = {
-  selectedText: string | null;
-  definitionDraft: string;
-  translationDraft: string;
-  contextDraft: string;
-  setDefinitionDraft: (v: string) => void;
-  setTranslationDraft: (v: string) => void;
-  setContextDraft: (v: string) => void;
-  onConfirm: () => void;
-  onCancel: () => void;
-};
+  selectedText: string | null
+  definitionDraft: string
+  translationDraft: string
+  contextDraft: string
+  setDefinitionDraft: (v: string) => void
+  setTranslationDraft: (v: string) => void
+  setContextDraft: (v: string) => void
+  onConfirm: () => void
+  onCancel: () => void
+}
 
 export function WordEdit({
   selectedText,
@@ -25,13 +25,13 @@ export function WordEdit({
   onConfirm,
   onCancel,
 }: WordEditProps) {
-  const textColor = useThemeColor({}, "text");
+  const textColor = useThemeColor({}, 'text')
 
   return (
     <>
       <View style={styles.sheetHeader}>
         <Text style={[styles.sheetHeaderCenter, { color: textColor }]}>
-          {selectedText ?? "—"}
+          {selectedText ?? '—'}
         </Text>
       </View>
       <Text style={[styles.sheetLabel, { color: textColor }]}>Definition:</Text>
@@ -40,20 +40,14 @@ export function WordEdit({
         onChangeText={setDefinitionDraft}
         minHeight={30}
       />
-      <Text style={[styles.sheetLabel, { color: textColor }]}>
-        Translation:
-      </Text>
+      <Text style={[styles.sheetLabel, { color: textColor }]}>Translation:</Text>
       <TextArea
         value={translationDraft}
         onChangeText={setTranslationDraft}
         minHeight={30}
       />
       <Text style={[styles.sheetLabel, { color: textColor }]}>Context:</Text>
-      <TextArea
-        value={contextDraft}
-        onChangeText={setContextDraft}
-        minHeight={30}
-      />
+      <TextArea value={contextDraft} onChangeText={setContextDraft} minHeight={30} />
       <View style={styles.sheetEditActions}>
         <Button variant="secondary" onPress={onCancel}>
           Cancel
@@ -63,5 +57,5 @@ export function WordEdit({
         </Button>
       </View>
     </>
-  );
+  )
 }

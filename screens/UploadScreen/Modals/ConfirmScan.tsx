@@ -1,50 +1,60 @@
-import { Button, Text } from "@/components/ui";
-import { spacing } from "@/constants/Themes";
-import { useUpload } from "@/hooks/useUpload";
-import DocumentScanner from "react-native-document-scanner-plugin";
-import React from "react";
-import ConfirmModal from "@screens/UploadScreen/Components/ConfirmModal";
-import ImageCarousel from "@screens/UploadScreen/Components/ImageCarousel";
+import React from 'react'
+import DocumentScanner from 'react-native-document-scanner-plugin'
+import { Button, Text } from '@/components/ui'
+import { spacing } from '@/constants/Themes'
+import { useUpload } from '@/hooks/useUpload'
+import ConfirmModal from '@screens/UploadScreen/Components/ConfirmModal'
+import ImageCarousel from '@screens/UploadScreen/Components/ImageCarousel'
 
 export default function ConfirmScan() {
-  const { upload, setImages, isConfirmScanModalVisible, hideConfirmScanModal, processUpload, clearUpload } = useUpload();
+  const {
+    upload,
+    setImages,
+    isConfirmScanModalVisible,
+    hideConfirmScanModal,
+    processUpload,
+    clearUpload,
+  } = useUpload()
 
   const launchScanner = async () => {
-    const { scannedImages, status } = await DocumentScanner.scanDocument();
-    if (status === "success" && scannedImages && scannedImages.length > 0) {
-      setImages(scannedImages);
+    const { scannedImages, status } = await DocumentScanner.scanDocument()
+    if (status === 'success' && scannedImages && scannedImages.length > 0) {
+      setImages(scannedImages)
     }
-  };
+  }
 
   const handleConfirm = async () => {
-    hideConfirmScanModal();
-    await processUpload();
-  };
+    hideConfirmScanModal()
+    await processUpload()
+  }
 
-  const hasImages = upload.images.length > 0;
+  const hasImages = upload.images.length > 0
 
   return (
     <ConfirmModal
       visible={isConfirmScanModalVisible}
       title="Scan Document"
       icon="scan-outline"
-      onCancel={() => { clearUpload(); hideConfirmScanModal(); }}
+      onCancel={() => {
+        clearUpload()
+        hideConfirmScanModal()
+      }}
       onConfirm={handleConfirm}
       confirmDisabled={!hasImages}
     >
       {hasImages && (
-        <Text style={{ textAlign: "center", marginBottom: spacing.sm }}>
-          {upload.images.length} page{upload.images.length !== 1 ? "s" : ""} scanned
+        <Text style={{ textAlign: 'center', marginBottom: spacing.sm }}>
+          {upload.images.length} page{upload.images.length !== 1 ? 's' : ''} scanned
         </Text>
       )}
       <Button
-        variant={hasImages ? "secondary" : "primary"}
+        variant={hasImages ? 'secondary' : 'primary'}
         onPress={launchScanner}
         style={{ marginHorizontal: spacing.sm, marginBottom: spacing.md }}
       >
-        {hasImages ? "Rescan" : "Start Scan"}
+        {hasImages ? 'Rescan' : 'Start Scan'}
       </Button>
       {hasImages && <ImageCarousel imageUris={upload.images} />}
     </ConfirmModal>
-  );
+  )
 }

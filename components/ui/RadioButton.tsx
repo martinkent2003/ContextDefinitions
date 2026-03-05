@@ -1,30 +1,27 @@
-import { radii, spacing, typography } from "@/constants/Themes";
-import { ThemeProps, useThemeColor } from "@/hooks/useThemeColor";
-import {
-  Alert,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-  ViewStyle,
-} from "react-native";
-import { Text } from "@components/ui/Text";
+import type { ViewStyle } from 'react-native'
+import { Alert, StyleSheet, TouchableOpacity, View } from 'react-native'
+
+import { radii, spacing, typography } from '@/constants/Themes'
+import type { ThemeProps } from '@/hooks/useThemeColor'
+import { useThemeColor } from '@/hooks/useThemeColor'
+import { Text } from '@components/ui/Text'
 
 export type RadioItem = {
-  label: string;
-  description: string;
-  value: string;
-  warning?: string;
-};
+  label: string
+  description: string
+  value: string
+  warning?: string
+}
 
 export type RadioButtonProps = ThemeProps & {
-  items: RadioItem[];
-  selected?: string;
-  onSelect?: (value: string) => void;
-  label?: string;
-  subLabel?: string;
-  direction?: "row" | "column";
-  containerStyle?: ViewStyle;
-};
+  items: RadioItem[]
+  selected?: string
+  onSelect?: (value: string) => void
+  label?: string
+  subLabel?: string
+  direction?: 'row' | 'column'
+  containerStyle?: ViewStyle
+}
 
 export function RadioButton(props: RadioButtonProps) {
   const {
@@ -35,36 +32,33 @@ export function RadioButton(props: RadioButtonProps) {
     onSelect,
     label,
     subLabel,
-    direction = "column",
+    direction = 'column',
     containerStyle,
-  } = props;
+  } = props
 
-  const textColor = useThemeColor(
-    { light: lightColor, dark: darkColor },
-    "text",
-  );
-  const labelColor = useThemeColor({}, "textSecondary");
-  const backgroundColor = useThemeColor({}, "backgroundSecondary");
-  const borderColor = useThemeColor({}, "border");
-  const tintColor = useThemeColor({}, "tint");
-  const warningColor = useThemeColor({}, "error");
+  const textColor = useThemeColor({ light: lightColor, dark: darkColor }, 'text')
+  const labelColor = useThemeColor({}, 'textSecondary')
+  const backgroundColor = useThemeColor({}, 'backgroundSecondary')
+  const borderColor = useThemeColor({}, 'border')
+  const tintColor = useThemeColor({}, 'tint')
+  const warningColor = useThemeColor({}, 'error')
 
   const handleSelect = (item: RadioItem) => {
-    if (item.value === selected) return;
+    if (item.value === selected) return
 
     if (item.warning) {
-      Alert.alert("Warning", item.warning, [
-        { text: "Cancel", style: "cancel" },
+      Alert.alert('Warning', item.warning, [
+        { text: 'Cancel', style: 'cancel' },
         {
-          text: "Confirm",
-          style: "destructive",
+          text: 'Confirm',
+          style: 'destructive',
           onPress: () => onSelect?.(item.value),
         },
-      ]);
+      ])
     } else {
-      onSelect?.(item.value);
+      onSelect?.(item.value)
     }
-  };
+  }
 
   return (
     <View
@@ -73,17 +67,13 @@ export function RadioButton(props: RadioButtonProps) {
         { borderColor: borderColor, backgroundColor: backgroundColor },
       ]}
     >
-      {label && (
-        <Text style={[styles.label, { color: labelColor }]}>{label}</Text>
-      )}
+      {label && <Text style={[styles.label, { color: labelColor }]}>{label}</Text>}
       {subLabel && (
         <Text style={[styles.subLabel, { color: labelColor }]}>{subLabel}</Text>
       )}
-      <View
-        style={[styles.group, { flexDirection: direction }, containerStyle]}
-      >
+      <View style={[styles.group, { flexDirection: direction }, containerStyle]}>
         {items.map((item) => {
-          const isSelected = item.value === selected;
+          const isSelected = item.value === selected
           return (
             <TouchableOpacity
               key={item.value}
@@ -98,9 +88,7 @@ export function RadioButton(props: RadioButtonProps) {
                   {item.label}
                 </Text>
                 {item.description && (
-                  <Text
-                    style={[styles.optionDescription, { color: labelColor }]}
-                  >
+                  <Text style={[styles.optionDescription, { color: labelColor }]}>
                     {item.description}
                   </Text>
                 )}
@@ -122,20 +110,18 @@ export function RadioButton(props: RadioButtonProps) {
                     style={[
                       styles.filled,
                       {
-                        backgroundColor: item.warning
-                          ? warningColor
-                          : tintColor,
+                        backgroundColor: item.warning ? warningColor : tintColor,
                       },
                     ]}
                   />
                 )}
               </View>
             </TouchableOpacity>
-          );
+          )
         })}
       </View>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -159,8 +145,8 @@ const styles = StyleSheet.create({
     gap: spacing.md,
   },
   option: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: spacing.lg,
     paddingVertical: spacing.sm,
     paddingHorizontal: spacing.sm,
@@ -175,8 +161,8 @@ const styles = StyleSheet.create({
     height: 30,
     borderRadius: radii.full,
     borderWidth: 2,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   filled: {
     width: 20,
@@ -189,4 +175,4 @@ const styles = StyleSheet.create({
   optionDescription: {
     fontSize: typography.sizes.sm,
   },
-});
+})

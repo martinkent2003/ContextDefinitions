@@ -1,16 +1,18 @@
-import React from "react";
-import { View, ScrollView as DefaultScrollView } from "react-native";
-import MaskedView from "@react-native-masked-view/masked-view";
-import { LinearGradient } from "expo-linear-gradient";
-import { ThemeProps, useThemeColor } from "@hooks/useThemeColor";
-import { spacing } from "@constants/Themes";
+import MaskedView from '@react-native-masked-view/masked-view'
+import { LinearGradient } from 'expo-linear-gradient'
+import React from 'react'
+import { StyleSheet, View, ScrollView as DefaultScrollView } from 'react-native'
 
-const DEFAULT_FADE_HEIGHT = spacing.sm;
+import { spacing } from '@constants/Themes'
+import type { ThemeProps } from '@hooks/useThemeColor'
+import { useThemeColor } from '@hooks/useThemeColor'
+
+const DEFAULT_FADE_HEIGHT = spacing.sm
 
 export type FadingScrollViewProps = ThemeProps &
-  DefaultScrollView["props"] & {
-    fadeHeight?: number;
-  };
+  DefaultScrollView['props'] & {
+    fadeHeight?: number
+  }
 
 export function FadingScrollView(props: FadingScrollViewProps) {
   const {
@@ -19,24 +21,24 @@ export function FadingScrollView(props: FadingScrollViewProps) {
     darkColor,
     fadeHeight = DEFAULT_FADE_HEIGHT,
     ...otherProps
-  } = props;
+  } = props
   const backgroundColor = useThemeColor(
     { light: lightColor, dark: darkColor },
-    "background",
-  );
+    'background',
+  )
 
   return (
     <MaskedView
-      style={{ flex: 1 }}
+      style={styles.fill}
       maskElement={
-        <View style={{ flex: 1, borderColor: "#FFFFFF", borderWidth: 1 }}>
+        <View style={styles.maskContainer}>
           <LinearGradient
-            colors={["transparent", "black"]}
+            colors={['transparent', 'black']}
             style={{ height: fadeHeight }}
           />
-          <View style={{ flex: 1, backgroundColor: "black" }} />
+          <View style={styles.maskFill} />
           <LinearGradient
-            colors={["black", "transparent"]}
+            colors={['black', 'transparent']}
             style={{ height: fadeHeight }}
           />
         </View>
@@ -44,5 +46,11 @@ export function FadingScrollView(props: FadingScrollViewProps) {
     >
       <DefaultScrollView style={[{ backgroundColor }, style]} {...otherProps} />
     </MaskedView>
-  );
+  )
 }
+
+const styles = StyleSheet.create({
+  fill: { flex: 1 },
+  maskContainer: { flex: 1, borderColor: '#FFFFFF', borderWidth: 1 },
+  maskFill: { flex: 1, backgroundColor: 'black' },
+})

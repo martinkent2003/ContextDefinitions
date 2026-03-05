@@ -1,14 +1,13 @@
-import { spacing, typography } from "@/constants/Themes";
-import { StyleSheet } from "react-native";
-
+import { StyleSheet } from 'react-native'
+import { spacing, typography } from '@/constants/Themes'
 
 export const styles = StyleSheet.create({
   readingScreen: {
     flex: 1,
-  },  
+  },
   header: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingHorizontal: spacing.md,
     paddingBottom: spacing.md,
     //  borderColor: "#FFFFFF",
@@ -22,7 +21,7 @@ export const styles = StyleSheet.create({
     fontSize: typography.sizes.xxl,
     fontWeight: typography.weights.bold,
     flex: 1,
-    marginRight:spacing.xs
+    marginRight: spacing.xs,
   },
   //reading content
   readingContent: {
@@ -31,23 +30,23 @@ export const styles = StyleSheet.create({
     paddingBottom: spacing.xxxl,
     // borderColor: "#FFFFFF",
     // borderWidth: 1,
-    overflow: "hidden"
+    overflow: 'hidden',
   },
 
-  //token 
-    tokenContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
+  //token
+  tokenContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
   },
   tokenContainerHidden: {
     opacity: 0,
   },
   //footer
   footer: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingHorizontal: spacing.lg,
-  },  
+  },
   footerButton: {
     padding: spacing.xs,
   },
@@ -55,9 +54,9 @@ export const styles = StyleSheet.create({
     opacity: 0.3,
   },
   footerFontSizeGroup: {
-    flex:1,
-    flexDirection: "row",
-    alignItems: "center",
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
     marginRight: spacing.sm,
   },
   footerFontSizeLabel: {
@@ -67,22 +66,22 @@ export const styles = StyleSheet.create({
   },
   footerPaginationGroup: {
     flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   footerPageLabel: {
     flex: 1,
-    textAlign: "center",
+    textAlign: 'center',
     fontSize: typography.sizes.xxxl,
     fontWeight: typography.weights.medium,
   },
 
   //wordsheetwrapper
-  absoluteFillObject : {
-    position: 'absolute', 
-    top: 0, 
-    left: 0, 
-    right: 0, 
-    bottom: 0 
+  absoluteFillObject: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
   },
-});
+})

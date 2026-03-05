@@ -1,14 +1,14 @@
-import { radii, spacing, typography } from "@/constants/Themes";
-import { ThemeProps, useThemeColor } from "@/hooks/useThemeColor";
-import {
-  TextInput as DefaultInput,
-  TextInputProps as DefaultInputProps,
-} from "react-native";
+import type { TextInputProps as DefaultInputProps } from 'react-native'
+import { TextInput as DefaultInput } from 'react-native'
+
+import { radii, spacing, typography } from '@/constants/Themes'
+import type { ThemeProps } from '@/hooks/useThemeColor'
+import { useThemeColor } from '@/hooks/useThemeColor'
 
 export type TextAreaProps = ThemeProps &
   DefaultInputProps & {
-    minHeight?: number;
-  };
+    minHeight?: number
+  }
 
 export function TextArea(props: TextAreaProps) {
   const {
@@ -18,33 +18,33 @@ export function TextArea(props: TextAreaProps) {
     placeholderTextColor,
     minHeight = 300,
     ...otherProps
-  } = props;
+  } = props
 
-  const color = useThemeColor({ light: lightColor, dark: darkColor }, "text");
-  const borderColor = useThemeColor({}, "border");
-  const placeholderColor = useThemeColor({}, "textTertiary");
-  const backgroundColor = useThemeColor({}, "backgroundSecondary");
+  const color = useThemeColor({ light: lightColor, dark: darkColor }, 'text')
+  const borderColor = useThemeColor({}, 'border')
+  const placeholderColor = useThemeColor({}, 'textTertiary')
+  const backgroundColor = useThemeColor({}, 'backgroundSecondary')
+
+  const baseStyle = {
+    minHeight,
+    padding: spacing.sm,
+    marginHorizontal: spacing.sm,
+    borderColor: borderColor,
+    borderWidth: 1,
+    borderRadius: radii.lg,
+    fontSize: typography.sizes.md,
+    backgroundColor: backgroundColor,
+    color: color,
+  }
 
   return (
     <DefaultInput
       multiline
+      scrollEnabled={false}
       textAlignVertical="top"
       placeholderTextColor={placeholderTextColor ?? placeholderColor}
-      style={[
-        {
-          minHeight,
-          padding: spacing.sm,
-          marginHorizontal: spacing.sm,
-          borderColor: borderColor,
-          borderWidth: 1,
-          borderRadius: radii.lg,
-          fontSize: typography.sizes.md,
-          backgroundColor: backgroundColor,
-          color: color,
-        },
-        style,
-      ]}
+      style={[baseStyle, style]}
       {...otherProps}
     />
-  );
+  )
 }

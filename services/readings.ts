@@ -1,44 +1,53 @@
-import { ReadingMetadata, ReadingPackageV1 } from '@/types/readings';
-import { supabase } from '@utils/supabase';
-import { FunctionsFetchError, FunctionsHttpError, FunctionsRelayError } from "@supabase/supabase-js";
+import {
+  FunctionsFetchError,
+  FunctionsHttpError,
+  FunctionsRelayError,
+} from '@supabase/supabase-js'
+import type { ReadingMetadata, ReadingPackageV1 } from '@/types/readings'
+import { supabase } from '@utils/supabase'
 
 //since blob.text() is a web-only api
 function blobToText(blob: Blob): Promise<string> {
   return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onloadend = () => resolve(reader.result as string);
-    reader.onerror = reject;
-    reader.readAsText(blob);
-  });
+    const reader = new FileReader()
+    reader.onloadend = () => resolve(reader.result as string)
+    reader.onerror = reject
+    reader.readAsText(blob)
+  })
 }
 
-export async function uploadReading(content: string, title: string, genre: string, privacy: boolean) {
-    const newReading = {
-        title: title,
-        genre: genre,
-        language_code: "en",
-        visibility: privacy ? "private" : "public",
-        content: content,
-    };
+export async function uploadReading(
+  content: string,
+  title: string,
+  genre: string,
+  privacy: boolean,
+) {
+  const newReading = {
+    title: title,
+    genre: genre,
+    language_code: 'en',
+    visibility: privacy ? 'private' : 'public',
+    content: content,
+  }
 
-    const { data, error } = await supabase.functions.invoke('create-reading', {
-    body: JSON.stringify(newReading)
-    })
-    if (error instanceof FunctionsHttpError) {
-        const errorMessage = await error.context.json()
-        console.log('Function returned an error', errorMessage)
-    } else if (error instanceof FunctionsRelayError) {
-        console.log('Relay error:', error.message)
-    } else if (error instanceof FunctionsFetchError) {
-        console.log('Fetch error:', error.message)
-    } else {
-        console.log(data)
-    }
+  const { data, error } = await supabase.functions.invoke('create-reading', {
+    body: JSON.stringify(newReading),
+  })
+  if (error instanceof FunctionsHttpError) {
+    const errorMessage = await error.context.json()
+    console.log('Function returned an error', errorMessage)
+  } else if (error instanceof FunctionsRelayError) {
+    console.log('Relay error:', error.message)
+  } else if (error instanceof FunctionsFetchError) {
+    console.log('Fetch error:', error.message)
+  } else {
+    console.log(data)
+  }
 }
 
 export async function fetchSavedReadings(): Promise<ReadingMetadata[]> {
   const { data, error } = await supabase
-    .from("user_saved_readings")
+    .from('user_saved_readings')
     .select(
       `
       readings (
@@ -50,104 +59,109 @@ export async function fetchSavedReadings(): Promise<ReadingMetadata[]> {
       )
     `,
     )
-    .order("last_accessed", { ascending: false })
-    .limit(20);
+    .order('last_accessed', { ascending: false })
+    .limit(20)
 
   if (error) {
-    console.log("fetchSavedReadings error:", error.message);
-    return [];
+    console.log('fetchSavedReadings error:', error.message)
+    return []
   }
 
   return (data ?? [])
     .map((row: any) => row.readings)
     .filter(Boolean)
-    .map((r: any): ReadingMetadata => ({
-      id: String(r.id),
-      title: String(r.title ?? ""),
-      genre: String(r.genre ?? ""),
-      rating: String(r.difficulty ?? ""), // or "0" if you prefer
-      body: String(r.content_preview ?? ""),
-    }));
+    .map(
+      (r: any): ReadingMetadata => ({
+        id: String(r.id),
+        title: String(r.title ?? ''),
+        genre: String(r.genre ?? ''),
+        rating: String(r.difficulty ?? ''), // or "0" if you prefer
+        body: String(r.content_preview ?? ''),
+      }),
+    )
 }
 
 export async function fetchFeedReadings(): Promise<ReadingMetadata[]> {
-  const { data: userRes, error: userErr } = await supabase.auth.getUser();
-  const userId = userRes?.user?.id;
+  const { data: userRes, error: userErr } = await supabase.auth.getUser()
+  const userId = userRes?.user?.id
 
   if (userErr || !userId) {
-    console.log("fetchFeedReadings auth error:", userErr?.message ?? "No user");
-    return [];
+    console.log('fetchFeedReadings auth error:', userErr?.message ?? 'No user')
+    return []
   }
 
   const { data, error } = await supabase
-    .from("readings")
-    .select(`
+    .from('readings')
+    .select(
+      `
       id,
       title,
       genre,
       difficulty,
       content_preview,
       user_saved_readings!left(reading_id)
-    `)
-    .eq("visibility", "public")
-    .eq("is_deleted", false)
-    .eq("status", "processed")
-    .neq("owner_id", userId)                 // <-- exclude my own
-    .is("user_saved_readings.reading_id", null) // <-- exclude already saved
-    .order("created_at", { ascending: false })
-    .limit(20);
+    `,
+    )
+    .eq('visibility', 'public')
+    .eq('is_deleted', false)
+    .eq('status', 'processed')
+    .neq('owner_id', userId) // <-- exclude my own
+    .is('user_saved_readings.reading_id', null) // <-- exclude already saved
+    .order('created_at', { ascending: false })
+    .limit(20)
 
   if (error) {
-    console.log("fetchFeedReadings error:", error.message);
-    return [];
+    console.log('fetchFeedReadings error:', error.message)
+    return []
   }
 
-  return (data ?? []).map((r: any): ReadingMetadata => ({
-    id: String(r.id),
-    title: String(r.title ?? ""),
-    genre: String(r.genre ?? ""),
-    rating: String(r.difficulty ?? ""),
-    body: String(r.content_preview ?? ""),
-  }));
+  return (data ?? []).map(
+    (r: any): ReadingMetadata => ({
+      id: String(r.id),
+      title: String(r.title ?? ''),
+      genre: String(r.genre ?? ''),
+      rating: String(r.difficulty ?? ''),
+      body: String(r.content_preview ?? ''),
+    }),
+  )
 }
 
 export async function fetchAllAvailableReadings(): Promise<ReadingMetadata[]> {
-  const [saved, feed] = await Promise.all([fetchSavedReadings(), fetchFeedReadings()]);
+  const [saved, feed] = await Promise.all([fetchSavedReadings(), fetchFeedReadings()])
 
-  const map = new Map<string, ReadingMetadata>();
-  for (const r of [...saved, ...feed]) map.set(r.id, r);
+  const map = new Map<string, ReadingMetadata>()
+  for (const r of [...saved, ...feed]) map.set(r.id, r)
 
-  return Array.from(map.values());
+  return Array.from(map.values())
 }
 
-export async function getReadingStructure(readingId: string): Promise<ReadingPackageV1 | null>{
+export async function getReadingStructure(
+  readingId: string,
+): Promise<ReadingPackageV1 | null> {
   console.log(readingId)
-  const filePath = `readings/${readingId}.structure.v1.json`;
-  console.log(filePath);
-  const { data, error } = await supabase
-    .storage
-    .from('readings')
-    .download(filePath);
+  const filePath = `readings/${readingId}.structure.v1.json`
+  console.log(filePath)
+  const { data, error } = await supabase.storage.from('readings').download(filePath)
 
   if (error) {
-    console.log('Failed to download reading structure:', error.message);
-    return null;
+    console.log('Failed to download reading structure:', error.message)
+    return null
   }
 
   if (!data) {
-    console.log('No file data returned from storage.');
-    return null;
+    console.log('No file data returned from storage.')
+    return null
   }
   console.log('blob size: ', data.size, '\n type: ', data.type)
   // Convert Blob → text → JSON
-  const text = await blobToText(data);
-  const parsed = JSON.parse(text) as ReadingPackageV1;
+  const text = await blobToText(data)
+  const parsed = JSON.parse(text) as ReadingPackageV1
 
   // Optional: runtime schema guard
-  if (parsed.schema !== "reading_package_v1") {
-    console.log('Invalid schema:', parsed.schema);
-    return null;
+  if (parsed.schema !== 'reading_package_v1') {
+    console.log('Invalid schema:', parsed.schema)
+    return null
   }
-  console.log("returned structure")
-  return parsed;
+  console.log('returned structure')
+  return parsed
 }

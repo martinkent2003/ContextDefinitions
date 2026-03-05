@@ -1,19 +1,27 @@
-import { View } from "react-native";
-import { GestureDetector } from "react-native-gesture-handler";
-import { styles } from "@/screens/ReadingScreen/styles";
-import WordToken from "./WordToken";
-import { useReadingContent } from "@/hooks/useReadingContent";
+import { View } from 'react-native'
+import { GestureDetector } from 'react-native-gesture-handler'
+import { useReadingContent } from '@/screens/ReadingScreen/hooks/useReadingContent'
+import { styles } from '@/screens/ReadingScreen/styles'
+import WordToken from './WordToken'
 
 export default function ReadingContent() {
-  const { tokens, fontSize, isMeasuring, isHighlighted, pan, onContainerLayout, onTokenLayout } = useReadingContent();
+  const {
+    tokens,
+    fontSize,
+    isMeasuring,
+    isHighlighted,
+    pan,
+    onContainerLayout,
+    onTokenLayout,
+  } = useReadingContent()
 
   return (
     <View style={styles.readingContent} onLayout={onContainerLayout}>
       <GestureDetector gesture={pan}>
         <View style={[styles.tokenContainer, isMeasuring && styles.tokenContainerHidden]}>
           {tokens.map((token, idx) => {
-            const prev = idx > 0 ? tokens[idx - 1] : null;
-            const addLeadingSpace = prev !== null && token.start > prev.end;
+            const prev = idx > 0 ? tokens[idx - 1] : null
+            const addLeadingSpace = prev !== null && token.start > prev.end
             return (
               <WordToken
                 key={token.i}
@@ -23,11 +31,10 @@ export default function ReadingContent() {
                 fontSize={fontSize}
                 onLayout={(layout) => onTokenLayout(token.i, layout)}
               />
-            );
+            )
           })}
         </View>
       </GestureDetector>
     </View>
-  );
+  )
 }
-

@@ -1,29 +1,29 @@
-import { spacing, typography } from "@/constants/Themes";
-import { StyleSheet } from "react-native";
+import { StyleSheet } from 'react-native'
+import { spacing, typography } from '@/constants/Themes'
 
 export const styles = StyleSheet.create({
   sheetContent: {
     flex: 1,
     paddingHorizontal: spacing.md,
-    backgroundColor: "transparent",
+    backgroundColor: 'transparent',
   },
   sheetHeader: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: spacing.md,
-    backgroundColor: "transparent",
+    backgroundColor: 'transparent',
   },
   sheetHeaderCenter: {
     flex: 1,
-    textAlign: "center",
+    textAlign: 'center',
     fontSize: typography.sizes.xl,
     fontWeight: typography.weights.semibold,
   },
   sheetHeaderActions: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: spacing.xs,
-    backgroundColor: "transparent",
+    backgroundColor: 'transparent',
   },
   sheetLabel: {
     fontSize: typography.sizes.sm,
@@ -36,20 +36,19 @@ export const styles = StyleSheet.create({
     marginTop: spacing.xs,
   },
   sheetEditActions: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     padding: spacing.sm,
     marginTop: spacing.md,
-    backgroundColor: "transparent",
+    backgroundColor: 'transparent',
   },
   feedTitle: {
     fontSize: typography.sizes.xl,
     fontWeight: typography.weights.semibold,
-    marginBottom: spacing.md,
+    marginBottom: spacing.sm,
   },
   feedEmpty: {
     fontSize: typography.sizes.md,
-    textAlign: "center",
-    marginTop: spacing.xl,
+    textAlign: 'center',
   },
-});
+})

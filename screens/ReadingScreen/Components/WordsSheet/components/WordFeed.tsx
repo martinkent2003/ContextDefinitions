@@ -1,18 +1,18 @@
-import { ScrollView } from "react-native";
-import { Text } from "@/components/ui";
-import { useThemeColor } from "@/hooks/useThemeColor";
-import { styles } from "@/components/WordsSheet/styles";
-import { SavedWord } from "@/components/WordsSheet/index";
-import { WordCard } from "@/components/ui/WordCard";
+import { ScrollView } from 'react-native'
+import { Text } from '@/components/ui'
+import { WordCard } from '@/components/ui/WordCard'
+import { useThemeColor } from '@/hooks/useThemeColor'
+import type { SavedWord } from '@/screens/ReadingScreen/Components/WordsSheet/hooks/useReadingWords'
+import { styles } from '@/screens/ReadingScreen/Components/WordsSheet/styles'
 
 type WordFeedProps = {
-  savedWords: SavedWord[];
-  handleView: (savedWord: SavedWord) => void;
-};
+  savedWords: SavedWord[]
+  handleView: (savedWord: SavedWord) => void
+}
 
 export function WordFeed({ savedWords, handleView }: WordFeedProps) {
-  const textColor = useThemeColor({}, "text");
-  const textSecondary = useThemeColor({}, "textSecondary");
+  const textColor = useThemeColor({}, 'text')
+  const textSecondary = useThemeColor({}, 'textSecondary')
 
   return (
     <>
@@ -29,12 +29,12 @@ export function WordFeed({ savedWords, handleView }: WordFeedProps) {
               text={word.text}
               definition={word.definition}
               onPress={() => {
-                handleView(word);
+                handleView(word)
               }}
             />
           ))}
         </ScrollView>
       )}
     </>
-  );
+  )
 }

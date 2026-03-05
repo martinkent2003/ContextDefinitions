@@ -1,19 +1,19 @@
-import {  View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { useThemeColor } from "@/hooks/useThemeColor";
-import { useReading } from "@/hooks/useReading";
-import { styles } from "@screens/ReadingScreen/styles";
-import Header from "@screens/ReadingScreen/Components/Header";
-import ReadingContent from "@screens/ReadingScreen/Components/ReadingContent";
-import Footer from "@screens/ReadingScreen/Components/Footer";
-import WordsSheet from "@/components/WordsSheet";
+import { View } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { useReading } from '@/hooks/useReading'
+import { useThemeColor } from '@/hooks/useThemeColor'
+import WordsSheet from '@/screens/ReadingScreen/Components/WordsSheet'
+import Footer from '@screens/ReadingScreen/Components/Footer'
+import Header from '@screens/ReadingScreen/Components/Header'
+import ReadingContent from '@screens/ReadingScreen/Components/ReadingContent'
+import { styles } from '@screens/ReadingScreen/styles'
 
 export default function ReadingScreen() {
-  const { reading } = useReading();
-  const backgroundColor = useThemeColor({}, "background");
+  const { reading } = useReading()
+  const backgroundColor = useThemeColor({}, 'background')
 
-  if (!reading) return null;
-  
+  if (!reading) return null
+
   return (
     <SafeAreaView style={[styles.readingScreen, { backgroundColor }]}>
       <Header />
@@ -23,5 +23,5 @@ export default function ReadingScreen() {
         <WordsSheet />
       </View>
     </SafeAreaView>
-  );
+  )
 }

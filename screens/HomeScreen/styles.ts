@@ -1,8 +1,8 @@
-import { radii, spacing, typography } from "@/constants/Themes";
-import { StyleSheet } from "react-native";
+import { StyleSheet } from 'react-native'
+import { radii, spacing, typography } from '@/constants/Themes'
 
 export const styles = StyleSheet.create({
-    // Screen
+  // Screen
   screen: {
     flex: 1,
     // borderColor: "#FFFFFF",
@@ -10,14 +10,13 @@ export const styles = StyleSheet.create({
   },
   pressable: {
     flex: 1,
-    paddingHorizontal: spacing.md,    
+    paddingHorizontal: spacing.md,
     //  borderColor: "#FFFFFF",
     //  borderWidth: 1,
-     
   },
   header: {
     marginBottom: spacing.md,
-    
+
     //  borderColor: "#FFFFFF",
     //  borderWidth: 1,
   },
@@ -25,14 +24,14 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    
+
     //  borderColor: "#FFFFFF",
     //  borderWidth: 1,
   },
   segmentedControl: {
     marginTop: spacing.md,
     marginHorizontal: spacing.xxl,
-    
+
     //  borderColor: "#FFFFFF",
     //  borderWidth: 1,
   },
@@ -52,9 +51,9 @@ export const styles = StyleSheet.create({
     fontSize: typography.sizes.xs,
   },
   feed: {
-    marginTop:spacing.xs,
+    marginTop: spacing.xs,
     gap: spacing.xs,
     // borderColor: "#FFFFFF",
     // borderWidth: 1,
   },
-});
+})

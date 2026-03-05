@@ -1,28 +1,27 @@
-import { radii, shadows, spacing, typography } from '@constants/Themes';
-import { ThemeProps, useThemeColor } from '@hooks/useThemeColor';
-import * as Haptics from 'expo-haptics';
-import {
-    ActivityIndicator,
-    StyleSheet,
-    TouchableOpacity,
-    TouchableOpacityProps
-} from 'react-native';
-import { Text } from '@components/ui/Text';
+import * as Haptics from 'expo-haptics'
+import type { TouchableOpacityProps } from 'react-native'
+import { ActivityIndicator, StyleSheet, TouchableOpacity } from 'react-native'
+
+import { Text } from '@components/ui/Text'
+import { radii, shadows, spacing, typography } from '@constants/Themes'
+import { useThemeColor } from '@hooks/useThemeColor'
+import type { ThemeProps } from '@hooks/useThemeColor'
 
 // Define variant types
-type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'upload';
-type ButtonSize = 'sm' | 'md' | 'lg';
+type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'upload'
+type ButtonSize = 'sm' | 'md' | 'lg'
 
-export type ButtonProps = ThemeProps & TouchableOpacityProps & {
-  variant?: ButtonVariant;
-  size?: ButtonSize;
-  loading?: boolean;
-  disabled?: boolean;
-  fullWidth?: boolean;
-  children: React.ReactNode;
-};
+export type ButtonProps = ThemeProps &
+  TouchableOpacityProps & {
+    variant?: ButtonVariant
+    size?: ButtonSize
+    loading?: boolean
+    disabled?: boolean
+    fullWidth?: boolean
+    children: React.ReactNode
+  }
 
-// Size configurations 
+// Size configurations
 const sizeStyles = {
   sm: {
     paddingVertical: spacing.xs,
@@ -42,7 +41,7 @@ const sizeStyles = {
     fontSize: typography.sizes.lg,
     borderRadius: radii.lg,
   },
-};
+}
 
 export function Button(props: ButtonProps) {
   const {
@@ -57,7 +56,7 @@ export function Button(props: ButtonProps) {
     children,
     onPress,
     ...otherProps
-  } = props;
+  } = props
 
   const hapticStyles: Record<ButtonVariant, Haptics.ImpactFeedbackStyle> = {
     primary: Haptics.ImpactFeedbackStyle.Light,
@@ -65,25 +64,25 @@ export function Button(props: ButtonProps) {
     ghost: Haptics.ImpactFeedbackStyle.Light,
     danger: Haptics.ImpactFeedbackStyle.Rigid,
     upload: Haptics.ImpactFeedbackStyle.Medium,
-  };
+  }
 
   const handlePress: TouchableOpacityProps['onPress'] = (e) => {
-    Haptics.impactAsync(hapticStyles[variant]);
-    onPress?.(e);
-  };
+    Haptics.impactAsync(hapticStyles[variant])
+    onPress?.(e)
+  }
 
   //theme colors for each variant
-  const primaryBg = useThemeColor({}, 'buttonBackground');
-  const secondaryBg = useThemeColor({}, 'buttonBackgroundSecondary');
-  const ghostBg = useThemeColor({}, 'buttonBackgroundGhost');
-  const errorColor = useThemeColor({}, 'error');
-  
-  const uploadBg = useThemeColor({}, 'cardBackground');
+  const primaryBg = useThemeColor({}, 'buttonBackground')
+  const secondaryBg = useThemeColor({}, 'buttonBackgroundSecondary')
+  const ghostBg = useThemeColor({}, 'buttonBackgroundGhost')
+  const errorColor = useThemeColor({}, 'error')
+
+  const uploadBg = useThemeColor({}, 'cardBackground')
   const cardBorderColor = useThemeColor({}, 'cardBorder')
-  
-  const primaryText = useThemeColor({}, 'textInverse');
-  const secondaryText = useThemeColor({}, 'text');
-  const ghostText = useThemeColor({}, 'tint');
+
+  const primaryText = useThemeColor({}, 'textInverse')
+  const secondaryText = useThemeColor({}, 'text')
+  const ghostText = useThemeColor({}, 'tint')
 
   // Variant configurations
   const variantStyles = {
@@ -115,30 +114,27 @@ export function Button(props: ButtonProps) {
       backgroundColor: uploadBg,
       textColor: primaryText,
       borderWidth: 2,
-      borderColor: cardBorderColor
-    }
-  };
+      borderColor: cardBorderColor,
+    },
+  }
 
-  const currentVariant = variantStyles[variant];
-  const currentSize = sizeStyles[size];
+  const currentVariant = variantStyles[variant]
+  const currentSize = sizeStyles[size]
+
+  const variantStyle = {
+    backgroundColor: currentVariant.backgroundColor,
+    borderWidth: currentVariant.borderWidth,
+    borderColor: currentVariant.borderColor,
+    paddingVertical: currentSize.paddingVertical,
+    paddingHorizontal: currentSize.paddingHorizontal,
+    borderRadius: currentSize.borderRadius,
+    opacity: disabled ? 0.5 : 1,
+    width: fullWidth ? ('100%' as const) : undefined,
+  }
 
   return (
     <TouchableOpacity
-      style={[
-        styles.base,
-        {
-          backgroundColor: currentVariant.backgroundColor,
-          borderWidth: currentVariant.borderWidth,
-          borderColor: currentVariant.borderColor,
-          paddingVertical: currentSize.paddingVertical,
-          paddingHorizontal: currentSize.paddingHorizontal,
-          borderRadius: currentSize.borderRadius,
-          opacity: disabled ? 0.5 : 1,
-          width: fullWidth ? '100%' : undefined,
-        },
-        shadows.md,
-        style,
-      ]}
+      style={[styles.base, variantStyle, shadows.md, style]}
       onPress={handlePress}
       disabled={disabled || loading}
       {...otherProps}
@@ -159,7 +155,7 @@ export function Button(props: ButtonProps) {
         </Text>
       )}
     </TouchableOpacity>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -172,4 +168,4 @@ const styles = StyleSheet.create({
     fontWeight: typography.weights.bold,
     textAlign: 'center',
   },
-});
+})

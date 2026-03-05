@@ -1,14 +1,13 @@
-
 // DESIGN TOKENS - Single source of truth
 const palette = {
-  // 
+  //
   primary: {
     50: '#e3f2fd',
     100: '#bbdefb',
     200: '#90caf9',
     300: '#64b5f6',
     400: '#42a5f5',
-    500: '#2f95dc', 
+    500: '#2f95dc',
     600: '#1e88e5',
     700: '#1976d2',
     800: '#1565c0',
@@ -36,8 +35,7 @@ const palette = {
   // Base
   white: '#ffffff',
   black: '#000000',
-
-} as const;
+} as const
 
 // Spacing scale (based on 4px grid)
 export const spacing = {
@@ -50,17 +48,17 @@ export const spacing = {
   xxl: 48,
   xxxl: 64,
   xxxxl: 96,
-} as const;
+} as const
 
 // Typography
-// Insert Excalifont in here 
+// Insert Excalifont in here
 export const typography = {
   fonts: {
     regular: 'System',
     medium: 'System',
     bold: 'System',
     mono: 'SpaceMono',
-    excalifont: 'Excalifont'
+    excalifont: 'Excalifont',
   },
   sizes: {
     xs: 12,
@@ -82,7 +80,7 @@ export const typography = {
     semibold: '600' as const,
     bold: '700' as const,
   },
-} as const;
+} as const
 
 // Border radius
 export const radii = {
@@ -95,7 +93,7 @@ export const radii = {
   xxl: 36,
   xxxl: 48,
   full: 9999,
-} as const;
+} as const
 
 // Shadows
 export const shadows = {
@@ -121,7 +119,7 @@ export const shadows = {
     shadowRadius: 8,
     elevation: 5,
   },
-} as const;
+} as const
 
 // Theme-specific colors to light/dark
 export const Colors = {
@@ -130,33 +128,33 @@ export const Colors = {
     background: palette.gray[10],
     backgroundSecondary: palette.gray[50],
     backgroundTertiary: palette.gray[100],
-    
+
     // Text
     text: palette.gray[900],
     textSecondary: palette.gray[600],
     textTertiary: palette.gray[400],
     textInverse: palette.white,
-    
+
     // Interactive
     tint: palette.primary[500],
     buttonBackground: palette.primary[500],
     buttonBackgroundSecondary: palette.gray[100],
     buttonBackgroundGhost: 'transparent',
-    
+
     // Borders
     border: palette.gray[200],
     borderFocused: palette.primary[500],
-    
+
     // Cards
     cardBackground: palette.white,
     cardBorder: palette.gray[200],
-    
+
     // Status
     success: palette.success,
     warning: palette.warning,
     error: palette.error,
     info: palette.info,
-    
+
     // Tab bar
     tabIconDefault: palette.gray[400],
     tabIconSelected: palette.primary[500],
@@ -166,38 +164,38 @@ export const Colors = {
     background: palette.gray[900],
     backgroundSecondary: palette.gray[800],
     backgroundTertiary: palette.gray[700],
-    
+
     // Text
     text: palette.white,
     textSecondary: palette.gray[300],
     textTertiary: palette.gray[500],
     textInverse: palette.gray[900],
-    
+
     // Interactive
     tint: palette.primary[400],
     buttonBackground: palette.primary[500],
     buttonBackgroundSecondary: palette.gray[600],
     buttonBackgroundGhost: 'transparent',
-    
+
     // Borders
     border: palette.gray[700],
     borderFocused: palette.primary[400],
-    
+
     // Cards
     cardBackground: palette.gray[800],
     cardBorder: palette.gray[700],
-    
+
     // Status
     success: palette.success,
     warning: palette.warning,
     error: palette.error,
     info: palette.info,
-    
+
     // Tab bar
     tabIconDefault: palette.gray[500],
     tabIconSelected: palette.white,
   },
-} as const;
+} as const
 
 // Export everything as a unified theme
 export const theme = {
@@ -206,11 +204,11 @@ export const theme = {
   typography,
   radii,
   shadows,
-} as const;
+} as const
 
-export type Theme = typeof theme;
-export type ColorScheme = keyof typeof Colors;
-export type ThemeColors = keyof typeof Colors.light;
+export type Theme = typeof theme
+export type ColorScheme = keyof typeof Colors
+export type ThemeColors = keyof typeof Colors.light
 
 // Default export for convenience (the Colors object for light/dark access)
-export default Colors;
+export default Colors

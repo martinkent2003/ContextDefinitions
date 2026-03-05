@@ -1,19 +1,19 @@
-import { Icon } from "@/components/ui";
-import Colors from "@/constants/Themes";
-import { useColorScheme } from "@/hooks/useColorScheme";
-import { Tabs } from "expo-router";
-import React from "react";
+import { Tabs } from 'expo-router'
+import React from 'react'
 
+import { Icon } from '@/components/ui'
+import { Colors } from '@/constants/Themes'
+import { useColorScheme } from '@/hooks/useColorScheme'
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
+  const colorScheme = useColorScheme()
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
+        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
-        animation:'shift'
+        animation: 'shift',
       }}
       detachInactiveScreens={false}
     >
@@ -23,38 +23,34 @@ export default function TabLayout() {
           tabBarIcon: ({ color, focused }) => (
             <Icon
               library="FontAwesome"
-              name= {focused? "home" : "home"}
+              name={focused ? 'home' : 'home'}
               color={color}
               size={24}
             />
-          )
+          ),
         }}
       />
       <Tabs.Screen
         name="create"
         options={{
           tabBarIcon: ({ color, focused }) => (
-            <Icon
-            library="FontAwesome"
-            name="plus"
-            color={color}
-            size={24} />
-          )
+            <Icon library="FontAwesome" name="plus" color={color} size={24} />
+          ),
         }}
       />
       <Tabs.Screen
         name="library"
         options={{
-          tabBarIcon: ({color, focused}) => (
+          tabBarIcon: ({ color, focused }) => (
             <Icon
               library="FontAwesome"
-              name={focused ? "folder-open" : "folder"}
+              name={focused ? 'folder-open' : 'folder'}
               color={color}
-              size = {24}
+              size={24}
             />
-          )
+          ),
         }}
       />
     </Tabs>
-  );
+  )
 }

@@ -1,13 +1,13 @@
-import { SegmentedControl, View } from '@/components/ui';
-import { useHome } from '@/hooks/useHome';
-import { styles } from '@screens/HomeScreen/styles';
-import SearchBar from '@screens/HomeScreen/Components/SearchBar';
-import UserIcon from '@screens/HomeScreen/Components/UserIcon';
+import { SegmentedControl, View } from '@/components/ui'
+import { useHome } from '@/hooks/useHome'
+import SearchBar from '@screens/HomeScreen/Components/SearchBar'
+import UserIcon from '@screens/HomeScreen/Components/UserIcon'
+import { styles } from '@screens/HomeScreen/styles'
 
-const SEGMENTS = ['Feed', 'Private'];
+const SEGMENTS = ['Feed', 'Private']
 
 export default function Header() {
-  const { showProfileModal, selectedSegment, setSelectedSegment } = useHome();
+  const { showProfileModal, selectedSegment, setSelectedSegment } = useHome()
 
   return (
     <View style={styles.header}>
@@ -23,5 +23,5 @@ export default function Header() {
         style={styles.segmentedControl}
       />
     </View>
-  );
+  )
 }

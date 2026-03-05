@@ -1,56 +1,66 @@
-import { Button, Text } from "@/components/ui";
-import { spacing } from "@/constants/Themes";
-import { useUpload } from "@/hooks/useUpload";
-import * as ImagePicker from "expo-image-picker";
-import React from "react";
-import ConfirmModal from "@screens/UploadScreen/Components/ConfirmModal";
-import ImageCarousel from "@screens/UploadScreen/Components/ImageCarousel";
+import * as ImagePicker from 'expo-image-picker'
+import React from 'react'
+import { Button, Text } from '@/components/ui'
+import { spacing } from '@/constants/Themes'
+import { useUpload } from '@/hooks/useUpload'
+import ConfirmModal from '@screens/UploadScreen/Components/ConfirmModal'
+import ImageCarousel from '@screens/UploadScreen/Components/ImageCarousel'
 
 export default function ConfirmImages() {
-  const { upload, setImages, isConfirmImageModalVisible, hideConfirmImageModal, processUpload, clearUpload } = useUpload();
+  const {
+    upload,
+    setImages,
+    isConfirmImageModalVisible,
+    hideConfirmImageModal,
+    processUpload,
+    clearUpload,
+  } = useUpload()
 
   const pickImageAsync = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ["images"],
+      mediaTypes: ['images'],
       allowsMultipleSelection: true,
       quality: 1,
       presentationStyle: ImagePicker.UIImagePickerPresentationStyle.PAGE_SHEET,
-    });
+    })
 
     if (!result.canceled) {
-      setImages(result.assets.map((asset) => asset.uri));
+      setImages(result.assets.map((asset) => asset.uri))
     }
-  };
+  }
 
   const handleConfirm = async () => {
-    hideConfirmImageModal();
-    await processUpload();
-  };
+    hideConfirmImageModal()
+    await processUpload()
+  }
 
-  const hasImages = upload.images.length > 0;
+  const hasImages = upload.images.length > 0
 
   return (
     <ConfirmModal
       visible={isConfirmImageModalVisible}
       title="Select Images"
       icon="images-outline"
-      onCancel={() => { clearUpload(); hideConfirmImageModal(); }}
+      onCancel={() => {
+        clearUpload()
+        hideConfirmImageModal()
+      }}
       onConfirm={handleConfirm}
       confirmDisabled={!hasImages}
     >
       {hasImages && (
-        <Text style={{ textAlign: "center", marginBottom: spacing.sm }}>
-          {upload.images.length} image{upload.images.length !== 1 ? "s" : ""} selected
+        <Text style={{ textAlign: 'center', marginBottom: spacing.sm }}>
+          {upload.images.length} image{upload.images.length !== 1 ? 's' : ''} selected
         </Text>
       )}
       <Button
-        variant={hasImages ? "secondary" : "primary"}
+        variant={hasImages ? 'secondary' : 'primary'}
         onPress={pickImageAsync}
         style={{ marginHorizontal: spacing.sm, marginBottom: spacing.md }}
       >
-        {hasImages ? "Change Selection" : "Choose Images"}
+        {hasImages ? 'Change Selection' : 'Choose Images'}
       </Button>
       {hasImages && <ImageCarousel imageUris={upload.images} />}
     </ConfirmModal>
-  );
+  )
 }

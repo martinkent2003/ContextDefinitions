@@ -1,9 +1,9 @@
-import { Button, Icon, Input, Picker, ScrollView, View } from '@/components/ui'
-import { signUpWithEmail } from '@/services/auth'
-import { useLoading } from '@/hooks/useLoading'
-import { LanguageCode, SignUpData } from '@/types/auth'
 import React, { useState } from 'react'
 import { Alert, AppState, StyleSheet } from 'react-native'
+import { Button, Icon, Input, Picker, ScrollView, View } from '@/components/ui'
+import { useLoading } from '@/hooks/useLoading'
+import { signUpWithEmail } from '@/services/auth'
+import type { LanguageCode, SignUpData } from '@/types/auth'
 import { supabase } from '@utils/supabase'
 
 const LANGUAGES: { label: string; value: LanguageCode }[] = [
@@ -44,7 +44,7 @@ export default function SignUp() {
   const { showLoading, hideLoading } = useLoading()
 
   async function signUp() {
-    showLoading("Creating account...", "typing")
+    showLoading('Creating account...', 'typing')
     const signUpData: SignUpData = {
       email,
       password,
@@ -68,42 +68,38 @@ export default function SignUp() {
     <ScrollView style={styles.container} keyboardShouldPersistTaps="handled">
       <View style={[styles.verticallySpaced, styles.mt20]}>
         <Input
-          leftIcon={<Icon library="FontAwesome" name='envelope' size={20}/>}
+          leftIcon={<Icon library="FontAwesome" name="envelope" size={20} />}
           onChangeText={(text) => setEmail(text)}
           value={email}
           placeholder="email@address.com"
           autoCapitalize={'none'}
-
         />
       </View>
       <View style={styles.verticallySpaced}>
         <Input
-          leftIcon={<Icon library="FontAwesome" name="lock" size={20}/>}
+          leftIcon={<Icon library="FontAwesome" name="lock" size={20} />}
           onChangeText={(text) => setPassword(text)}
           value={password}
           secureTextEntry={true}
           placeholder="Password"
           autoCapitalize={'none'}
-
         />
       </View>
       <View style={styles.verticallySpaced}>
         <Input
-          leftIcon={<Icon library="FontAwesome" name="user" size={20}/>}
+          leftIcon={<Icon library="FontAwesome" name="user" size={20} />}
           onChangeText={(text) => setUsername(text)}
           value={username}
           placeholder="Username (min 6 characters)"
           autoCapitalize={'none'}
-
         />
       </View>
       <View style={styles.verticallySpaced}>
         <Input
-          leftIcon={<Icon library="FontAwesome" name="id-card" size={20}/>}
+          leftIcon={<Icon library="FontAwesome" name="id-card" size={20} />}
           onChangeText={(text) => setFullName(text)}
           value={fullName}
           placeholder="Your full name"
-
         />
       </View>
       <View style={styles.verticallySpaced}>
@@ -123,7 +119,9 @@ export default function SignUp() {
         />
       </View>
       <View style={[styles.verticallySpaced, styles.mt20]}>
-        <Button variant="primary" size="lg" onPress={() => signUp()}>Sign up</Button>
+        <Button variant="primary" size="lg" onPress={() => signUp()}>
+          Sign up
+        </Button>
       </View>
     </ScrollView>
   )

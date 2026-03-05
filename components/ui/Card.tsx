@@ -1,20 +1,19 @@
-import { radii, shadows, spacing, typography } from '@constants/Themes';
-import { ThemeProps, useThemeColor } from '@hooks/useThemeColor';
-import * as Haptics from 'expo-haptics';
-import {
-  StyleSheet,
-  TouchableOpacity,
-  TouchableOpacityProps,
-  View,
-} from 'react-native';
-import { Text } from '@components/ui/Text';
+import * as Haptics from 'expo-haptics'
+import type { TouchableOpacityProps } from 'react-native'
+import { StyleSheet, TouchableOpacity, View } from 'react-native'
 
-export type CardProps = ThemeProps & Omit<TouchableOpacityProps, 'children'> & {
-  title: string;
-  subtitle?: string;
-  rating?: number | string;
-  body?: string;
-};
+import { Text } from '@components/ui/Text'
+import { radii, shadows, spacing, typography } from '@constants/Themes'
+import { useThemeColor } from '@hooks/useThemeColor'
+import type { ThemeProps } from '@hooks/useThemeColor'
+
+export type CardProps = ThemeProps &
+  Omit<TouchableOpacityProps, 'children'> & {
+    title: string
+    subtitle?: string
+    rating?: number | string
+    body?: string
+  }
 
 export function Card(props: CardProps) {
   const {
@@ -27,35 +26,35 @@ export function Card(props: CardProps) {
     style,
     onPress,
     ...otherProps
-  } = props;
+  } = props
 
   const handlePress: TouchableOpacityProps['onPress'] = (e) => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    onPress?.(e);
-  };
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+    onPress?.(e)
+  }
 
-  const cardBackground = useThemeColor({}, 'cardBackground');
-  const cardBorder = useThemeColor({}, 'cardBorder');
-  const textColor = useThemeColor({}, 'text');
-  const textSecondary = useThemeColor({}, 'textSecondary');
-  const successColor = useThemeColor({}, 'success');
-  const warningColor = useThemeColor({}, 'warning');
-  const errorColor = useThemeColor({}, 'error');
+  const cardBackground = useThemeColor({}, 'cardBackground')
+  const cardBorder = useThemeColor({}, 'cardBorder')
+  const textColor = useThemeColor({}, 'text')
+  const textSecondary = useThemeColor({}, 'textSecondary')
+  const successColor = useThemeColor({}, 'success')
+  const warningColor = useThemeColor({}, 'warning')
+  const errorColor = useThemeColor({}, 'error')
 
   // Determine rating color based on difficulty value
   const getRatingColor = () => {
-    const numericRating = typeof rating === 'string' ? parseFloat(rating) : rating;
-    if (numericRating === undefined || isNaN(numericRating)) return textColor;
+    const numericRating = typeof rating === 'string' ? parseFloat(rating) : rating
+    if (numericRating === undefined || isNaN(numericRating)) return textColor
 
     if (numericRating >= 0 && numericRating < 35) {
-      return successColor; // Green for easy (0-100)
+      return successColor // Green for easy (0-100)
     } else if (numericRating >= 35 && numericRating < 65) {
-      return warningColor; // Yellow for medium (100-200)
+      return warningColor // Yellow for medium (100-200)
     } else if (numericRating >= 65) {
-      return errorColor; // Red for hard (200-300)
+      return errorColor // Red for hard (200-300)
     }
-    return textColor; // Default for out of range
-  };
+    return textColor // Default for out of range
+  }
 
   return (
     <TouchableOpacity
@@ -75,35 +74,26 @@ export function Card(props: CardProps) {
       {/* Header Row: Title + Rating */}
       <View style={styles.header}>
         <View style={styles.titleContainer}>
-          <Text 
-            style={[styles.title, { color: textColor }]}
-            numberOfLines={1}>
+          <Text style={[styles.title, { color: textColor }]} numberOfLines={1}>
             {title}
           </Text>
           {subtitle && (
-            <Text style={[styles.subtitle, { color: textSecondary }]}>
-              {subtitle}
-            </Text>
+            <Text style={[styles.subtitle, { color: textSecondary }]}>{subtitle}</Text>
           )}
         </View>
         {rating !== undefined && (
-          <Text style={[styles.rating, { color: getRatingColor() }]}>
-            {rating}
-          </Text>
+          <Text style={[styles.rating, { color: getRatingColor() }]}>{rating}</Text>
         )}
       </View>
 
       {/* Body */}
       {body && (
-        <Text
-          style={[styles.body, { color: textSecondary }]}
-          numberOfLines={3}
-        >
+        <Text style={[styles.body, { color: textSecondary }]} numberOfLines={3}>
           {body}
         </Text>
       )}
     </TouchableOpacity>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -111,7 +101,7 @@ const styles = StyleSheet.create({
     borderRadius: radii.xl,
     borderWidth: 1,
     padding: spacing.sm,
-    paddingHorizontal: spacing.sm+spacing.xs,
+    paddingHorizontal: spacing.sm + spacing.xs,
     margin: spacing.xs,
   },
   header: {
@@ -125,7 +115,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: typography.sizes.xl,
-    fontWeight: typography.weights.bold,
+    fontWeight: typography.weights.medium,
   },
   subtitle: {
     fontSize: typography.sizes.md,
@@ -133,11 +123,11 @@ const styles = StyleSheet.create({
   },
   rating: {
     fontSize: typography.sizes.xl,
-    fontWeight: typography.weights.semibold,
+    fontWeight: typography.weights.medium,
   },
   body: {
     fontSize: typography.sizes.sm,
     marginTop: spacing.sm,
     lineHeight: typography.sizes.sm * typography.lineHeights.normal,
   },
-});
+})

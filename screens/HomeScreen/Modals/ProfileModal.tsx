@@ -1,41 +1,49 @@
-import { Button, View } from '@/components/ui';
-import { signOut } from '@/services/auth';
-import { useLoading } from '@/hooks/useLoading';
-import { StatusBar } from 'expo-status-bar';
-import { Alert, Modal, Platform, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useThemeColor } from "@/hooks/useThemeColor";
+import { StatusBar } from 'expo-status-bar'
+import { Alert, Modal, Platform, StyleSheet } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { Button, View } from '@/components/ui'
+import { useLoading } from '@/hooks/useLoading'
+import { useThemeColor } from '@/hooks/useThemeColor'
+import { signOut } from '@/services/auth'
 
 type Props = {
-  visible: boolean;
-  onClose: () => void;
-};
+  visible: boolean
+  onClose: () => void
+}
 
 export default function ProfileModal({ visible, onClose }: Props) {
-  const { showLoading, hideLoading } = useLoading();
-  const backgroundColor = useThemeColor({}, "background");
+  const { showLoading, hideLoading } = useLoading()
+  const backgroundColor = useThemeColor({}, 'background')
 
   async function logOut() {
-    showLoading("Signing out...", "typing");
-    const { error } = await signOut();
-    if (error) Alert.alert(error.message);
-    hideLoading();
+    showLoading('Signing out...', 'typing')
+    const { error } = await signOut()
+    if (error) Alert.alert(error.message)
+    hideLoading()
   }
 
   return (
     <Modal visible={visible} animationType="slide">
-      <SafeAreaView style={[styles.container, {backgroundColor}]}>
+      <SafeAreaView style={[styles.container, { backgroundColor }]}>
         <View style={[styles.verticallySpaced, styles.mt20]}>
-          <Button variant="secondary" size="lg" onPress={onClose}>Close</Button>
+          <Button variant="secondary" size="lg" onPress={onClose}>
+            Close
+          </Button>
         </View>
         <View style={[styles.verticallySpaced]}>
-          <Button variant="danger" size="lg" onPress={() => logOut()}>Sign Out</Button>
+          <Button variant="danger" size="lg" onPress={() => logOut()}>
+            Sign Out
+          </Button>
         </View>
-        <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
+        <View
+          style={styles.separator}
+          lightColor="#eee"
+          darkColor="rgba(255,255,255,0.1)"
+        />
         {Platform.OS === 'ios' && <StatusBar style="light" />}
       </SafeAreaView>
     </Modal>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -58,4 +66,4 @@ const styles = StyleSheet.create({
   mt20: {
     marginTop: 20,
   },
-});
+})

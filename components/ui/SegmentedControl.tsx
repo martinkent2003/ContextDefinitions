@@ -1,18 +1,14 @@
-import { useEffect, useRef, useState } from 'react';
-import { radii, spacing, typography } from '@/constants/Themes';
-import { ThemeProps, useThemeColor } from '@/hooks/useThemeColor';
-import * as Haptics from "expo-haptics";
-import {
-  Animated,
-  LayoutChangeEvent,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-  ViewStyle,
-} from 'react-native';
-import { Text } from '@components/ui/Text';
+import * as Haptics from 'expo-haptics'
+import { useEffect, useRef, useState } from 'react'
+import type { LayoutChangeEvent, ViewStyle } from 'react-native'
+import { Animated, StyleSheet, TouchableOpacity, View } from 'react-native'
 
-type SegmentedControlSize = 'sm' | 'md' | 'lg';
+import { radii, spacing, typography } from '@/constants/Themes'
+import type { ThemeProps } from '@/hooks/useThemeColor'
+import { useThemeColor } from '@/hooks/useThemeColor'
+import { Text } from '@components/ui/Text'
+
+type SegmentedControlSize = 'sm' | 'md' | 'lg'
 
 const sizeStyles = {
   sm: {
@@ -30,15 +26,15 @@ const sizeStyles = {
     paddingHorizontal: spacing.lg,
     fontSize: typography.sizes.lg,
   },
-};
+}
 
 export type SegmentedControlProps = ThemeProps & {
-  segments: string[];
-  selected: string;
-  onSelect: (value: string) => void;
-  size?: SegmentedControlSize;
-  style?: ViewStyle;
-};
+  segments: string[]
+  selected: string
+  onSelect: (value: string) => void
+  size?: SegmentedControlSize
+  style?: ViewStyle
+}
 
 export function SegmentedControl(props: SegmentedControlProps) {
   const {
@@ -49,39 +45,39 @@ export function SegmentedControl(props: SegmentedControlProps) {
     onSelect,
     size = 'md',
     style,
-  } = props;
+  } = props
 
-  const backgroundColor = useThemeColor({}, 'backgroundSecondary');
-  const borderColor = useThemeColor({}, 'border');
-  const selectedBg = useThemeColor({}, 'tint');
-  const selectedText = useThemeColor({}, 'textInverse');
-  const unselectedText = useThemeColor({ light: lightColor, dark: darkColor }, 'text');
+  const backgroundColor = useThemeColor({}, 'backgroundSecondary')
+  const borderColor = useThemeColor({}, 'border')
+  const selectedBg = useThemeColor({}, 'tint')
+  const selectedText = useThemeColor({}, 'textInverse')
+  const unselectedText = useThemeColor({ light: lightColor, dark: darkColor }, 'text')
 
-  const currentSize = sizeStyles[size];
+  const currentSize = sizeStyles[size]
 
-  const [containerWidth, setContainerWidth] = useState(0);
-  const translateX = useRef(new Animated.Value(0)).current;
+  const [containerWidth, setContainerWidth] = useState(0)
+  const translateX = useRef(new Animated.Value(0)).current
 
-  const selectedIndex = segments.indexOf(selected);
-  const segmentWidth = containerWidth / segments.length;
+  const selectedIndex = segments.indexOf(selected)
+  const segmentWidth = containerWidth / segments.length
 
   useEffect(() => {
-    if (containerWidth === 0) return;
+    if (containerWidth === 0) return
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Soft)
     Animated.spring(translateX, {
       toValue: selectedIndex * segmentWidth,
       useNativeDriver: true,
       tension: 68,
       friction: 7,
-    }).start();
-  }, [selectedIndex, segmentWidth]);
+    }).start()
+  }, [selectedIndex, segmentWidth]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const onLayout = (e: LayoutChangeEvent) => {
-    const width = e.nativeEvent.layout.width;
-    setContainerWidth(width);
+    const width = e.nativeEvent.layout.width
+    setContainerWidth(width)
     // Set initial position without animation
-    translateX.setValue(segments.indexOf(selected) * (width / segments.length));
-  };
+    translateX.setValue(segments.indexOf(selected) * (width / segments.length))
+  }
 
   return (
     <View
@@ -108,7 +104,7 @@ export function SegmentedControl(props: SegmentedControlProps) {
         />
       )}
       {segments.map((segment) => {
-        const isSelected = segment === selected;
+        const isSelected = segment === selected
         return (
           <TouchableOpacity
             key={segment}
@@ -133,10 +129,10 @@ export function SegmentedControl(props: SegmentedControlProps) {
               {segment}
             </Text>
           </TouchableOpacity>
-        );
+        )
       })}
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -161,4 +157,4 @@ const styles = StyleSheet.create({
     fontWeight: typography.weights.semibold,
     textAlign: 'center',
   },
-});
+})

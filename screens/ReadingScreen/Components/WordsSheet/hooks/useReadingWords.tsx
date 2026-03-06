@@ -2,6 +2,7 @@ import type BottomSheet from '@gorhom/bottom-sheet'
 import { useEffect, useRef, useState } from 'react'
 import { Alert } from 'react-native'
 import { useReading } from '@/hooks/useReading'
+import { getDefinitionAndTranslation } from '@/services/definition-translation'
 import type { ReadingSelection } from '@/types/readings'
 
 type SheetMode = 'feed' | 'view' | 'edit'
@@ -25,16 +26,46 @@ export function useReadingWords() {
   const [definitionDraft, setDefinitionDraft] = useState('')
   const [translationDraft, setTranslationDraft] = useState('')
   const [contextDraft, setContextDraft] = useState('')
+  const [fetchCache, setFetchCache] = useState<
+    Map<string, { definition: string; translation: string }>
+  >(() => new Map())
 
   useEffect(() => {
-    if (selection !== null) {
-      setMode('view')
-      sheetRef.current?.snapToIndex(0)
-    } else {
+    if (selection === null) {
       setMode('feed')
       sheetRef.current?.snapToIndex(0)
+      return
     }
-  }, [selection])
+
+    sheetRef.current?.snapToIndex(0)
+
+    if (!selectedText || !sentenceText) {
+      setMode('view')
+      return
+    }
+
+    const cacheKey = `${selectedText}|||${sentenceText}`
+    const cached = fetchCache.get(cacheKey)
+
+    if (cached) {
+      setDefinition(cached.definition)
+      setTranslation(cached.translation)
+      setMode('view')
+      return
+    }
+    //TODO: replace hardcoded spanish with user's native language
+    getDefinitionAndTranslation(selectedText, sentenceText, 'spanish')
+      .then(({ definition, translation }) => {
+        setFetchCache((prev) => new Map(prev).set(cacheKey, { definition, translation }))
+        setDefinition(definition)
+        setTranslation(translation)
+        setMode('view')
+      })
+      .catch((err) => {
+        console.error('Failed to fetch definition/translation:', err)
+        setMode('view')
+      })
+  }, [selection, selectedText, sentenceText])
 
   function handleView(savedWord: SavedWord) {
     setSelection(savedWord.selection)

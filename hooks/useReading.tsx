@@ -30,7 +30,7 @@ export function ReadingProvider({ children }: { children: React.ReactNode }) {
   const [reading, setReading] = useState<ReadingMetadata | null>(null)
   const [readingContent, setReadingContent] = useState<ReadingPackageV1 | null>(null)
   const [selection, setSelection] = useState<ReadingSelection | null>(null)
-  const [fontSize, setFontSize] = useState<number>(typography.sizes.xl)
+  const [fontSize, setFontSize] = useState<number>(typography.sizes.md)
   const [totalPages, setTotalPages] = useState<number>(0)
   const [currentPage, setCurrentPage] = useState<number>(0)
 

@@ -18,7 +18,7 @@ export const styles = StyleSheet.create({
     marginRight: spacing.sm,
   },
   title: {
-    fontSize: typography.sizes.xxl,
+    fontSize: typography.sizes.lg,
     fontWeight: typography.weights.bold,
     flex: 1,
     marginRight: spacing.xs,

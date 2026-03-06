@@ -5,7 +5,7 @@ import {
   FunctionsHttpError,
   FunctionsRelayError,
 } from '@supabase/supabase-js'
-import { supabase } from '../utils/supabase'
+import { supabase } from '@/utils/supabase'
 
 export async function ocrExtract(language_code: string, uris: string[]) {
   const formData = new FormData()

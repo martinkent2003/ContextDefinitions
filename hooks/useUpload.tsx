@@ -72,12 +72,17 @@ export function UploadProvider({ children }: { children: React.ReactNode }) {
     setMetadata({ title, genre, privacy })
     try {
       showLoading('Uploading Reading...', 'book')
-      const result = await uploadReading(content, title, genre, privacy)
+      const success = await uploadReading(content, title, genre, privacy)
       hideLoading()
-      Alert.alert('Successfully uploaded ' + title)
-      refreshReadings()
+      if (success) {
+        Alert.alert('Successfully uploaded ' + title)
+        refreshReadings()
+      } else {
+        Alert.alert('Failed to upload', 'There was an error uploading ' + title)
+      }
     } catch (err) {
-      Alert.alert('Error uploading ' + title)
+      hideLoading()
+      Alert.alert('Failed to upload', 'There was an error uploading ' + title)
     }
   }
 

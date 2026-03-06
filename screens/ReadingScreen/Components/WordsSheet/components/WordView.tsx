@@ -38,7 +38,6 @@ export function WordView({
         <View style={styles.sheetHeaderActions}>
           <IconButton
             icon={{ library: 'Ionicons', name: 'pencil-outline', size: 24 }}
-            label="Edit"
             onPress={onEdit}
           />
           {isSaved ? (
@@ -55,7 +54,6 @@ export function WordView({
           ) : (
             <IconButton
               icon={{ library: 'Ionicons', name: 'add', size: 24 }}
-              label="Add"
               onPress={onAdd}
             />
           )}

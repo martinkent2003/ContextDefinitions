@@ -10,7 +10,6 @@ export function BackButton({ size = 24, ...otherProps }: BackButtonProps) {
   return (
     <IconButton
       icon={{ library: 'Ionicons', name: 'arrow-back-outline', size }}
-      label="Return"
       {...otherProps}
     />
   )

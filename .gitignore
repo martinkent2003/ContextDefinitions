@@ -36,12 +36,12 @@ yarn-error.*
 .env
 
 
+# test coverage
+coverage/
+
 # typescript
 *.tsbuildinfo
 
 # generated native folders
 /ios
 /android
-
-#claude
-.claude

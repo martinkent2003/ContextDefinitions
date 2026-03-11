@@ -5,6 +5,7 @@ import { uploadReading } from '@/services/readings'
 import type { UploadedFile, UploadMetadata } from '@/types/upload'
 import { useHome } from '@hooks/useHome'
 import { useLoading } from '@hooks/useLoading'
+import { useProfile } from '@hooks/useProfile'
 
 type UploadContextType = {
   // Data
@@ -49,6 +50,7 @@ export function UploadProvider({ children }: { children: React.ReactNode }) {
   const [isConfirmFileModalVisible, setConfirmFileVisible] = useState(false)
   const [isConfirmScanModalVisible, setConfirmScanVisible] = useState(false)
   const { showLoading, hideLoading } = useLoading()
+  const { profile } = useProfile()
 
   const { refreshReadings } = useHome()
 
@@ -72,12 +74,23 @@ export function UploadProvider({ children }: { children: React.ReactNode }) {
     setMetadata({ title, genre, privacy })
     try {
       showLoading('Uploading Reading...', 'book')
-      const result = await uploadReading(content, title, genre, privacy)
+      const success = await uploadReading(
+        content,
+        title,
+        genre,
+        privacy,
+        profile?.target_language ?? 'en',
+      )
       hideLoading()
-      Alert.alert('Successfully uploaded ' + title)
-      refreshReadings()
+      if (success) {
+        Alert.alert('Successfully uploaded ' + title)
+        refreshReadings()
+      } else {
+        Alert.alert('Failed to upload', 'There was an error uploading ' + title)
+      }
     } catch (err) {
-      Alert.alert('Error uploading ' + title)
+      hideLoading()
+      Alert.alert('Failed to upload', 'There was an error uploading ' + title)
     }
   }
 

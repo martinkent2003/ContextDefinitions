@@ -1,3 +1,4 @@
+import * as Haptics from 'expo-haptics'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import type { LayoutChangeEvent, LayoutRectangle } from 'react-native'
 import { Gesture } from 'react-native-gesture-handler'
@@ -10,7 +11,7 @@ type LayoutMap = Map<number, LayoutRectangle>
 
 // visibleIds restricts the search to tokens currently rendered on screen,
 // preventing stale measurement-pass positions from other pages being hit.
-function hitTest(
+export function hitTest(
   x: number,
   y: number,
   map: LayoutMap,
@@ -33,7 +34,7 @@ function hitTest(
 type Sentence = ReadingPackageV1['sentences'][number]
 
 // Build a token→sentence lookup by walking both arrays together.O(n+m)
-function buildTokenSentenceMap(
+export function buildTokenSentenceMap(
   allTokens: Token[],
   sentences: Sentence[],
 ): Map<number, number> {
@@ -60,7 +61,7 @@ function buildTokenSentenceMap(
 // Sentence-aware: when a greedy break would split a sentence across pages,
 // the current page is trimmed back to the start of that sentence so the whole
 // sentence begins on the next page instead.
-function buildPages(
+export function buildPages(
   map: LayoutMap,
   allTokens: Token[],
   sentences: Sentence[],
@@ -144,6 +145,7 @@ export type UseReadingContentReturn = {
 export function useReadingContent(): UseReadingContentReturn {
   const {
     readingContent,
+    selection,
     setSelection,
     fontSize,
     setTotalPages,
@@ -222,6 +224,28 @@ export function useReadingContent(): UseReadingContentReturn {
     hideLoading()
   }, [layoutsComplete, containerHeight, hideLoading, setCurrentPage, setTotalPages])
 
+  useEffect(() => {
+    if (selection === null) {
+      setSelectionStart(null)
+      setSelectionEnd(null)
+      return
+    }
+
+    const { tokenIndices } = selection
+    if (tokenIndices.length === 0) return
+
+    const lo = Math.min(...tokenIndices)
+    const hi = Math.max(...tokenIndices)
+
+    setSelectionStart(lo)
+    setSelectionEnd(hi)
+
+    const currentPages = pagesRef.current
+    if (currentPages.length === 0) return
+    const targetPage = currentPages.findIndex((page) => page.some((t) => t.i === lo))
+    if (targetPage !== -1) setCurrentPage(targetPage)
+  }, [selection])
+
   // During the measurement pass (pages not yet built), render all tokens so
   // React Native can measure each one. After pages are built, render only the
   // current page — the container's overflow:hidden clips any measurement-pass
@@ -260,6 +284,7 @@ export function useReadingContent(): UseReadingContentReturn {
       committedRef.current = false
       const hit = hitTest(e.x, e.y, layoutMap.current, visibleTokenIdsRef.current)
       if (hit !== null) {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
         selectionStartRef.current = hit
         selectionEndRef.current = hit
         setSelectionStart(hit)
@@ -277,6 +302,7 @@ export function useReadingContent(): UseReadingContentReturn {
       const start = selectionStartRef.current
       const end = selectionEndRef.current
       if (start !== null && end !== null) {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
         commitSelection(start, end)
         committedRef.current = true
       }
@@ -286,11 +312,13 @@ export function useReadingContent(): UseReadingContentReturn {
         const start = selectionStartRef.current
         const end = selectionEndRef.current
         if (start !== null && end !== null) commitSelection(start, end)
+        else {
+          setSelectionStart(null)
+          setSelectionEnd(null)
+        }
       }
       selectionStartRef.current = null
       selectionEndRef.current = null
-      setSelectionStart(null)
-      setSelectionEnd(null)
     })
 
   function onContainerLayout(e: LayoutChangeEvent): void {

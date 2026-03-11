@@ -21,11 +21,12 @@ export async function uploadReading(
   title: string,
   genre: string,
   privacy: boolean,
-) {
+  languageCode: string,
+): Promise<boolean> {
   const newReading = {
     title: title,
     genre: genre,
-    language_code: 'en',
+    language_code: languageCode,
     visibility: privacy ? 'private' : 'public',
     content: content,
   }
@@ -36,12 +37,16 @@ export async function uploadReading(
   if (error instanceof FunctionsHttpError) {
     const errorMessage = await error.context.json()
     console.log('Function returned an error', errorMessage)
+    return false
   } else if (error instanceof FunctionsRelayError) {
     console.log('Relay error:', error.message)
+    return false
   } else if (error instanceof FunctionsFetchError) {
     console.log('Fetch error:', error.message)
+    return false
   } else {
     console.log(data)
+    return true
   }
 }
 
@@ -139,7 +144,7 @@ export async function getReadingStructure(
   readingId: string,
 ): Promise<ReadingPackageV1 | null> {
   console.log(readingId)
-  const filePath = `readings/${readingId}.structure.v1.json`
+  const filePath = `${readingId}.structure.v1.json`
   console.log(filePath)
   const { data, error } = await supabase.storage.from('readings').download(filePath)
 
@@ -157,8 +162,9 @@ export async function getReadingStructure(
   const text = await blobToText(data)
   const parsed = JSON.parse(text) as ReadingPackageV1
 
-  // Optional: runtime schema guard
-  if (parsed.schema !== 'reading_package_v1') {
+  //TODO: Standardize schemas in supabase (add future schemas here)
+  const validSchemas = ['reading_structure_v1']
+  if (!validSchemas.includes(parsed.schema)) {
     console.log('Invalid schema:', parsed.schema)
     return null
   }

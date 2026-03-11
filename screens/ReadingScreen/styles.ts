@@ -18,7 +18,7 @@ export const styles = StyleSheet.create({
     marginRight: spacing.sm,
   },
   title: {
-    fontSize: typography.sizes.xxl,
+    fontSize: typography.sizes.lg,
     fontWeight: typography.weights.bold,
     flex: 1,
     marginRight: spacing.xs,
@@ -45,7 +45,7 @@ export const styles = StyleSheet.create({
   footer: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: spacing.lg,
+    paddingHorizontal: spacing.sm,
   },
   footerButton: {
     padding: spacing.xs,
@@ -54,10 +54,9 @@ export const styles = StyleSheet.create({
     opacity: 0.3,
   },
   footerFontSizeGroup: {
-    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    marginRight: spacing.sm,
+    marginRight: spacing.xs,
   },
   footerFontSizeLabel: {
     fontSize: typography.sizes.xxxl,
@@ -70,10 +69,10 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   footerPageLabel: {
-    flex: 1,
     textAlign: 'center',
     fontSize: typography.sizes.xxxl,
     fontWeight: typography.weights.medium,
+    padding: spacing.sm,
   },
 
   //wordsheetwrapper

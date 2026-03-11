@@ -1,16 +1,4 @@
-export type LanguageCode =
-  | 'en'
-  | 'es'
-  | 'ja'
-  | 'pt'
-  | 'fr'
-  | 'de'
-  | 'zh'
-  | 'ko'
-  | 'it'
-  | 'ru'
-  | 'ar'
-  | 'hi'
+import type { LanguageCode } from '@/types/language'
 
 export interface SignUpData {
   email: string

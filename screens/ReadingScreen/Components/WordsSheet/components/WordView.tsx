@@ -38,7 +38,6 @@ export function WordView({
         <View style={styles.sheetHeaderActions}>
           <IconButton
             icon={{ library: 'Ionicons', name: 'pencil-outline', size: 24 }}
-            label="Edit"
             onPress={onEdit}
           />
           {isSaved ? (
@@ -49,25 +48,24 @@ export function WordView({
                 size: 24,
                 color: '#B33',
               }}
-              label="Remove"
               onPress={onRemove}
             />
           ) : (
             <IconButton
               icon={{ library: 'Ionicons', name: 'add', size: 24 }}
-              label="Add"
               onPress={onAdd}
             />
           )}
         </View>
       </View>
-      <Text style={[styles.sheetLabel, { color: textColor }]}>Definition:</Text>
-      <Text style={[styles.sheetValue, { color: textSecondary }]}>
-        {definition ?? '—'}
-      </Text>
+
       <Text style={[styles.sheetLabel, { color: textColor }]}>Translation:</Text>
       <Text style={[styles.sheetValue, { color: textSecondary }]}>
         {translation ?? '—'}
+      </Text>
+      <Text style={[styles.sheetLabel, { color: textColor }]}>Definition:</Text>
+      <Text style={[styles.sheetValue, { color: textSecondary }]}>
+        {definition ?? '—'}
       </Text>
       <Text style={[styles.sheetLabel, { color: textColor }]}>Context:</Text>
       <Text style={[styles.sheetValue, { color: textSecondary }]}>

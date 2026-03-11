@@ -15,7 +15,7 @@ export type IconButtonProps = Omit<TouchableOpacityProps, 'children'> & {
 
 export function IconButton({ icon, label, style, ...touchableProps }: IconButtonProps) {
   const borderColor = useThemeColor({}, 'border')
-  const backgroundColor = useThemeColor({}, 'buttonBackgroundSecondary')
+  const backgroundColor = useThemeColor({}, 'cardBackground')
 
   return (
     <TouchableOpacity style={[styles.container, style]} {...touchableProps}>

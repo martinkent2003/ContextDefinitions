@@ -3,7 +3,11 @@ import {
   FunctionsHttpError,
   FunctionsRelayError,
 } from '@supabase/supabase-js'
-import type { CachedWord, DefinitionAndTranslationParams, SavedWordRow } from '@/types/words'
+import type {
+  CachedWord,
+  DefinitionAndTranslationParams,
+  SavedWordRow,
+} from '@/types/words'
 import { supabase } from '@/utils/supabase'
 
 export async function getCachedWords(

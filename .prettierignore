@@ -1,0 +1,14 @@
+# Generated files
+coverage/
+node_modules/
+
+# Claude IDE files
+.claude/
+
+# Large/external JSON data
+shared/reading-structure/
+
+# Build artifacts
+.expo/
+dist/
+build/

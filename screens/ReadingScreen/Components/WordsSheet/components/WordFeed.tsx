@@ -2,11 +2,11 @@ import { ScrollView } from 'react-native'
 import { Text } from '@/components/ui'
 import { WordCard } from '@/components/ui/WordCard'
 import { useThemeColor } from '@/hooks/useThemeColor'
-import type { SavedWord } from '@/screens/ReadingScreen/Components/WordsSheet/hooks/useReadingWords'
 import { styles } from '@/screens/ReadingScreen/Components/WordsSheet/styles'
+import type { SavedWord } from '@/types/words'
 
 type WordFeedProps = {
-  savedWords: SavedWord[]
+  savedWords: Map<string, SavedWord>
   handleView: (savedWord: SavedWord) => void
 }
 
@@ -17,20 +17,18 @@ export function WordFeed({ savedWords, handleView }: WordFeedProps) {
   return (
     <>
       <Text style={[styles.feedTitle, { color: textColor }]}>Saved Words</Text>
-      {savedWords.length === 0 ? (
+      {savedWords.size === 0 ? (
         <Text style={[styles.feedEmpty, { color: textSecondary }]}>
           No words saved yet. Select text and tap + to add words.
         </Text>
       ) : (
         <ScrollView>
-          {savedWords.map((word, index) => (
+          {[...savedWords.values()].map((word) => (
             <WordCard
-              key={index}
+              key={word.id}
               text={word.text}
-              definition={word.definition}
-              onPress={() => {
-                handleView(word)
-              }}
+              definition={word.translation}
+              onPress={() => handleView(word)}
             />
           ))}
         </ScrollView>

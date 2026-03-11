@@ -322,7 +322,7 @@ export function LoadingProvider({ children }: { children: React.ReactNode }) {
 
       {isLoading && (
         <Animated.View
-          entering={FadeIn.duration(200)}
+          entering={FadeIn.duration(50)}
           exiting={FadeOut.duration(200)}
           style={styles.overlay}
         >

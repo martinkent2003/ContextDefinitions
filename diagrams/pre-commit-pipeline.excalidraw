@@ -820,8 +820,8 @@
       "opacity": 100,
       "angle": 0,
       "seed": 600003,
-      "version": 2,
-      "versionNonce": 854991013,
+      "version": 28,
+      "versionNonce": 736101520,
       "isDeleted": false,
       "groupIds": [],
       "boundElements": [],
@@ -832,7 +832,7 @@
       "index": "aL",
       "frameId": null,
       "roundness": null,
-      "updated": 1772734006164,
+      "updated": 1772830235410,
       "autoResize": true
     },
     {
@@ -1643,7 +1643,7 @@
       "version": 110,
       "versionNonce": 2055656997,
       "isDeleted": false,
-      "boundElements": null,
+      "boundElements": [],
       "updated": 1772734045817,
       "link": null,
       "locked": false,

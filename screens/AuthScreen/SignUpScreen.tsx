@@ -3,23 +3,9 @@ import { Alert, AppState, StyleSheet } from 'react-native'
 import { Button, Icon, Input, Picker, ScrollView, View } from '@/components/ui'
 import { useLoading } from '@/hooks/useLoading'
 import { signUpWithEmail } from '@/services/auth'
-import type { LanguageCode, SignUpData } from '@/types/auth'
+import type { SignUpData } from '@/types/auth'
+import { LANGUAGES, type LanguageCode } from '@/types/language'
 import { supabase } from '@utils/supabase'
-
-const LANGUAGES: { label: string; value: LanguageCode }[] = [
-  { label: 'English', value: 'en' },
-  { label: 'Spanish', value: 'es' },
-  { label: 'Japanese', value: 'ja' },
-  { label: 'Portuguese', value: 'pt' },
-  { label: 'French', value: 'fr' },
-  { label: 'German', value: 'de' },
-  { label: 'Chinese', value: 'zh' },
-  { label: 'Korean', value: 'ko' },
-  { label: 'Italian', value: 'it' },
-  { label: 'Russian', value: 'ru' },
-  { label: 'Arabic', value: 'ar' },
-  { label: 'Hindi', value: 'hi' },
-]
 
 // Tells Supabase Auth to continuously refresh the session automatically if
 // the app is in the foreground. When this is added, you will continue to receive
@@ -39,7 +25,7 @@ export default function SignUp() {
   const [username, setUsername] = useState('')
   const [fullName, setFullName] = useState('')
   const [nativeLanguage, setNativeLanguage] = useState<LanguageCode>('en')
-  const [targetLanguage, setTargetLanguage] = useState<LanguageCode>('ja')
+  const [targetLanguage, setTargetLanguage] = useState<LanguageCode>('es')
 
   const { showLoading, hideLoading } = useLoading()
 

@@ -145,6 +145,7 @@ export type UseReadingContentReturn = {
 export function useReadingContent(): UseReadingContentReturn {
   const {
     readingContent,
+    selection,
     setSelection,
     fontSize,
     setTotalPages,
@@ -223,6 +224,28 @@ export function useReadingContent(): UseReadingContentReturn {
     hideLoading()
   }, [layoutsComplete, containerHeight, hideLoading, setCurrentPage, setTotalPages])
 
+  useEffect(() => {
+    if (selection === null) {
+      setSelectionStart(null)
+      setSelectionEnd(null)
+      return
+    }
+
+    const { tokenIndices } = selection
+    if (tokenIndices.length === 0) return
+
+    const lo = Math.min(...tokenIndices)
+    const hi = Math.max(...tokenIndices)
+
+    setSelectionStart(lo)
+    setSelectionEnd(hi)
+
+    const currentPages = pagesRef.current
+    if (currentPages.length === 0) return
+    const targetPage = currentPages.findIndex((page) => page.some((t) => t.i === lo))
+    if (targetPage !== -1) setCurrentPage(targetPage)
+  }, [selection])
+
   // During the measurement pass (pages not yet built), render all tokens so
   // React Native can measure each one. After pages are built, render only the
   // current page — the container's overflow:hidden clips any measurement-pass
@@ -289,11 +312,13 @@ export function useReadingContent(): UseReadingContentReturn {
         const start = selectionStartRef.current
         const end = selectionEndRef.current
         if (start !== null && end !== null) commitSelection(start, end)
+        else {
+          setSelectionStart(null)
+          setSelectionEnd(null)
+        }
       }
       selectionStartRef.current = null
       selectionEndRef.current = null
-      setSelectionStart(null)
-      setSelectionEnd(null)
     })
 
   function onContainerLayout(e: LayoutChangeEvent): void {

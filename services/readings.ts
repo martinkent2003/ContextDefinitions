@@ -21,11 +21,12 @@ export async function uploadReading(
   title: string,
   genre: string,
   privacy: boolean,
+  languageCode: string,
 ): Promise<boolean> {
   const newReading = {
     title: title,
     genre: genre,
-    language_code: 'en',
+    language_code: languageCode,
     visibility: privacy ? 'private' : 'public',
     content: content,
   }

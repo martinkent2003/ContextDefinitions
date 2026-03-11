@@ -34,16 +34,16 @@ export function WordEdit({
           {selectedText ?? '—'}
         </Text>
       </View>
-      <Text style={[styles.sheetLabel, { color: textColor }]}>Definition:</Text>
-      <TextArea
-        value={definitionDraft}
-        onChangeText={setDefinitionDraft}
-        minHeight={30}
-      />
       <Text style={[styles.sheetLabel, { color: textColor }]}>Translation:</Text>
       <TextArea
         value={translationDraft}
         onChangeText={setTranslationDraft}
+        minHeight={30}
+      />
+      <Text style={[styles.sheetLabel, { color: textColor }]}>Definition:</Text>
+      <TextArea
+        value={definitionDraft}
+        onChangeText={setDefinitionDraft}
         minHeight={30}
       />
       <Text style={[styles.sheetLabel, { color: textColor }]}>Context:</Text>

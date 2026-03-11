@@ -48,7 +48,6 @@ export function WordView({
                 size: 24,
                 color: '#B33',
               }}
-              label="Remove"
               onPress={onRemove}
             />
           ) : (
@@ -59,13 +58,14 @@ export function WordView({
           )}
         </View>
       </View>
-      <Text style={[styles.sheetLabel, { color: textColor }]}>Definition:</Text>
-      <Text style={[styles.sheetValue, { color: textSecondary }]}>
-        {definition ?? '—'}
-      </Text>
+
       <Text style={[styles.sheetLabel, { color: textColor }]}>Translation:</Text>
       <Text style={[styles.sheetValue, { color: textSecondary }]}>
         {translation ?? '—'}
+      </Text>
+      <Text style={[styles.sheetLabel, { color: textColor }]}>Definition:</Text>
+      <Text style={[styles.sheetValue, { color: textSecondary }]}>
+        {definition ?? '—'}
       </Text>
       <Text style={[styles.sheetLabel, { color: textColor }]}>Context:</Text>
       <Text style={[styles.sheetValue, { color: textSecondary }]}>

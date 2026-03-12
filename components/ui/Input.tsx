@@ -1,9 +1,29 @@
 import type { InputProps as DefaultInputProps } from '@rneui/themed'
 import { Input as DefaultInput } from '@rneui/themed'
+import { Platform } from 'react-native'
 
 import { radii, spacing, typography } from '@constants/Themes'
 import type { ThemeProps } from '@hooks/useThemeColor'
 import { useThemeColor } from '@hooks/useThemeColor'
+
+if (Platform.OS === 'web' && typeof document !== 'undefined') {
+  const styleId = 'input-autofill-override'
+  if (!document.getElementById(styleId)) {
+    const style = document.createElement('style')
+    style.id = styleId
+    style.textContent = `
+      input:-webkit-autofill,
+      input:-webkit-autofill:hover,
+      input:-webkit-autofill:focus,
+      input:-webkit-autofill:active {
+        -webkit-box-shadow: 0 0 0px 1000px var(--input-bg, transparent) inset !important;
+        -webkit-text-fill-color: var(--input-color, inherit) !important;
+        transition: background-color 5000s ease-in-out 0s;
+      }
+    `
+    document.head.appendChild(style)
+  }
+}
 
 type InputSize = 'sm' | 'md' | 'lg'
 
@@ -62,14 +82,23 @@ export function Input(props: InputProps) {
     borderRadius: currentSize.borderRadius,
     backgroundColor: backgroundColor,
     paddingHorizontal: currentSize.paddingHorizontal,
-    borderBottomWidth: 2,
     height: currentSize.height,
   }
 
   return (
     <DefaultInput
       placeholderTextColor={placeholderTextColor ?? placeholderColor}
-      inputStyle={[{ color, fontSize: currentSize.fontSize }, inputStyle]}
+      inputStyle={[
+        { color, fontSize: currentSize.fontSize },
+        Platform.OS === 'web'
+          ? ({
+              // @ts-ignore — web-only CSS variables for autofill override
+              '--input-bg': backgroundColor,
+              '--input-color': color,
+            } as object)
+          : undefined,
+        inputStyle,
+      ]}
       labelStyle={[{ color: labelColor }, labelStyle]}
       containerStyle={containerStyle}
       inputContainerStyle={[inputContainerBaseStyle, inputContainerStyle]}

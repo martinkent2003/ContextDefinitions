@@ -1,4 +1,5 @@
 import { useRouter } from 'expo-router'
+import { Platform } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { View } from '@/components/ui'
 import { useUpload } from '@/hooks/useUpload'
@@ -24,11 +25,13 @@ export default function UploadReadingScreen() {
     <SafeAreaView style={styles.screen}>
       <Header title="Upload Reading" />
       <View style={styles.content}>
-        <UploadActionButton
-          label="Scan"
-          icon="scan-outline"
-          onPress={showConfirmScanModal}
-        />
+        {Platform.OS !== 'web' && (
+          <UploadActionButton
+            label="Scan"
+            icon="scan-outline"
+            onPress={showConfirmScanModal}
+          />
+        )}
         <UploadActionButton
           label="Select Image"
           icon="image-outline"

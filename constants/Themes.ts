@@ -1,40 +1,42 @@
 // DESIGN TOKENS - Single source of truth
+import { Platform } from 'react-native'
+
 const palette = {
-  //
   primary: {
-    50: '#e3f2fd',
-    100: '#bbdefb',
-    200: '#90caf9',
-    300: '#64b5f6',
-    400: '#42a5f5',
-    500: '#2f95dc',
-    600: '#1e88e5',
-    700: '#1976d2',
-    800: '#1565c0',
-    900: '#0d47a1',
+    50: '#eff6ff',
+    100: '#dbeafe',
+    200: '#bfdbfe',
+    300: '#93c5fd',
+    400: '#60a5fa',
+    500: '#3b82f6',
+    600: '#2563eb',
+    700: '#1d4ed8',
+    800: '#1e40af',
+    900: '#1e3a8a',
   },
-  // Neutral colors (what we will use since our app is simple black and white)
+  // Zinc — cool-toned neutral, sharp contrast
   gray: {
-    10: '#fbfbfb',
+    10: '#ffffff',
     50: '#fafafa',
-    100: '#f5f5f5',
-    200: '#eeeeee',
-    300: '#e0e0e0',
-    400: '#bdbdbd',
-    500: '#9e9e9e',
-    600: '#757575',
-    700: '#616161',
-    800: '#424242',
-    900: '#212121',
+    100: '#f4f4f5',
+    200: '#e4e4e7',
+    300: '#d4d4d8',
+    400: '#a1a1aa',
+    500: '#71717a',
+    600: '#52525b',
+    700: '#3f3f46',
+    800: '#27272a',
+    900: '#18181b',
+    950: '#09090b',
   },
   // Semantic colors
-  success: '#4caf50',
-  warning: '#ff9800',
-  error: '#f44336',
-  info: '#2196f3',
+  success: '#22c55e',
+  warning: '#f59e0b',
+  error: '#ef4444',
+  info: '#3b82f6',
   // Base
   white: '#ffffff',
-  black: '#000000',
+  black: '#09090b',
 } as const
 
 // Spacing scale (based on 4px grid)
@@ -98,28 +100,37 @@ export const radii = {
 // Shadows
 export const shadows = {
   none: {},
-  sm: {
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 1,
-  },
-  md: {
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.15,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  lg: {
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
-    elevation: 5,
-  },
-} as const
+  sm: Platform.select({
+    web: { boxShadow: '0px 1px 2px rgba(0,0,0,0.1)' },
+    default: {
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 1 },
+      shadowOpacity: 0.1,
+      shadowRadius: 2,
+      elevation: 1,
+    },
+  }) as object,
+  md: Platform.select({
+    web: { boxShadow: '0px 2px 4px rgba(0,0,0,0.15)' },
+    default: {
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.15,
+      shadowRadius: 4,
+      elevation: 3,
+    },
+  }) as object,
+  lg: Platform.select({
+    web: { boxShadow: '0px 4px 8px rgba(0,0,0,0.2)' },
+    default: {
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.2,
+      shadowRadius: 8,
+      elevation: 5,
+    },
+  }) as object,
+}
 
 // Theme-specific colors to light/dark
 export const Colors = {
@@ -130,20 +141,20 @@ export const Colors = {
     backgroundTertiary: palette.gray[100],
 
     // Text
-    text: palette.gray[900],
+    text: palette.gray[950],
     textSecondary: palette.gray[600],
     textTertiary: palette.gray[400],
     textInverse: palette.white,
 
     // Interactive
-    tint: palette.primary[500],
-    buttonBackground: palette.primary[500],
+    tint: palette.primary[600],
+    buttonBackground: palette.primary[600],
     buttonBackgroundSecondary: palette.gray[100],
     buttonBackgroundGhost: 'transparent',
 
     // Borders
     border: palette.gray[200],
-    borderFocused: palette.primary[500],
+    borderFocused: palette.primary[600],
 
     // Cards
     cardBackground: palette.white,
@@ -157,33 +168,33 @@ export const Colors = {
 
     // Tab bar
     tabIconDefault: palette.gray[400],
-    tabIconSelected: palette.primary[500],
+    tabIconSelected: palette.primary[600],
   },
   dark: {
     // Backgrounds
-    background: palette.gray[900],
-    backgroundSecondary: palette.gray[800],
-    backgroundTertiary: palette.gray[700],
+    background: palette.gray[950],
+    backgroundSecondary: palette.gray[900],
+    backgroundTertiary: palette.gray[800],
 
     // Text
-    text: palette.white,
-    textSecondary: palette.gray[300],
-    textTertiary: palette.gray[500],
-    textInverse: palette.gray[900],
+    text: palette.gray[50],
+    textSecondary: palette.gray[400],
+    textTertiary: palette.gray[600],
+    textInverse: palette.gray[950],
 
     // Interactive
     tint: palette.primary[400],
-    buttonBackground: palette.primary[500],
-    buttonBackgroundSecondary: palette.gray[600],
+    buttonBackground: palette.primary[600],
+    buttonBackgroundSecondary: palette.gray[800],
     buttonBackgroundGhost: 'transparent',
 
     // Borders
-    border: palette.gray[700],
+    border: palette.gray[800],
     borderFocused: palette.primary[400],
 
     // Cards
-    cardBackground: palette.gray[800],
-    cardBorder: palette.gray[700],
+    cardBackground: palette.gray[900],
+    cardBorder: palette.gray[800],
 
     // Status
     success: palette.success,
@@ -192,8 +203,8 @@ export const Colors = {
     info: palette.info,
 
     // Tab bar
-    tabIconDefault: palette.gray[500],
-    tabIconSelected: palette.white,
+    tabIconDefault: palette.gray[600],
+    tabIconSelected: palette.gray[50],
   },
 } as const
 

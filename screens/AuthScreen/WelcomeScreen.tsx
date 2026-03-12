@@ -1,12 +1,15 @@
 import { useRouter } from 'expo-router'
 import { StyleSheet } from 'react-native'
 import { Button, Text, View } from '@/components/ui'
+import { consumeSignOutReason } from '@/utils/signOutReason'
 
 export default function WelcomeScreen() {
   const router = useRouter()
+  const signOutMessage = consumeSignOutReason()
   return (
     <View style={styles.content}>
       <Text style={styles.title}>Yomu</Text>
+      {signOutMessage && <Text style={styles.signOutMessage}>{signOutMessage}</Text>}
       <Text style={styles.subtitle}>Get started, sign in or creating an account</Text>
 
       <View style={styles.buttonContainer}>
@@ -50,6 +53,12 @@ const styles = StyleSheet.create({
     color: '#666',
     textAlign: 'center',
     marginBottom: 40,
+  },
+  signOutMessage: {
+    fontSize: 14,
+    color: '#ef4444',
+    textAlign: 'center',
+    marginBottom: 16,
   },
   buttonContainer: {
     width: '100%',

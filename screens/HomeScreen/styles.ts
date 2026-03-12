@@ -5,12 +5,14 @@ export const styles = StyleSheet.create({
   // Screen
   screen: {
     flex: 1,
+    overflow: 'visible',
     // borderColor: "#FFFFFF",
     // borderWidth: 1,
   },
   pressable: {
     flex: 1,
     paddingHorizontal: spacing.md,
+    overflow: 'visible',
     //  borderColor: "#FFFFFF",
     //  borderWidth: 1,
   },
@@ -53,6 +55,7 @@ export const styles = StyleSheet.create({
   feed: {
     marginTop: spacing.xs,
     gap: spacing.xs,
+    overflow: 'visible',
     // borderColor: "#FFFFFF",
     // borderWidth: 1,
   },

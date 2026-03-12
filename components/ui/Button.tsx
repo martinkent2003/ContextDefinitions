@@ -1,6 +1,11 @@
 import * as Haptics from 'expo-haptics'
-import type { TouchableOpacityProps } from 'react-native'
-import { ActivityIndicator, StyleSheet, TouchableOpacity } from 'react-native'
+import type { PressableProps } from 'react-native'
+import { ActivityIndicator, Pressable, StyleSheet } from 'react-native'
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from 'react-native-reanimated'
 
 import { Text } from '@components/ui/Text'
 import { radii, shadows, spacing, typography } from '@constants/Themes'
@@ -12,7 +17,7 @@ type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'upload'
 type ButtonSize = 'sm' | 'md' | 'lg'
 
 export type ButtonProps = ThemeProps &
-  TouchableOpacityProps & {
+  PressableProps & {
     variant?: ButtonVariant
     size?: ButtonSize
     loading?: boolean
@@ -43,6 +48,8 @@ const sizeStyles = {
   },
 }
 
+const SPRING = { mass: 0.5, stiffness: 150, damping: 15 }
+
 export function Button(props: ButtonProps) {
   const {
     lightColor,
@@ -66,7 +73,7 @@ export function Button(props: ButtonProps) {
     upload: Haptics.ImpactFeedbackStyle.Medium,
   }
 
-  const handlePress: TouchableOpacityProps['onPress'] = (e) => {
+  const handlePress: PressableProps['onPress'] = (e) => {
     Haptics.impactAsync(hapticStyles[variant])
     onPress?.(e)
   }
@@ -132,29 +139,52 @@ export function Button(props: ButtonProps) {
     width: fullWidth ? ('100%' as const) : undefined,
   }
 
+  const scale = useSharedValue(1)
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+  }))
+
   return (
-    <TouchableOpacity
-      style={[styles.base, variantStyle, shadows.md, style]}
+    <Pressable
+      onHoverIn={() => {
+        if (!disabled && !loading) scale.value = withSpring(1.03, SPRING)
+      }}
+      onHoverOut={() => {
+        scale.value = withSpring(1, SPRING)
+      }}
+      onPressIn={() => {
+        if (!disabled && !loading) scale.value = withSpring(0.97, SPRING)
+      }}
+      onPressOut={() => {
+        scale.value = withSpring(1, SPRING)
+      }}
       onPress={handlePress}
       disabled={disabled || loading}
       {...otherProps}
     >
-      {loading ? (
-        <ActivityIndicator color={currentVariant.textColor} />
-      ) : (
-        <Text
-          style={[
-            styles.text,
-            {
-              color: currentVariant.textColor,
-              fontSize: currentSize.fontSize,
-            },
-          ]}
-        >
-          {children}
-        </Text>
-      )}
-    </TouchableOpacity>
+      <Animated.View
+        style={[styles.base, variantStyle, shadows.md, style, animatedStyle]}
+      >
+        {loading ? (
+          <ActivityIndicator color={currentVariant.textColor} />
+        ) : typeof children === 'string' || typeof children === 'number' ? (
+          <Text
+            style={[
+              styles.text,
+              {
+                color: currentVariant.textColor,
+                fontSize: currentSize.fontSize,
+              },
+            ]}
+          >
+            {children}
+          </Text>
+        ) : (
+          children
+        )}
+      </Animated.View>
+    </Pressable>
   )
 }
 

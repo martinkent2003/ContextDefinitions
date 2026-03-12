@@ -1,6 +1,11 @@
 import * as Haptics from 'expo-haptics'
-import type { TouchableOpacityProps } from 'react-native'
-import { StyleSheet, TouchableOpacity, View } from 'react-native'
+import type { PressableProps } from 'react-native'
+import { Pressable, StyleSheet, View } from 'react-native'
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from 'react-native-reanimated'
 
 import { Text } from '@components/ui/Text'
 import { radii, shadows, spacing, typography } from '@constants/Themes'
@@ -8,12 +13,14 @@ import { useThemeColor } from '@hooks/useThemeColor'
 import type { ThemeProps } from '@hooks/useThemeColor'
 
 export type CardProps = ThemeProps &
-  Omit<TouchableOpacityProps, 'children'> & {
+  Omit<PressableProps, 'children'> & {
     title: string
     subtitle?: string
     rating?: number | string
     body?: string
   }
+
+const SPRING = { mass: 0.5, stiffness: 150, damping: 15 }
 
 export function Card(props: CardProps) {
   const {
@@ -28,7 +35,7 @@ export function Card(props: CardProps) {
     ...otherProps
   } = props
 
-  const handlePress: TouchableOpacityProps['onPress'] = (e) => {
+  const handlePress: PressableProps['onPress'] = (e) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
     onPress?.(e)
   }
@@ -40,6 +47,12 @@ export function Card(props: CardProps) {
   const successColor = useThemeColor({}, 'success')
   const warningColor = useThemeColor({}, 'warning')
   const errorColor = useThemeColor({}, 'error')
+
+  const scale = useSharedValue(1)
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+  }))
 
   // Determine rating color based on difficulty value
   const getRatingColor = () => {
@@ -57,42 +70,57 @@ export function Card(props: CardProps) {
   }
 
   return (
-    <TouchableOpacity
-      style={[
-        styles.container,
-        {
-          backgroundColor: cardBackground,
-          borderColor: cardBorder,
-        },
-        shadows.md,
-        style,
-      ]}
+    <Pressable
+      onHoverIn={() => {
+        scale.value = withSpring(1.02, SPRING)
+      }}
+      onHoverOut={() => {
+        scale.value = withSpring(1, SPRING)
+      }}
+      onPressIn={() => {
+        scale.value = withSpring(0.97, SPRING)
+      }}
+      onPressOut={() => {
+        scale.value = withSpring(1, SPRING)
+      }}
       onPress={handlePress}
-      activeOpacity={0.7}
       {...otherProps}
     >
-      {/* Header Row: Title + Rating */}
-      <View style={styles.header}>
-        <View style={styles.titleContainer}>
-          <Text style={[styles.title, { color: textColor }]} numberOfLines={1}>
-            {title}
-          </Text>
-          {subtitle && (
-            <Text style={[styles.subtitle, { color: textSecondary }]}>{subtitle}</Text>
+      <Animated.View
+        style={[
+          styles.container,
+          {
+            backgroundColor: cardBackground,
+            borderColor: cardBorder,
+          },
+          shadows.md,
+          style,
+          animatedStyle,
+        ]}
+      >
+        {/* Header Row: Title + Rating */}
+        <View style={styles.header}>
+          <View style={styles.titleContainer}>
+            <Text style={[styles.title, { color: textColor }]} numberOfLines={1}>
+              {title}
+            </Text>
+            {subtitle && (
+              <Text style={[styles.subtitle, { color: textSecondary }]}>{subtitle}</Text>
+            )}
+          </View>
+          {rating !== undefined && (
+            <Text style={[styles.rating, { color: getRatingColor() }]}>{rating}</Text>
           )}
         </View>
-        {rating !== undefined && (
-          <Text style={[styles.rating, { color: getRatingColor() }]}>{rating}</Text>
-        )}
-      </View>
 
-      {/* Body */}
-      {body && (
-        <Text style={[styles.body, { color: textSecondary }]} numberOfLines={3}>
-          {body}
-        </Text>
-      )}
-    </TouchableOpacity>
+        {/* Body */}
+        {body && (
+          <Text style={[styles.body, { color: textSecondary }]} numberOfLines={3}>
+            {body}
+          </Text>
+        )}
+      </Animated.View>
+    </Pressable>
   )
 }
 

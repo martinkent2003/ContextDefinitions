@@ -4,12 +4,12 @@ import { useFonts } from 'expo-font'
 import { Redirect, Stack, useSegments } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
 import { useEffect } from 'react'
-import { StyleSheet } from 'react-native'
+import { Platform, StyleSheet, View } from 'react-native'
 import 'react-native-reanimated'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 
-import { Colors } from '@/constants/Themes'
+import { Colors, spacing } from '@/constants/Themes'
 import { useColorScheme } from '@/hooks/useColorScheme'
 import { LoadingProvider } from '@/hooks/useLoading'
 import { SessionProvider, useSession } from '@/hooks/useSession'
@@ -27,6 +27,7 @@ export const unstable_settings = {
 SplashScreen.preventAutoHideAsync()
 
 export default function RootLayout() {
+  const colorScheme = useColorScheme()
   const [loaded, error] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
     Excalifont: require('../assets/fonts/Excalifont-Regular.ttf'),
@@ -49,20 +50,36 @@ export default function RootLayout() {
   }
 
   return (
-    <GestureHandlerRootView style={styles.root}>
-      <SafeAreaProvider>
-        <LoadingProvider>
-          <SessionProvider>
-            <RootLayoutNav />
-          </SessionProvider>
-        </LoadingProvider>
-      </SafeAreaProvider>
-    </GestureHandlerRootView>
+    <LoadingProvider>
+      <GestureHandlerRootView style={styles.root}>
+        <View
+          style={[
+            Platform.OS === 'web' ? styles.webPadding : styles.root,
+            Platform.OS === 'web' && {
+              backgroundColor:
+                Colors[colorScheme === 'dark' ? 'dark' : 'light'].background,
+            },
+          ]}
+        >
+          <SafeAreaProvider>
+            <SessionProvider>
+              <RootLayoutNav />
+            </SessionProvider>
+          </SafeAreaProvider>
+        </View>
+      </GestureHandlerRootView>
+    </LoadingProvider>
   )
 }
 
 const styles = StyleSheet.create({
   root: { flex: 1 },
+  webPadding: {
+    flex: 1,
+    paddingHorizontal: spacing.xxxxl,
+    paddingTop: spacing.xl,
+    overflow: 'visible',
+  },
 })
 
 function RootLayoutNav() {
@@ -76,7 +93,7 @@ function RootLayoutNav() {
 
   const inAuthGroup = segments[0] === '(public)'
 
-  const scheme = colorScheme ?? 'light'
+  const scheme = colorScheme === 'dark' ? 'dark' : 'light'
   const navTheme = {
     ...DefaultTheme,
     dark: scheme === 'dark',
@@ -93,8 +110,14 @@ function RootLayoutNav() {
   return (
     <ThemeProvider value={navTheme}>
       <Stack>
-        <Stack.Screen name="(private)" options={{ headerShown: false }} />
-        <Stack.Screen name="(public)" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="(private)"
+          options={{ headerShown: false, contentStyle: { overflow: 'visible' } }}
+        />
+        <Stack.Screen
+          name="(public)"
+          options={{ headerShown: false, contentStyle: { overflow: 'visible' } }}
+        />
       </Stack>
       {!session && !inAuthGroup && <Redirect href="/(public)/welcome" />}
       {session && inAuthGroup && <Redirect href="/(private)/(tabs)/home" />}

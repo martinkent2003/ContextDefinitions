@@ -11,7 +11,12 @@ export default function PrivateLayout() {
       <ReadingProvider>
         <HomeProvider>
           <UploadProvider>
-            <Stack screenOptions={{ headerShown: false }}>
+            <Stack
+              screenOptions={{
+                headerShown: false,
+                contentStyle: { overflow: 'visible' },
+              }}
+            >
               <Stack.Screen name="(tabs)" />
               <Stack.Screen name="reading" />
             </Stack>

@@ -50,24 +50,25 @@ export default function RootLayout() {
   }
 
   return (
-    <GestureHandlerRootView
-      style={[
-        styles.root,
-        Platform.OS === 'web' && {
-          backgroundColor: Colors[colorScheme === 'dark' ? 'dark' : 'light'].background,
-        },
-      ]}
-    >
-      <View style={Platform.OS === 'web' ? styles.webPadding : styles.root}>
-        <SafeAreaProvider>
-          <LoadingProvider>
+    <LoadingProvider>
+      <GestureHandlerRootView style={styles.root}>
+        <View
+          style={[
+            Platform.OS === 'web' ? styles.webPadding : styles.root,
+            Platform.OS === 'web' && {
+              backgroundColor:
+                Colors[colorScheme === 'dark' ? 'dark' : 'light'].background,
+            },
+          ]}
+        >
+          <SafeAreaProvider>
             <SessionProvider>
               <RootLayoutNav />
             </SessionProvider>
-          </LoadingProvider>
-        </SafeAreaProvider>
-      </View>
-    </GestureHandlerRootView>
+          </SafeAreaProvider>
+        </View>
+      </GestureHandlerRootView>
+    </LoadingProvider>
   )
 }
 
@@ -75,7 +76,9 @@ const styles = StyleSheet.create({
   root: { flex: 1 },
   webPadding: {
     flex: 1,
-    padding: spacing.lg,
+    paddingHorizontal: spacing.xxxxl,
+    paddingTop: spacing.xl,
+    overflow: 'visible',
   },
 })
 
@@ -107,8 +110,14 @@ function RootLayoutNav() {
   return (
     <ThemeProvider value={navTheme}>
       <Stack>
-        <Stack.Screen name="(private)" options={{ headerShown: false }} />
-        <Stack.Screen name="(public)" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="(private)"
+          options={{ headerShown: false, contentStyle: { overflow: 'visible' } }}
+        />
+        <Stack.Screen
+          name="(public)"
+          options={{ headerShown: false, contentStyle: { overflow: 'visible' } }}
+        />
       </Stack>
       {!session && !inAuthGroup && <Redirect href="/(public)/welcome" />}
       {session && inAuthGroup && <Redirect href="/(private)/(tabs)/home" />}

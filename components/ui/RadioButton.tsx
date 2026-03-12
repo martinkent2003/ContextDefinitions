@@ -1,6 +1,11 @@
 import * as Haptics from 'expo-haptics'
 import type { ViewStyle } from 'react-native'
-import { Alert, StyleSheet, TouchableOpacity, View } from 'react-native'
+import { Alert, Platform, Pressable, StyleSheet, View } from 'react-native'
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from 'react-native-reanimated'
 
 import { radii, spacing, typography } from '@/constants/Themes'
 import type { ThemeProps } from '@/hooks/useThemeColor'
@@ -22,6 +27,96 @@ export type RadioButtonProps = ThemeProps & {
   subLabel?: string
   direction?: 'row' | 'column'
   containerStyle?: ViewStyle
+}
+
+const SPRING = { mass: 0.5, stiffness: 150, damping: 15 }
+
+type RadioOptionProps = {
+  item: RadioItem
+  isSelected: boolean
+  borderColor: string
+  backgroundColor: string
+  textColor: string
+  labelColor: string
+  tintColor: string
+  warningColor: string
+  onPress: (item: RadioItem) => void
+}
+
+function RadioOption({
+  item,
+  isSelected,
+  borderColor,
+  backgroundColor,
+  textColor,
+  labelColor,
+  tintColor,
+  warningColor,
+  onPress,
+}: RadioOptionProps) {
+  const scale = useSharedValue(1)
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+  }))
+
+  return (
+    <Pressable
+      onHoverIn={() => {
+        scale.value = withSpring(1.02, SPRING)
+      }}
+      onHoverOut={() => {
+        scale.value = withSpring(1, SPRING)
+      }}
+      onPressIn={() => {
+        scale.value = withSpring(0.97, SPRING)
+      }}
+      onPressOut={() => {
+        scale.value = withSpring(1, SPRING)
+      }}
+      onPress={() => onPress(item)}
+    >
+      <Animated.View
+        style={[
+          styles.option,
+          { borderColor: borderColor, backgroundColor: backgroundColor },
+          animatedStyle,
+        ]}
+      >
+        <View style={styles.textContainer}>
+          <Text style={[styles.optionText, { color: textColor }]}>{item.label}</Text>
+          {item.description && (
+            <Text style={[styles.optionDescription, { color: labelColor }]}>
+              {item.description}
+            </Text>
+          )}
+        </View>
+        <View
+          style={[
+            styles.circle,
+            {
+              borderColor: isSelected
+                ? item.warning
+                  ? warningColor
+                  : tintColor
+                : borderColor,
+            },
+          ]}
+        >
+          {isSelected && (
+            <View
+              style={[
+                styles.filled,
+                {
+                  backgroundColor: item.warning ? warningColor : tintColor,
+                },
+              ]}
+            />
+          )}
+        </View>
+      </Animated.View>
+    </Pressable>
+  )
 }
 
 export function RadioButton(props: RadioButtonProps) {
@@ -47,7 +142,7 @@ export function RadioButton(props: RadioButtonProps) {
   const handleSelect = (item: RadioItem) => {
     if (item.value === selected) return
 
-    if (item.warning) {
+    if (item.warning && Platform.OS !== 'web') {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning)
       Alert.alert('Warning', item.warning, [
         { text: 'Cancel', style: 'cancel' },
@@ -74,53 +169,20 @@ export function RadioButton(props: RadioButtonProps) {
         <Text style={[styles.subLabel, { color: labelColor }]}>{subLabel}</Text>
       )}
       <View style={[styles.group, { flexDirection: direction }, containerStyle]}>
-        {items.map((item) => {
-          const isSelected = item.value === selected
-          return (
-            <TouchableOpacity
-              key={item.value}
-              style={[
-                styles.option,
-                { borderColor: borderColor, backgroundColor: backgroundColor },
-              ]}
-              onPress={() => handleSelect(item)}
-            >
-              <View style={styles.textContainer}>
-                <Text style={[styles.optionText, { color: textColor }]}>
-                  {item.label}
-                </Text>
-                {item.description && (
-                  <Text style={[styles.optionDescription, { color: labelColor }]}>
-                    {item.description}
-                  </Text>
-                )}
-              </View>
-              <View
-                style={[
-                  styles.circle,
-                  {
-                    borderColor: isSelected
-                      ? item.warning
-                        ? warningColor
-                        : tintColor
-                      : borderColor,
-                  },
-                ]}
-              >
-                {isSelected && (
-                  <View
-                    style={[
-                      styles.filled,
-                      {
-                        backgroundColor: item.warning ? warningColor : tintColor,
-                      },
-                    ]}
-                  />
-                )}
-              </View>
-            </TouchableOpacity>
-          )
-        })}
+        {items.map((item) => (
+          <RadioOption
+            key={item.value}
+            item={item}
+            isSelected={item.value === selected}
+            borderColor={borderColor}
+            backgroundColor={backgroundColor}
+            textColor={textColor}
+            labelColor={labelColor}
+            tintColor={tintColor}
+            warningColor={warningColor}
+            onPress={handleSelect}
+          />
+        ))}
       </View>
     </View>
   )
@@ -154,6 +216,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.sm,
     borderRadius: radii.md,
     borderWidth: 1,
+    ...Platform.select({ web: { outlineStyle: 'none' } as object }),
   },
   textContainer: {
     flex: 1,

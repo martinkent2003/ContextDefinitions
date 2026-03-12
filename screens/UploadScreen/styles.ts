@@ -32,9 +32,7 @@ export const styles = StyleSheet.create({
   },
   backButton: {
     position: 'absolute',
-    width: radii.xxl,
-    height: radii.xxl,
-    borderRadius: radii.xl,
+    zIndex: 1,
   },
   title: {
     fontSize: typography.sizes.xxl,

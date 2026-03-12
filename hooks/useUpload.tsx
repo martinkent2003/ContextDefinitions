@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from 'react'
-import { Alert } from 'react-native'
+import { Alert, Platform } from 'react-native'
 import { ocrExtract } from '@/services/ocr'
 import { uploadReading } from '@/services/readings'
 import type { UploadedFile, UploadMetadata } from '@/types/upload'
@@ -135,7 +135,13 @@ export function UploadProvider({ children }: { children: React.ReactNode }) {
         showConfirmFileModal: () => setConfirmFileVisible(true),
         hideConfirmFileModal: () => setConfirmFileVisible(false),
         isConfirmScanModalVisible,
-        showConfirmScanModal: () => setConfirmScanVisible(true),
+        showConfirmScanModal: () =>
+          Platform.OS === 'web'
+            ? Alert.alert(
+                'Not available',
+                'Document scanning is only available on mobile.',
+              )
+            : setConfirmScanVisible(true),
         hideConfirmScanModal: () => setConfirmScanVisible(false),
       }}
     >

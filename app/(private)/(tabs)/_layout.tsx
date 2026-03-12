@@ -1,56 +1,26 @@
-import { Tabs } from 'expo-router'
+import { TabList, TabSlot, TabTrigger, Tabs } from 'expo-router/ui'
 import React from 'react'
+import { StyleSheet } from 'react-native'
 
-import { Icon } from '@/components/ui'
-import { Colors } from '@/constants/Themes'
-import { useColorScheme } from '@/hooks/useColorScheme'
+import { CustomTabList } from '@/components/ui/CustomTabList'
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme()
-
   return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-        animation: 'shift',
-      }}
-      detachInactiveScreens={false}
-    >
-      <Tabs.Screen
-        name="home"
-        options={{
-          tabBarIcon: ({ color, focused }) => (
-            <Icon
-              library="FontAwesome"
-              name={focused ? 'home' : 'home'}
-              color={color}
-              size={24}
-            />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="create"
-        options={{
-          tabBarIcon: ({ color, focused }) => (
-            <Icon library="FontAwesome" name="plus" color={color} size={24} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="library"
-        options={{
-          tabBarIcon: ({ color, focused }) => (
-            <Icon
-              library="FontAwesome"
-              name={focused ? 'folder-open' : 'folder'}
-              color={color}
-              size={24}
-            />
-          ),
-        }}
-      />
+    <Tabs>
+      <TabSlot />
+      <CustomTabList />
+      <TabList style={styles.hidden}>
+        <TabTrigger name="home" href="/home" />
+        <TabTrigger name="create" href="/create" />
+        <TabTrigger name="library" href="/library" />
+      </TabList>
     </Tabs>
   )
 }
+
+const styles = StyleSheet.create({
+  hidden: {
+    display: 'none',
+    overflow: 'visible',
+  },
+})

@@ -5,6 +5,7 @@ import {
   FunctionsHttpError,
   FunctionsRelayError,
 } from '@supabase/supabase-js'
+import { Platform } from 'react-native'
 import { supabase } from '@/utils/supabase'
 
 export async function ocrExtract(language_code: string, uris: string[]) {
@@ -13,7 +14,13 @@ export async function ocrExtract(language_code: string, uris: string[]) {
 
   for (const uri of uris) {
     const name = uri.split('/').pop() ?? 'file'
-    formData.append('files', { uri, name, type: 'application/octet-stream' } as any)
+    if (Platform.OS === 'web') {
+      const response = await fetch(uri)
+      const blob = await response.blob()
+      formData.append('files', blob, name)
+    } else {
+      formData.append('files', { uri, name, type: 'application/octet-stream' } as any)
+    }
   }
 
   const { data, error } = await supabase.functions.invoke('ocr-extract', {

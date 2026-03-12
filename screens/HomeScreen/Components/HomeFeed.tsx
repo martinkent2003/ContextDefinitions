@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react'
 import { Card, FadingScrollView, ScrollView } from '@/components/ui'
 import { useHome } from '@/hooks/useHome'
+import { useReading } from '@/hooks/useReading'
 import type { ReadingMetadata } from '@/types/readings'
 import { styles } from '@screens/HomeScreen/styles'
 
 export default function HomeFeed() {
   const { readings, handleCardPress } = useHome()
+  const { cachedReadingIds } = useReading()
   const [feed, setFeed] = useState<ReadingMetadata[]>([])
 
   useEffect(() => {
@@ -21,6 +23,7 @@ export default function HomeFeed() {
           subtitle={reading.genre}
           rating={reading.rating}
           body={reading.body}
+          isCached={cachedReadingIds.includes(reading.id)}
           onPress={() => handleCardPress(reading)}
         />
       ))}

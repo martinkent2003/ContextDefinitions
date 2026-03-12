@@ -7,6 +7,7 @@ import Animated, {
   withSpring,
 } from 'react-native-reanimated'
 
+import { Icon } from '@components/ui/Icon'
 import { Text } from '@components/ui/Text'
 import { radii, shadows, spacing, typography } from '@constants/Themes'
 import { useThemeColor } from '@hooks/useThemeColor'
@@ -18,6 +19,7 @@ export type CardProps = ThemeProps &
     subtitle?: string
     rating?: number | string
     body?: string
+    isCached?: boolean
   }
 
 const SPRING = { mass: 0.5, stiffness: 150, damping: 15 }
@@ -30,6 +32,7 @@ export function Card(props: CardProps) {
     subtitle,
     rating,
     body,
+    isCached,
     style,
     onPress,
     ...otherProps
@@ -72,7 +75,7 @@ export function Card(props: CardProps) {
   return (
     <Pressable
       onHoverIn={() => {
-        scale.value = withSpring(1.02, SPRING)
+        scale.value = withSpring(1.005, SPRING)
       }}
       onHoverOut={() => {
         scale.value = withSpring(1, SPRING)
@@ -114,10 +117,23 @@ export function Card(props: CardProps) {
         </View>
 
         {/* Body */}
-        {body && (
-          <Text style={[styles.body, { color: textSecondary }]} numberOfLines={3}>
-            {body}
-          </Text>
+        {(body || isCached) && (
+          <View style={styles.bodyRow}>
+            {body && (
+              <Text style={[styles.body, { color: textSecondary }]} numberOfLines={3}>
+                {body}
+              </Text>
+            )}
+            {isCached && (
+              <Icon
+                library="Ionicons"
+                name="save-outline"
+                size={16}
+                color={textSecondary}
+                style={styles.cachedIcon}
+              />
+            )}
+          </View>
         )}
       </Animated.View>
     </Pressable>
@@ -154,8 +170,16 @@ const styles = StyleSheet.create({
     fontWeight: typography.weights.medium,
   },
   body: {
+    flex: 1,
     fontSize: typography.sizes.sm,
-    marginTop: spacing.sm,
     lineHeight: typography.sizes.sm * typography.lineHeights.normal,
+  },
+  bodyRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    marginTop: spacing.sm,
+  },
+  cachedIcon: {
+    marginLeft: spacing.xs,
   },
 })

@@ -1,0 +1,55 @@
+import { StatusBar } from 'expo-status-bar'
+import { Alert, Platform, StyleSheet } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
+
+import { Button, View } from '@/components/ui'
+import { useLoading } from '@/hooks/useLoading'
+import { useThemeColor } from '@/hooks/useThemeColor'
+import { signOut } from '@/services/auth'
+
+export default function ProfileScreen() {
+  const { showLoading, hideLoading } = useLoading()
+  const backgroundColor = useThemeColor({}, 'background')
+
+  async function logOut() {
+    showLoading('Signing out...', 'typing')
+    const { error } = await signOut()
+    if (error) Alert.alert(error.message)
+    hideLoading()
+  }
+
+  return (
+    <SafeAreaView style={[styles.container, { backgroundColor }]}>
+      <View style={[styles.verticallySpaced]}>
+        <Button variant="danger" size="lg" onPress={() => logOut()}>
+          Sign Out
+        </Button>
+      </View>
+      <View
+        style={styles.separator}
+        lightColor="#eee"
+        darkColor="rgba(255,255,255,0.1)"
+      />
+      {Platform.OS === 'ios' && <StatusBar style="light" />}
+    </SafeAreaView>
+  )
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  separator: {
+    marginVertical: 30,
+    height: 1,
+    width: '80%',
+  },
+  verticallySpaced: {
+    paddingTop: 4,
+    paddingBottom: 4,
+    alignSelf: 'stretch',
+    margin: 20,
+  },
+})

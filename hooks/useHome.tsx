@@ -17,17 +17,11 @@ type HomeContextType = {
   setSelectedSegment: (segment: string) => void
   refreshReadings: () => Promise<void>
   handleCardPress: (reading: ReadingMetadata) => Promise<void>
-
-  // Modal visibility
-  isProfileModalVisible: boolean
-  showProfileModal: () => void
-  hideProfileModal: () => void
 }
 
 const HomeContext = createContext<HomeContextType | null>(null)
 
 export function HomeProvider({ children }: { children: React.ReactNode }) {
-  const [isProfileModalVisible, setProfileModalVisible] = useState(false)
   const [readings, setReadings] = useState<ReadingMetadata[]>([])
   const [selectedSegment, setSelectedSegment] = useState('Feed')
   const { showLoading, hideLoading } = useLoading()
@@ -91,9 +85,6 @@ export function HomeProvider({ children }: { children: React.ReactNode }) {
         setSelectedSegment,
         refreshReadings,
         handleCardPress,
-        isProfileModalVisible,
-        showProfileModal: () => setProfileModalVisible(true),
-        hideProfileModal: () => setProfileModalVisible(false),
       }}
     >
       {children}

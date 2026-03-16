@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
   },
   iconBox: {
     borderWidth: 1,
-    borderRadius: radii.sm,
+    borderRadius: radii.lg,
     padding: spacing.xs,
     alignItems: 'center',
     justifyContent: 'center',

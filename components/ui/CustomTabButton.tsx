@@ -2,7 +2,7 @@ import type { FontAwesome } from '@expo/vector-icons'
 import type { TabTriggerSlotProps } from 'expo-router/ui'
 import * as React from 'react'
 import type { ComponentProps } from 'react'
-import type { View } from 'react-native';
+import type { View } from 'react-native'
 import { Pressable, StyleSheet, Text } from 'react-native'
 import Animated, {
   useAnimatedStyle,
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     gap: spacing.xs,
-    opacity: 0.8,
+    opacity: 0.9,
   },
   label: {
     fontSize: typography.sizes.xs,

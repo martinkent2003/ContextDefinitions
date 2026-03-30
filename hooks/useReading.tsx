@@ -1,6 +1,15 @@
-import { createContext, useCallback, useContext, useMemo, useState } from 'react'
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import { typography } from '@/constants/Themes'
 import { useProfile } from '@/hooks/useProfile'
+import { readingCacheService } from '@/services/readingCache'
 import { getReadingStructure } from '@/services/readings'
 import { getCachedWords, getSavedWords } from '@/services/words'
 import koreeda from '@/shared/reading-structure/koreeda.json'
@@ -19,6 +28,7 @@ type ReadingContextType = {
   selection: ReadingSelection | null
   initialCachedWords: CachedWord[]
   initialSavedWordRows: SavedWordRow[]
+  cachedReadingIds: string[]
   handleReadingChange: (reading: ReadingMetadata) => Promise<boolean>
   setSelection: (sel: ReadingSelection | null) => void
   fontSize: number
@@ -38,26 +48,87 @@ export function ReadingProvider({ children }: { children: React.ReactNode }) {
   const [selection, setSelection] = useState<ReadingSelection | null>(null)
   const [initialCachedWords, setInitialCachedWords] = useState<CachedWord[]>([])
   const [initialSavedWordRows, setInitialSavedWordRows] = useState<SavedWordRow[]>([])
+  const [cachedReadingIds, setCachedReadingIds] = useState<string[]>([])
   const [fontSize, setFontSize] = useState<number>(typography.sizes.md)
   const [totalPages, setTotalPages] = useState<number>(0)
   const [currentPage, setCurrentPage] = useState<number>(0)
+  const cacheReadyRef = useRef(false)
+
+  useEffect(() => {
+    readingCacheService.initialize().then(() => {
+      cacheReadyRef.current = true
+      readingCacheService.getCachedReadingIds().then((ids) => {
+        console.log('[Cache] Stored reading IDs:', ids)
+        setCachedReadingIds(ids)
+      })
+    })
+  }, [])
 
   const handleReadingChange = useCallback(
     async (reading: ReadingMetadata): Promise<boolean> => {
       setSelection(null)
-      const [result, cachedWords, savedWords] = await Promise.all([
+      const nativeLang = profile?.native_language ?? 'en'
+      const userId = profile?.id ?? ''
+
+      // Layer 2: SQLite cache hit
+      if (cacheReadyRef.current) {
+        const cachedStructure = await readingCacheService.getStructure(reading.id)
+
+        if (cachedStructure !== null) {
+          console.log('[Cache HIT]', reading.id)
+          const [cachedWords, cachedSavedWords] = await Promise.all([
+            readingCacheService.getCachedWords(reading.id, nativeLang),
+            readingCacheService.getSavedWords(reading.id, userId, nativeLang),
+          ])
+
+          setReading(reading)
+          setReadingContent(cachedStructure)
+          setInitialCachedWords(cachedWords ?? [])
+          setInitialSavedWordRows(cachedSavedWords ?? [])
+
+          // Background refresh: update SQLite only — don't update initialCachedWords
+          // mid-session as it would reset the fetchCache in useReadingWords
+          getCachedWords(reading.id, nativeLang).then((fresh) => {
+            readingCacheService.setCachedWords(reading.id, nativeLang, fresh)
+          })
+
+          // Background refresh: saved words may have changed from another device
+          getSavedWords(reading.id, userId, nativeLang).then((fresh) => {
+            setInitialSavedWordRows(fresh)
+            readingCacheService.setSavedWords(reading.id, userId, nativeLang, fresh)
+          })
+
+          readingCacheService.getCachedReadingIds().then(setCachedReadingIds)
+          return true
+        }
+      }
+
+      // Layer 3: Network fetch
+      console.log('[Cache MISS]', reading.id)
+      const [result, freshCachedWords, freshSavedWords] = await Promise.all([
         getReadingStructure(reading.id),
-        getCachedWords(reading.id, profile?.native_language ?? 'en'),
-        getSavedWords(reading.id, profile?.id ?? '', profile?.native_language ?? 'en'),
+        getCachedWords(reading.id, nativeLang),
+        getSavedWords(reading.id, userId, nativeLang),
       ])
-      setInitialCachedWords(cachedWords)
-      setInitialSavedWordRows(savedWords)
+
+      setInitialCachedWords(freshCachedWords)
+      setInitialSavedWordRows(freshSavedWords)
+
       if (result === null) {
         setReading(null)
         return false
       }
+
       setReading(reading)
       setReadingContent(result)
+
+      // Write to SQLite cache (fire and forget; setStructure triggers LRU eviction)
+      readingCacheService.setStructure(reading.id, result).then(() => {
+        readingCacheService.getCachedReadingIds().then(setCachedReadingIds)
+      })
+      readingCacheService.setCachedWords(reading.id, nativeLang, freshCachedWords)
+      readingCacheService.setSavedWords(reading.id, userId, nativeLang, freshSavedWords)
+
       return true
     },
     [profile],
@@ -70,6 +141,7 @@ export function ReadingProvider({ children }: { children: React.ReactNode }) {
       selection,
       initialCachedWords,
       initialSavedWordRows,
+      cachedReadingIds,
       handleReadingChange,
       setSelection,
       fontSize,
@@ -85,6 +157,7 @@ export function ReadingProvider({ children }: { children: React.ReactNode }) {
       selection,
       initialCachedWords,
       initialSavedWordRows,
+      cachedReadingIds,
       handleReadingChange,
       fontSize,
       totalPages,

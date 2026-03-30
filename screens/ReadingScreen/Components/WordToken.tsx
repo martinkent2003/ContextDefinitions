@@ -1,5 +1,10 @@
 import type { LayoutRectangle } from 'react-native'
-import { StyleSheet } from 'react-native'
+import { Pressable, StyleSheet } from 'react-native'
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from 'react-native-reanimated'
 import { Text } from '@/components/ui'
 import { radii, spacing, typography } from '@/constants/Themes'
 import { useThemeColor } from '@/hooks/useThemeColor'
@@ -18,6 +23,8 @@ type WordTokenProps = {
   onLayout: (layout: LayoutRectangle) => void
 }
 
+const SPRING = { mass: 0.5, stiffness: 150, damping: 15 }
+
 export default function WordToken({
   token,
   addLeadingSpace,
@@ -28,18 +35,34 @@ export default function WordToken({
   const textColor = useThemeColor({}, 'text')
   const tintColor = useThemeColor({}, 'tint')
 
+  const scale = useSharedValue(1)
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+  }))
+
   return (
-    <Text
+    <Pressable
       onLayout={(e) => onLayout(e.nativeEvent.layout)}
-      style={[
-        styles.token,
-        { color: textColor, fontSize },
-        addLeadingSpace && styles.leadingSpace,
-        isHighlighted && { backgroundColor: tintColor + '44' },
-      ]}
+      onHoverIn={() => {
+        scale.value = withSpring(1.05, SPRING)
+      }}
+      onHoverOut={() => {
+        scale.value = withSpring(1, SPRING)
+      }}
     >
-      {token.surface}
-    </Text>
+      <Animated.View style={animatedStyle}>
+        <Text
+          style={[
+            styles.token,
+            { color: textColor, fontSize },
+            addLeadingSpace && styles.leadingSpace,
+            isHighlighted && { backgroundColor: tintColor + '44' },
+          ]}
+        >
+          {token.surface}
+        </Text>
+      </Animated.View>
+    </Pressable>
   )
 }
 

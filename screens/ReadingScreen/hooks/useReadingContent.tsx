@@ -134,6 +134,7 @@ export type UseReadingContentReturn = {
   tokens: Token[]
   sentences: ReadingPackageV1['sentences']
   spans: ReadingPackageV1['spans']
+  blocks: ReadingPackageV1['blocks']
   fontSize: number
   isMeasuring: boolean
   isHighlighted: (tokenIdx: number) => boolean
@@ -166,6 +167,7 @@ export function useReadingContent(): UseReadingContentReturn {
   const currentPageRef = useRef<number>(0)
   const prevReadingContentRef = useRef<ReadingPackageV1 | null | undefined>(undefined)
   const anchorTokenRef = useRef<number | null>(null)
+  const measureStartRef = useRef<number>(0)
 
   const [selectionStart, setSelectionStart] = useState<number | null>(null)
   const [selectionEnd, setSelectionEnd] = useState<number | null>(null)
@@ -180,6 +182,7 @@ export function useReadingContent(): UseReadingContentReturn {
   const allTokens = readingContent?.tokens ?? []
   const sentences = readingContent?.sentences ?? []
   const spans = readingContent?.spans ?? []
+  const blocks = readingContent?.blocks ?? []
 
   // Reset measurement state whenever the reading content or font size changes.
   // This re-renders all tokens so they re-measure at the new size/content.
@@ -198,6 +201,8 @@ export function useReadingContent(): UseReadingContentReturn {
     }
 
     layoutMap.current.clear()
+    measureStartRef.current = Date.now()
+    console.log(`[T3] Measurement pass started, tokens=${allTokens.length}`)
     setLayoutsComplete(false)
     setPages([])
     setCurrentPage(0)
@@ -211,6 +216,9 @@ export function useReadingContent(): UseReadingContentReturn {
     if (!layoutsComplete || containerHeight === 0 || allTokens.length === 0) return
     const computed = buildPages(layoutMap.current, allTokens, sentences, containerHeight)
     setPages(computed)
+    console.log(
+      `[T4] buildPages done in ${Date.now() - measureStartRef.current}ms, pages=${computed.length}`,
+    )
     setTotalPages(computed.length)
 
     // Restore reading position: find the page that contains the anchor token
@@ -221,6 +229,9 @@ export function useReadingContent(): UseReadingContentReturn {
       setCurrentPage(targetPage !== -1 ? targetPage : 0)
     }
 
+    console.log(
+      `[T5] hideLoading called at ${Date.now() - measureStartRef.current}ms from T3`,
+    )
     hideLoading()
   }, [layoutsComplete, containerHeight, hideLoading, setCurrentPage, setTotalPages])
 
@@ -343,6 +354,7 @@ export function useReadingContent(): UseReadingContentReturn {
     tokens: visibleTokens,
     sentences,
     spans,
+    blocks,
     fontSize,
     isMeasuring,
     isHighlighted,

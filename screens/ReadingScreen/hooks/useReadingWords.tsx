@@ -3,6 +3,7 @@ import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { Alert } from 'react-native'
 import { useProfile } from '@/hooks/useProfile'
 import { useReading } from '@/hooks/useReading'
+import { readingCacheService } from '@/services/readingCache'
 import {
   addSavedWord,
   getDefinitionAndTranslation,
@@ -13,7 +14,19 @@ import {
 } from '@/services/words'
 import { LANGUAGE_CODE_TO_NAME } from '@/types/language'
 import type { ReadingSelection } from '@/types/readings'
-import type { SavedWord, SheetMode } from '@/types/words'
+import type { SavedWord, SavedWordRow, SheetMode } from '@/types/words'
+
+function savedWordToRow(word: SavedWord): SavedWordRow {
+  return {
+    id: word.id,
+    selection: word.text,
+    definition: serializeDefinition(word.definition),
+    translation: word.translation,
+    context: word.context,
+    selection_start: word.selection_start,
+    selection_end: word.selection_end,
+  }
+}
 
 function selectionCacheKey(sel: ReadingSelection): string {
   return [...sel.tokenIndices].sort((a, b) => a - b).join(',')
@@ -241,6 +254,14 @@ export function ReadingWordsProvider({ children }: { children: React.ReactNode }
         translation: translationDraft,
         context: contextDraft,
       })
+      const newMap = new Map(savedWords)
+      newMap.set(key, updated)
+      readingCacheService.setSavedWords(
+        reading!.id,
+        profile!.id,
+        profile?.native_language ?? 'en',
+        Array.from(newMap.values()).map(savedWordToRow),
+      )
     } catch (err) {
       console.error('Failed to update saved word:', err)
       setSavedWords((prev) => new Map(prev).set(key, savedWord))
@@ -275,6 +296,14 @@ export function ReadingWordsProvider({ children }: { children: React.ReactNode }
           })
           try {
             await removeSavedWord(savedWord.id)
+            const newMap = new Map(savedWords)
+            newMap.delete(key)
+            readingCacheService.setSavedWords(
+              reading!.id,
+              profile!.id,
+              profile?.native_language ?? 'en',
+              Array.from(newMap.values()).map(savedWordToRow),
+            )
           } catch (err) {
             console.error('Failed to remove saved word:', err)
             setSavedWords((prev) => new Map(prev).set(key, savedWord))
@@ -333,6 +362,15 @@ export function ReadingWordsProvider({ children }: { children: React.ReactNode }
               if (word) updated.set(key, { ...word, id })
               return updated
             })
+            const finalWord: SavedWord = { ...tempWord, id }
+            const newMap = new Map(savedWords)
+            newMap.set(key, finalWord)
+            readingCacheService.setSavedWords(
+              reading.id,
+              profile.id,
+              profile?.native_language ?? 'en',
+              Array.from(newMap.values()).map(savedWordToRow),
+            )
           } catch (err) {
             console.error('Failed to save word:', err)
             setSavedWords((prev) => {

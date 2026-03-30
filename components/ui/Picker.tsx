@@ -43,7 +43,11 @@ export function Picker<T extends string>(props: PickerProps<T>) {
         ]}
       >
         <DefaultPicker
-          style={[styles.picker, { color: textColor }, style]}
+          style={[
+            styles.picker,
+            { color: textColor, ...(Platform.OS === 'web' && { backgroundColor }) },
+            style,
+          ]}
           dropdownIconColor={textColor}
           itemStyle={Platform.select({
             ios: {
@@ -74,7 +78,6 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: typography.sizes.sm,
-    fontWeight: typography.weights.bold,
     marginLeft: spacing.xs,
     marginBottom: spacing.xs,
   },
@@ -84,8 +87,9 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     ...Platform.select({
       ios: {
-        height: 100,
+        height: 160,
       },
+      web: {},
       android: {},
     }),
   },
@@ -97,6 +101,16 @@ const styles = StyleSheet.create({
       },
       android: {
         height: undefined,
+      },
+      web: {
+        height: 44,
+        paddingHorizontal: spacing.sm,
+        paddingVertical: spacing.xs,
+        fontSize: typography.sizes.md,
+        borderWidth: 0,
+        outlineStyle: 'none',
+        cursor: 'pointer',
+        width: '100%',
       },
     }),
   },

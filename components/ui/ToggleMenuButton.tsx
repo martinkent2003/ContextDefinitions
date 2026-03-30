@@ -20,6 +20,7 @@ export function ToggleMenuButton({ onPress, isExpanded }: ToggleMenuButtonProps)
   const borderColor = useThemeColor({}, 'border')
   const iconColor = useThemeColor({}, 'text')
   const rotation = useSharedValue(0)
+  const scale = useSharedValue(1)
 
   React.useEffect(() => {
     rotation.value = withSpring(isExpanded ? 360 : 0, {
@@ -31,8 +32,10 @@ export function ToggleMenuButton({ onPress, isExpanded }: ToggleMenuButtonProps)
   }, [isExpanded, rotation])
 
   const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ rotate: `${rotation.value}deg` }],
+    transform: [{ rotate: `${rotation.value}deg` }, { scale: scale.value }],
   }))
+
+  const SPRING = { mass: 0.5, stiffness: 150, damping: 15 }
 
   return (
     <Pressable
@@ -42,6 +45,12 @@ export function ToggleMenuButton({ onPress, isExpanded }: ToggleMenuButtonProps)
         shadows.md,
       ]}
       onPress={onPress}
+      onHoverIn={() => {
+        scale.value = withSpring(1.05, SPRING)
+      }}
+      onHoverOut={() => {
+        scale.value = withSpring(1, SPRING)
+      }}
     >
       <Animated.View style={animatedStyle}>
         <Icon

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { Input, TextArea, RadioButton } from '@/components/ui'
+import { Input, TextArea, RadioButton, Picker } from '@/components/ui'
+import { useProfile } from '@/hooks/useProfile'
 import { useUpload } from '@/hooks/useUpload'
-import { uploadReading } from '@/services/readings'
+import { LANGUAGES, type LanguageCode } from '@/types/language'
 import ConfirmModal from '@screens/UploadScreen/Components/ConfirmModal'
 
 export default function ConfirmText() {
@@ -12,11 +13,15 @@ export default function ConfirmText() {
     setText,
     clearUpload,
   } = useUpload()
+  const { profile } = useProfile()
 
   const [title, setTitle] = useState<string>('')
   const [genre, setGenre] = useState<string>('')
   const [content, setContent] = useState<string>('')
   const [privacy, setPrivacy] = useState<boolean>(true)
+  const [language, setLanguage] = useState<LanguageCode>(
+    (profile?.target_language as LanguageCode) ?? 'en',
+  )
 
   useEffect(() => {
     if (upload.text !== null) {
@@ -25,7 +30,7 @@ export default function ConfirmText() {
   }, [upload.text])
 
   const handleConfirm = () => {
-    setText(content, title, genre, privacy)
+    setText(content, title, genre, privacy, language)
     hideConfirmTextModal()
   }
 
@@ -54,6 +59,13 @@ export default function ConfirmText() {
         placeholder="Enter Content"
         value={content}
         onChangeText={(text) => setContent(text)}
+      />
+
+      <Picker
+        label="Reading Language"
+        items={LANGUAGES}
+        selectedValue={language}
+        onValueChange={(value) => setLanguage(value as LanguageCode)}
       />
       <RadioButton
         label="Privacy Settings"

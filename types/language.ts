@@ -15,17 +15,17 @@ export type LanguageCode =
 /** Ordered list used to populate language pickers. */
 export const LANGUAGES: { label: string; value: LanguageCode }[] = [
   { label: 'English', value: 'en' },
-  { label: 'Spanish', value: 'es' },
-  { label: 'Japanese', value: 'ja' },
-  { label: 'Portuguese', value: 'pt' },
-  { label: 'French', value: 'fr' },
-  { label: 'German', value: 'de' },
-  { label: 'Chinese', value: 'zh' },
-  { label: 'Korean', value: 'ko' },
-  { label: 'Italian', value: 'it' },
-  { label: 'Russian', value: 'ru' },
-  { label: 'Arabic', value: 'ar' },
-  { label: 'Hindi', value: 'hi' },
+  { label: 'Español', value: 'es' },
+  { label: '日本語', value: 'ja' },
+  { label: 'Português', value: 'pt' },
+  { label: 'Français', value: 'fr' },
+  { label: 'Deutsch', value: 'de' },
+  { label: '中文', value: 'zh' },
+  { label: '한국어', value: 'ko' },
+  { label: 'Italiano', value: 'it' },
+  { label: 'Русский', value: 'ru' },
+  { label: 'العربية', value: 'ar' },
+  { label: 'हिन्दी', value: 'hi' },
 ]
 
 /** Maps a LanguageCode to its full lowercase name (used by AI services). */

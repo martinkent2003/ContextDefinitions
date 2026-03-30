@@ -148,13 +148,13 @@ export function Button(props: ButtonProps) {
   return (
     <Pressable
       onHoverIn={() => {
-        if (!disabled && !loading) scale.value = withSpring(1.03, SPRING)
+        if (!disabled && !loading) scale.value = withSpring(1.01, SPRING)
       }}
       onHoverOut={() => {
         scale.value = withSpring(1, SPRING)
       }}
       onPressIn={() => {
-        if (!disabled && !loading) scale.value = withSpring(0.97, SPRING)
+        if (!disabled && !loading) scale.value = withSpring(0.99, SPRING)
       }}
       onPressOut={() => {
         scale.value = withSpring(1, SPRING)

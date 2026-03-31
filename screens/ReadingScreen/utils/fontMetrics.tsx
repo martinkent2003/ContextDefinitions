@@ -21,16 +21,21 @@ export function isCalibrated(): boolean {
   return _calibrated
 }
 
+// Per-character measurement overestimates because it ignores kerning and font
+// shaping that reduce total width when characters are rendered together.
+const KERNING_SHRINK = 0.5
+
 /**
  * Estimate the rendered pixel width of a token's surface text.
- * Uses character-level width ratios measured at startup, scaled by fontSize.
+ * Uses character-level width ratios measured at startup, scaled by fontSize,
+ * then applies a shrink factor to compensate for kerning/shaping.
  */
 export function estimateTokenWidth(surface: string, fontSize: number): number {
   let total = 0
   for (const char of surface) {
     total += (charWidthRatios.get(char) ?? defaultRatio) * fontSize
   }
-  return total
+  return total * KERNING_SHRINK
 }
 
 function calibrate(charWidths: Map<string, number>): void {

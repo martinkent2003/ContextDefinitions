@@ -247,7 +247,7 @@ export function useReadingContent(): UseReadingContentReturn {
     // these positions for pixel-perfect hit-testing.
     layoutMap.current = computed
 
-    const newPages = buildPages(computed, tokens, sents, containerHeight * 2)
+    const newPages = buildPages(computed, tokens, sents, containerHeight)
     setPages(newPages)
     setTotalPages(newPages.length)
 

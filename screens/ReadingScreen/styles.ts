@@ -38,9 +38,6 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
   },
-  tokenContainerHidden: {
-    opacity: 0,
-  },
   //footer
   footer: {
     flexDirection: 'row',

@@ -1,4 +1,11 @@
-import { createContext, useCallback, useContext, useEffect, useState } from 'react'
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import Animated, {
   FadeIn,
@@ -26,6 +33,12 @@ type LoadingContextType = {
 }
 
 const LoadingContext = createContext<LoadingContextType | null>(null)
+
+// Separate context for actions only — consumers that only call
+// showLoading/hideLoading subscribe here and won't re-render when
+// isLoading toggles.
+type LoadingActions = Pick<LoadingContextType, 'showLoading' | 'hideLoading'>
+const LoadingActionsContext = createContext<LoadingActions | null>(null)
 
 // ---- Multilingual greetings for the rotating text animation ----
 const ROTATING_PHRASES = [
@@ -275,7 +288,8 @@ export function LoadingProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(false)
   const [loadingMessage, setLoadingMessage] = useState<string | null>(null)
   const [loadingStyle, setLoadingStyle] = useState<LoadingStyle>('book')
-  const colorScheme = useColorScheme() ?? 'light'
+  const rawScheme = useColorScheme()
+  const colorScheme = rawScheme === 'dark' ? 'dark' : 'light'
 
   const showLoading = useCallback((message?: string, style?: LoadingStyle) => {
     setLoadingMessage(message ?? null)
@@ -314,11 +328,18 @@ export function LoadingProvider({ children }: { children: React.ReactNode }) {
   // For typing style, the message is rendered inside the animation itself
   const showMessageBelow = loadingStyle !== 'typing' && !!loadingMessage
 
+  const actions = useMemo(
+    () => ({ showLoading, hideLoading }),
+    [showLoading, hideLoading],
+  )
+
   return (
     <LoadingContext.Provider
       value={{ isLoading, loadingMessage, loadingStyle, showLoading, hideLoading }}
     >
-      {children}
+      <LoadingActionsContext.Provider value={actions}>
+        {children}
+      </LoadingActionsContext.Provider>
 
       {isLoading && (
         <Animated.View
@@ -342,6 +363,16 @@ export function useLoading() {
   const context = useContext(LoadingContext)
   if (!context) {
     throw new Error('useLoading must be used within a LoadingProvider')
+  }
+  return context
+}
+
+// Use this when you only need showLoading/hideLoading — it does NOT
+// re-render when isLoading toggles.
+export function useLoadingActions() {
+  const context = useContext(LoadingActionsContext)
+  if (!context) {
+    throw new Error('useLoadingActions must be used within a LoadingProvider')
   }
   return context
 }

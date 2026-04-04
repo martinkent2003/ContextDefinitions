@@ -1,9 +1,15 @@
 import * as Haptics from 'expo-haptics'
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import type { LayoutChangeEvent, LayoutRectangle } from 'react-native'
 import { Gesture } from 'react-native-gesture-handler'
-import { useLoading } from '@/hooks/useLoading'
+import { spacing, typography } from '@/constants/Themes'
+import { useLoadingActions } from '@/hooks/useLoading'
 import { useReading } from '@/hooks/useReading'
+import { isCalibrated } from '@/screens/ReadingScreen/utils/fontMetrics'
+import {
+  computeLayout,
+  computeParagraphStarts,
+} from '@/screens/ReadingScreen/utils/layoutEngine'
 import type { ReadingPackageV1 } from '@/types/readings'
 
 type Token = ReadingPackageV1['tokens'][number]
@@ -33,7 +39,7 @@ export function hitTest(
 
 type Sentence = ReadingPackageV1['sentences'][number]
 
-// Build a token→sentence lookup by walking both arrays together.O(n+m)
+// Build a token→sentence lookup by walking both arrays together. O(n+m)
 export function buildTokenSentenceMap(
   allTokens: Token[],
   sentences: Sentence[],
@@ -54,7 +60,7 @@ export function buildTokenSentenceMap(
   return map
 }
 
-// Walk all token layouts (measured during the full render pass) and split them
+// Walk all token layouts (computed by the layout engine) and split them
 // into pages. A token belongs to the current page if its bottom edge fits
 // within `height` units from where the page started in the continuous layout.
 //
@@ -136,10 +142,12 @@ export type UseReadingContentReturn = {
   spans: ReadingPackageV1['spans']
   blocks: ReadingPackageV1['blocks']
   fontSize: number
-  isMeasuring: boolean
+  needsCalibration: boolean
+  onCalibrated: () => void
   isHighlighted: (tokenIdx: number) => boolean
   pan: ReturnType<typeof Gesture.Pan>
   onContainerLayout: (e: LayoutChangeEvent) => void
+  onTokenContainerLayout: (e: LayoutChangeEvent) => void
   onTokenLayout: (tokenIdx: number, layout: LayoutRectangle) => void
 }
 
@@ -153,7 +161,7 @@ export function useReadingContent(): UseReadingContentReturn {
     currentPage,
     setCurrentPage,
   } = useReading()
-  const { showLoading, hideLoading } = useLoading()
+  const { showLoading, hideLoading } = useLoadingActions()
 
   const layoutMap = useRef<LayoutMap>(new Map())
   const visibleTokenIdsRef = useRef<Set<number>>(new Set())
@@ -161,19 +169,23 @@ export function useReadingContent(): UseReadingContentReturn {
   const selectionEndRef = useRef<number | null>(null)
   const committedRef = useRef(false)
 
-  // Refs that mirror state/props so effects can read current values without
-  // them being listed as deps (which would cause spurious re-runs).
   const pagesRef = useRef<Token[][]>([])
   const currentPageRef = useRef<number>(0)
   const prevReadingContentRef = useRef<ReadingPackageV1 | null | undefined>(undefined)
   const anchorTokenRef = useRef<number | null>(null)
-  const measureStartRef = useRef<number>(0)
+
+  // Stable refs for loading actions so they never appear in effect deps.
+  const showLoadingRef = useRef(showLoading)
+  const hideLoadingRef = useRef(hideLoading)
+  showLoadingRef.current = showLoading
+  hideLoadingRef.current = hideLoading
 
   const [selectionStart, setSelectionStart] = useState<number | null>(null)
   const [selectionEnd, setSelectionEnd] = useState<number | null>(null)
+  const [containerWidth, setContainerWidth] = useState<number>(0)
   const [containerHeight, setContainerHeight] = useState<number>(0)
-  const [layoutsComplete, setLayoutsComplete] = useState(false)
   const [pages, setPages] = useState<Token[][]>([])
+  const [calibrated, setCalibrated] = useState(isCalibrated())
 
   // Keep mirror refs in sync every render.
   pagesRef.current = pages
@@ -184,11 +196,11 @@ export function useReadingContent(): UseReadingContentReturn {
   const spans = readingContent?.spans ?? []
   const blocks = readingContent?.blocks ?? []
 
-  // Reset measurement state whenever the reading content or font size changes.
-  // This re-renders all tokens so they re-measure at the new size/content.
-  // Show loading overlay to hide the re-measurement reflow from the user.
+  const onCalibrated = useCallback(() => setCalibrated(true), [])
+
+  // When reading content or font size changes, save the anchor token for
+  // position restoration and clear stale pages.
   useLayoutEffect(() => {
-    //console.log('Effect 1 fired, readingContent:', readingContent ? `${allTokens.length} tokens` : 'null')
     const isNewReading = readingContent !== prevReadingContentRef.current
     prevReadingContentRef.current = readingContent
 
@@ -200,40 +212,62 @@ export function useReadingContent(): UseReadingContentReturn {
       anchorTokenRef.current = null
     }
 
-    layoutMap.current.clear()
-    measureStartRef.current = Date.now()
-    console.log(`[T3] Measurement pass started, tokens=${allTokens.length}`)
-    setLayoutsComplete(false)
     setPages([])
     setCurrentPage(0)
-    if (readingContent !== null) showLoading()
-  }, [readingContent, fontSize, setCurrentPage, showLoading])
+    // Show loading only when calibration is still pending (slow path).
+    if (readingContent !== null && !isCalibrated()) {
+      showLoadingRef.current()
+    }
+  }, [readingContent, fontSize, setCurrentPage])
 
-  // Once all token layouts are collected AND container height is known,
-  // compute the paginated token array, then dismiss the loading overlay.
+  // Phase 3: Compute pages via mathematical layout engine.
+  // Runs once all prerequisites are met (calibrated, dimensions known, content loaded).
   useEffect(() => {
-    //console.log('Effect 2:', { layoutsComplete, containerHeight, tokenCount: allTokens.length });
-    if (!layoutsComplete || containerHeight === 0 || allTokens.length === 0) return
-    const computed = buildPages(layoutMap.current, allTokens, sentences, containerHeight)
-    setPages(computed)
-    console.log(
-      `[T4] buildPages done in ${Date.now() - measureStartRef.current}ms, pages=${computed.length}`,
-    )
-    setTotalPages(computed.length)
+    if (!readingContent || !calibrated || containerWidth === 0 || containerHeight === 0)
+      return
 
-    // Restore reading position: find the page that contains the anchor token
-    // (first token of the page the user was on before the font size changed).
+    const tokens = readingContent.tokens
+    const sents = readingContent.sentences
+    const blks = readingContent.blocks
+    if (tokens.length === 0) return
+
+    const lineHeight = typography.sizes.md * typography.lineHeights.relaxed
+    const paragraphStarts = computeParagraphStarts(tokens, blks)
+    const computed = computeLayout({
+      tokens,
+      paragraphStarts,
+      containerWidth,
+      fontSize,
+      lineHeight,
+      indentWidth: fontSize * 2,
+      leadingSpace: spacing.xs,
+    })
+
+    // Store computed layout; visible-page onLayout callbacks will refine
+    // these positions for pixel-perfect hit-testing.
+    layoutMap.current = computed
+
+    const newPages = buildPages(computed, tokens, sents, containerHeight * 2)
+    setPages(newPages)
+    setTotalPages(newPages.length)
+
+    // Restore reading position for font-size changes.
     const anchor = anchorTokenRef.current
-    if (anchor !== null && computed.length > 0) {
-      const targetPage = computed.findIndex((page) => page.some((t) => t.i === anchor))
+    if (anchor !== null && newPages.length > 0) {
+      const targetPage = newPages.findIndex((page) => page.some((t) => t.i === anchor))
       setCurrentPage(targetPage !== -1 ? targetPage : 0)
     }
 
-    console.log(
-      `[T5] hideLoading called at ${Date.now() - measureStartRef.current}ms from T3`,
-    )
-    hideLoading()
-  }, [layoutsComplete, containerHeight, hideLoading, setCurrentPage, setTotalPages])
+    hideLoadingRef.current()
+  }, [
+    calibrated,
+    containerWidth,
+    containerHeight,
+    readingContent,
+    fontSize,
+    setTotalPages,
+    setCurrentPage,
+  ])
 
   useEffect(() => {
     if (selection === null) {
@@ -257,12 +291,8 @@ export function useReadingContent(): UseReadingContentReturn {
     if (targetPage !== -1) setCurrentPage(targetPage)
   }, [selection])
 
-  // During the measurement pass (pages not yet built), render all tokens so
-  // React Native can measure each one. After pages are built, render only the
-  // current page — the container's overflow:hidden clips any measurement-pass
-  // overflow before pages are ready.
-  const isMeasuring = pages.length === 0 && allTokens.length > 0
-  const visibleTokens = pages.length > 0 ? (pages[currentPage] ?? []) : allTokens
+  // After pages are built, render only the current page's tokens.
+  const visibleTokens = pages.length > 0 ? (pages[currentPage] ?? []) : []
   visibleTokenIdsRef.current = new Set(visibleTokens.map((t) => t.i))
 
   function isHighlighted(tokenIdx: number): boolean {
@@ -333,21 +363,19 @@ export function useReadingContent(): UseReadingContentReturn {
     })
 
   function onContainerLayout(e: LayoutChangeEvent): void {
-    setContainerHeight(e.nativeEvent.layout.height)
+    const h = e.nativeEvent.layout.height
+    if (Math.abs(h - containerHeight) >= 1) setContainerHeight(h)
   }
 
+  // Get wrapping width directly from the tokenContainer — no padding guessing.
+  function onTokenContainerLayout(e: LayoutChangeEvent): void {
+    const w = e.nativeEvent.layout.width
+    if (Math.abs(w - containerWidth) >= 1) setContainerWidth(w)
+  }
+
+  // Overwrite computed positions with precise rendered positions for hit-testing.
   function onTokenLayout(tokenIdx: number, layout: LayoutRectangle): void {
     layoutMap.current.set(tokenIdx, layout)
-    // console.log(`token layouts: ${layoutMap.current.size} / ${allTokens.length}`);
-    // Signal completion once every token has reported its layout.
-    // Guard with !layoutsComplete so this only fires once per measurement pass.
-    if (
-      !layoutsComplete &&
-      layoutMap.current.size >= allTokens.length &&
-      allTokens.length > 0
-    ) {
-      setLayoutsComplete(true)
-    }
   }
 
   return {
@@ -356,10 +384,12 @@ export function useReadingContent(): UseReadingContentReturn {
     spans,
     blocks,
     fontSize,
-    isMeasuring,
+    needsCalibration: !calibrated,
+    onCalibrated,
     isHighlighted,
     pan,
     onContainerLayout,
+    onTokenContainerLayout,
     onTokenLayout,
   }
 }

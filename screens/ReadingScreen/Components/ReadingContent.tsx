@@ -3,6 +3,7 @@ import { View } from 'react-native'
 import { GestureDetector } from 'react-native-gesture-handler'
 import { useReadingContent } from '@/screens/ReadingScreen/hooks/useReadingContent'
 import { styles } from '@/screens/ReadingScreen/styles'
+import { FontMeasurer } from '@/screens/ReadingScreen/utils/fontMetrics'
 import WordToken from './WordToken'
 
 export default function ReadingContent() {
@@ -10,10 +11,12 @@ export default function ReadingContent() {
     tokens,
     blocks,
     fontSize,
-    isMeasuring,
+    needsCalibration,
+    onCalibrated,
     isHighlighted,
     pan,
     onContainerLayout,
+    onTokenContainerLayout,
     onTokenLayout,
   } = useReadingContent()
 
@@ -31,8 +34,9 @@ export default function ReadingContent() {
 
   return (
     <View style={styles.readingContent} onLayout={onContainerLayout}>
+      {needsCalibration && <FontMeasurer onReady={onCalibrated} />}
       <GestureDetector gesture={pan}>
-        <View style={[styles.tokenContainer, isMeasuring && styles.tokenContainerHidden]}>
+        <View style={styles.tokenContainer} onLayout={onTokenContainerLayout}>
           {tokens.map((token, idx) => {
             const prev = idx > 0 ? tokens[idx - 1] : null
             const addLeadingSpace = prev !== null && token.start > prev.end

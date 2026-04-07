@@ -58,7 +58,7 @@ export const CustomTabButton = React.forwardRef<View, CustomTabButtonProps>(
     }))
 
     return (
-      <Animated.View style={animatedStyle}>
+      <Animated.View style={animatedStyle} pointerEvents={isExpanded ? 'auto' : 'none'}>
         <Pressable
           ref={ref}
           {...props}

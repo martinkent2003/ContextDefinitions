@@ -186,6 +186,10 @@ export function useReadingContent(): UseReadingContentReturn {
   const [containerHeight, setContainerHeight] = useState<number>(0)
   const [pages, setPages] = useState<Token[][]>([])
   const [calibrated, setCalibrated] = useState(isCalibrated())
+  // Bumped each time a new layout is computed so Effect B can react to it
+  // without putting a Map object into state.
+  const [layoutVersion, setLayoutVersion] = useState(0)
+  const computedLayoutRef = useRef<Map<number, LayoutRectangle> | null>(null)
 
   // Keep mirror refs in sync every render.
   pagesRef.current = pages
@@ -220,14 +224,15 @@ export function useReadingContent(): UseReadingContentReturn {
     }
   }, [readingContent, fontSize, setCurrentPage])
 
-  // Phase 3: Compute pages via mathematical layout engine.
-  // Runs once all prerequisites are met (calibrated, dimensions known, content loaded).
+  // Effect A: recompute the mathematical layout whenever content, font, or
+  // container width changes. Clears the hit-test map so onLayout callbacks
+  // refill it with actual pixel positions. Does NOT depend on containerHeight
+  // so a height change (e.g. after the loading overlay hides) won't re-clear
+  // the map and discard freshly measured positions.
   useEffect(() => {
-    if (!readingContent || !calibrated || containerWidth === 0 || containerHeight === 0)
-      return
+    if (!readingContent || !calibrated || containerWidth === 0) return
 
     const tokens = readingContent.tokens
-    const sents = readingContent.sentences
     const blks = readingContent.blocks
     if (tokens.length === 0) return
 
@@ -243,9 +248,21 @@ export function useReadingContent(): UseReadingContentReturn {
       leadingSpace: spacing.xs,
     })
 
-    // Store computed layout; visible-page onLayout callbacks will refine
-    // these positions for pixel-perfect hit-testing.
-    layoutMap.current = computed
+    computedLayoutRef.current = computed
+    // Clear hit-test map; onLayout callbacks will fill it with real positions.
+    layoutMap.current = new Map()
+    //console.log('[DBG] layoutMap cleared, waiting for onLayout callbacks')
+    setLayoutVersion((v) => v + 1)
+  }, [calibrated, containerWidth, readingContent, fontSize])
+
+  // Effect B: rebuild pages whenever the layout or container height changes.
+  // Does NOT clear the hit-test map — only Effect A should do that.
+  useEffect(() => {
+    if (!readingContent || !computedLayoutRef.current || containerHeight === 0) return
+
+    const tokens = readingContent.tokens
+    const sents = readingContent.sentences
+    const computed = computedLayoutRef.current
 
     const newPages = buildPages(computed, tokens, sents, containerHeight)
     setPages(newPages)
@@ -259,15 +276,7 @@ export function useReadingContent(): UseReadingContentReturn {
     }
 
     hideLoadingRef.current()
-  }, [
-    calibrated,
-    containerWidth,
-    containerHeight,
-    readingContent,
-    fontSize,
-    setTotalPages,
-    setCurrentPage,
-  ])
+  }, [layoutVersion, containerHeight, readingContent, setTotalPages, setCurrentPage])
 
   useEffect(() => {
     if (selection === null) {
@@ -323,7 +332,9 @@ export function useReadingContent(): UseReadingContentReturn {
     .runOnJS(true)
     .onBegin((e) => {
       committedRef.current = false
+      //console.log(`[DBG] tap at x=${e.x.toFixed(1)}, y=${e.y.toFixed(1)} | layoutMap.size=${layoutMap.current.size} | visibleIds.size=${visibleTokenIdsRef.current.size}`)
       const hit = hitTest(e.x, e.y, layoutMap.current, visibleTokenIdsRef.current)
+      //console.log(`[DBG] hitTest result: ${hit}`)
       if (hit !== null) {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
         selectionStartRef.current = hit
@@ -376,6 +387,7 @@ export function useReadingContent(): UseReadingContentReturn {
   // Overwrite computed positions with precise rendered positions for hit-testing.
   function onTokenLayout(tokenIdx: number, layout: LayoutRectangle): void {
     layoutMap.current.set(tokenIdx, layout)
+    //console.log(`[DBG] onTokenLayout fired: tokenIdx=${tokenIdx}, mapSize=${layoutMap.current.size}, visibleCount=${visibleTokenIdsRef.current.size}`)
   }
 
   return {

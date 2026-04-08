@@ -155,7 +155,10 @@ export function ReadingWordsProvider({ children }: { children: React.ReactNode }
       setMode('feed')
       return
     }
-
+    if (selection.sentenceIndices.length > 1 || selection.tokenIndices.length > 10) {
+      Alert.alert('Selection too long', 'Please select text within a single sentence.')
+      return
+    }
     sheetRef.current?.snapToIndex(0)
 
     if (!selectedText || !sentenceText) {

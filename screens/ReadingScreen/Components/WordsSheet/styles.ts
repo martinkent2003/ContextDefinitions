@@ -51,6 +51,22 @@ export const styles = StyleSheet.create({
     fontSize: typography.sizes.md,
     textAlign: 'center',
   },
+  sheetPartOfSpeech: {
+    fontSize: typography.sizes.sm,
+    fontStyle: 'italic' as const,
+    textAlign: 'center' as const,
+    marginBottom: spacing.sm,
+  },
+  exampleText: {
+    fontSize: typography.sizes.sm,
+    fontStyle: 'italic' as const,
+    marginTop: spacing.xs,
+  },
+  exampleTranslation: {
+    fontSize: typography.sizes.sm,
+    marginLeft: spacing.md,
+    marginTop: 2,
+  },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',

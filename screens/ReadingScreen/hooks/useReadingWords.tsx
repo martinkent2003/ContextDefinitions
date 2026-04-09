@@ -8,13 +8,15 @@ import {
   addSavedWord,
   getDefinitionAndTranslation,
   parseDefinition,
+  parseExamples,
   serializeDefinition,
+  serializeExamples,
   removeSavedWord,
   updateSavedWord,
 } from '@/services/words'
 import { LANGUAGE_CODE_TO_NAME } from '@/types/language'
 import type { ReadingSelection } from '@/types/readings'
-import type { SavedWord, SavedWordRow, SheetMode } from '@/types/words'
+import type { SavedWord, SavedWordRow, SheetMode, WordExample } from '@/types/words'
 
 function savedWordToRow(word: SavedWord): SavedWordRow {
   return {
@@ -25,6 +27,8 @@ function savedWordToRow(word: SavedWord): SavedWordRow {
     context: word.context,
     selection_start: word.selection_start,
     selection_end: word.selection_end,
+    part_of_speech: word.part_of_speech,
+    examples: serializeExamples(word.examples),
   }
 }
 
@@ -40,6 +44,8 @@ type ReadingWordsContextType = {
   sentenceText: string | null
   definition: string | null
   translation: string | null
+  partOfSpeech: string | null
+  examples: WordExample[]
   definitionDraft: string
   translationDraft: string
   contextDraft: string
@@ -76,11 +82,21 @@ export function ReadingWordsProvider({ children }: { children: React.ReactNode }
   const [savedWords, setSavedWords] = useState<Map<string, SavedWord>>(() => new Map())
   const [definition, setDefinition] = useState<string | null>(null)
   const [translation, setTranslation] = useState<string | null>(null)
+  const [partOfSpeech, setPartOfSpeech] = useState<string | null>(null)
+  const [examples, setExamples] = useState<WordExample[]>([])
   const [definitionDraft, setDefinitionDraft] = useState('')
   const [translationDraft, setTranslationDraft] = useState('')
   const [contextDraft, setContextDraft] = useState('')
   const [fetchCache, setFetchCache] = useState<
-    Map<string, { definition: string; translation: string }>
+    Map<
+      string,
+      {
+        definition: string
+        translation: string
+        part_of_speech: string | null
+        examples: WordExample[]
+      }
+    >
   >(() => new Map())
 
   // Initialize fetchCache from DB lookup cache when reading changes.
@@ -90,7 +106,15 @@ export function ReadingWordsProvider({ children }: { children: React.ReactNode }
       return
     }
 
-    const newCache = new Map<string, { definition: string; translation: string }>()
+    const newCache = new Map<
+      string,
+      {
+        definition: string
+        translation: string
+        part_of_speech: string | null
+        examples: WordExample[]
+      }
+    >()
 
     for (const cached of initialCachedWords) {
       const tokens = readingContent.tokens.filter(
@@ -106,6 +130,8 @@ export function ReadingWordsProvider({ children }: { children: React.ReactNode }
       newCache.set(selectionCacheKey(partialSel), {
         definition: parseDefinition(cached.definition),
         translation: cached.translation,
+        part_of_speech: cached.part_of_speech ?? null,
+        examples: parseExamples(cached.examples ?? '[]'),
       })
     }
 
@@ -144,6 +170,8 @@ export function ReadingWordsProvider({ children }: { children: React.ReactNode }
         selection: sel,
         selection_start: row.selection_start,
         selection_end: row.selection_end,
+        part_of_speech: row.part_of_speech ?? null,
+        examples: parseExamples(row.examples ?? '[]'),
       })
     }
 
@@ -155,7 +183,10 @@ export function ReadingWordsProvider({ children }: { children: React.ReactNode }
       setMode('feed')
       return
     }
-
+    if (selection.sentenceIndices.length > 1 || selection.tokenIndices.length > 10) {
+      Alert.alert('Selection too long', 'Please select text within a single sentence.')
+      return
+    }
     sheetRef.current?.snapToIndex(0)
 
     if (!selectedText || !sentenceText) {
@@ -170,6 +201,8 @@ export function ReadingWordsProvider({ children }: { children: React.ReactNode }
     if (savedWord) {
       setDefinition(savedWord.definition)
       setTranslation(savedWord.translation)
+      setPartOfSpeech(savedWord.part_of_speech)
+      setExamples(savedWord.examples)
       setMode('view')
       return
     }
@@ -179,6 +212,8 @@ export function ReadingWordsProvider({ children }: { children: React.ReactNode }
     if (cached) {
       setDefinition(cached.definition)
       setTranslation(cached.translation)
+      setPartOfSpeech(cached.part_of_speech)
+      setExamples(cached.examples)
       setMode('view')
       return
     }
@@ -199,10 +234,19 @@ export function ReadingWordsProvider({ children }: { children: React.ReactNode }
       selection_start,
       selection_end,
     })
-      .then(({ definition, translation }) => {
-        setFetchCache((prev) => new Map(prev).set(cacheKey, { definition, translation }))
-        setDefinition(parseDefinition(definition))
+      .then(({ definition, translation, part_of_speech, examples }) => {
+        setFetchCache((prev) =>
+          new Map(prev).set(cacheKey, {
+            definition,
+            translation,
+            part_of_speech,
+            examples,
+          }),
+        )
+        setDefinition(definition)
         setTranslation(translation)
+        setPartOfSpeech(part_of_speech)
+        setExamples(examples)
         setMode('view')
       })
       .catch((err) => {
@@ -341,6 +385,8 @@ export function ReadingWordsProvider({ children }: { children: React.ReactNode }
             selection,
             selection_start,
             selection_end,
+            part_of_speech: partOfSpeech,
+            examples,
           }
           setSavedWords((prev) => new Map(prev).set(key, tempWord))
 
@@ -355,6 +401,8 @@ export function ReadingWordsProvider({ children }: { children: React.ReactNode }
               translation: translation ?? '',
               selection_start,
               selection_end,
+              part_of_speech: partOfSpeech,
+              examples: serializeExamples(examples),
             })
             setSavedWords((prev) => {
               const updated = new Map(prev)
@@ -394,6 +442,8 @@ export function ReadingWordsProvider({ children }: { children: React.ReactNode }
         sentenceText: sentenceText ?? null,
         definition,
         translation,
+        partOfSpeech,
+        examples,
         definitionDraft,
         translationDraft,
         contextDraft,

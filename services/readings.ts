@@ -3,8 +3,8 @@ import {
   FunctionsHttpError,
   FunctionsRelayError,
 } from '@supabase/supabase-js'
-import type { ReadingMetadata, ReadingPackageV1 } from '@/types/readings'
-import { supabase } from '@utils/supabase'
+import type { FeedSortOrder, ReadingMetadata, ReadingPackageV1 } from '@/types/readings'
+import { supabase, supabasePublishableKey, supabaseUrl } from '@utils/supabase'
 
 //since blob.text() is a web-only api
 function blobToText(blob: Blob): Promise<string> {
@@ -86,7 +86,45 @@ export async function fetchSavedReadings(): Promise<ReadingMetadata[]> {
     )
 }
 
-export async function fetchFeedReadings(): Promise<ReadingMetadata[]> {
+export async function fetchFeedReadings(
+  sort: FeedSortOrder = 'recent',
+): Promise<ReadingMetadata[]> {
+  if (sort === 'interests') {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession()
+    if (!session) {
+      console.log('fetchFeedReadings (interests): no session')
+      return []
+    }
+    const response = await fetch(
+      `${supabaseUrl}/functions/v1/personal-feed?limit=50&offset=0`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${session.access_token}`,
+          apikey: supabasePublishableKey,
+        },
+      },
+    )
+    if (!response.ok) {
+      console.log('fetchFeedReadings (interests) error:', response.status)
+      return []
+    }
+    const data = await response.json()
+    console.log(data)
+    const readings = Array.isArray(data) ? data : (data?.feed ?? [])
+    return readings.map(
+      (r: any): ReadingMetadata => ({
+        id: String(r.id),
+        title: String(r.title ?? ''),
+        genre: String(r.genre ?? ''),
+        rating: String(r.difficulty ?? ''),
+        body: String(r.content_preview ?? ''),
+      }),
+    )
+  }
+
   const { data: userRes, error: userErr } = await supabase.auth.getUser()
   const userId = userRes?.user?.id
 
@@ -94,6 +132,10 @@ export async function fetchFeedReadings(): Promise<ReadingMetadata[]> {
     console.log('fetchFeedReadings auth error:', userErr?.message ?? 'No user')
     return []
   }
+
+  const orderColumn =
+    sort === 'easiest' || sort === 'hardest' ? 'difficulty' : 'created_at'
+  const ascending = sort === 'easiest'
 
   const { data, error } = await supabase
     .from('readings')
@@ -110,10 +152,10 @@ export async function fetchFeedReadings(): Promise<ReadingMetadata[]> {
     .eq('visibility', 'public')
     .eq('is_deleted', false)
     .eq('status', 'processed')
-    .neq('owner_id', userId) // <-- exclude my own
-    .is('user_saved_readings.reading_id', null) // <-- exclude already saved
-    .order('created_at', { ascending: false })
-    .limit(20)
+    .neq('owner_id', userId)
+    .is('user_saved_readings.reading_id', null)
+    .order(orderColumn, { ascending })
+    .limit(50)
 
   if (error) {
     console.log('fetchFeedReadings error:', error.message)
@@ -131,8 +173,14 @@ export async function fetchFeedReadings(): Promise<ReadingMetadata[]> {
   )
 }
 
-export async function fetchAllAvailableReadings(): Promise<ReadingMetadata[]> {
-  const [saved, feed] = await Promise.all([fetchSavedReadings(), fetchFeedReadings()])
+export async function fetchAllAvailableReadings(
+  sort: FeedSortOrder = 'recent',
+): Promise<ReadingMetadata[]> {
+  if (sort === 'interests') {
+    return fetchFeedReadings('interests')
+  }
+
+  const [saved, feed] = await Promise.all([fetchSavedReadings(), fetchFeedReadings(sort)])
 
   const map = new Map<string, ReadingMetadata>()
   for (const r of [...saved, ...feed]) map.set(r.id, r)

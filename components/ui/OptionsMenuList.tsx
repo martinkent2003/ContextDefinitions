@@ -9,7 +9,9 @@ import Animated, {
 import { Icon } from '@/components/ui/Icon'
 import { OptionsMenuButton } from '@/components/ui/OptionsMenuButton'
 import { radii, shadows } from '@/constants/Themes'
+import { useHome } from '@/hooks/useHome'
 import { useThemeColor } from '@/hooks/useThemeColor'
+import type { FeedSortOrder } from '@/types/readings'
 
 let createPortal:
   | ((children: React.ReactNode, container: Element) => React.ReactPortal)
@@ -20,13 +22,20 @@ if (Platform.OS === 'web') {
   } catch {}
 }
 
-const OPTIONS = [
-  { iconName: 'time-outline', label: 'Recent', index: 0 },
-  { iconName: 'school-outline', label: 'Level', index: 1 },
-  { iconName: 'heart-outline', label: 'Interests', index: 2 },
-] as const
+const OPTIONS: {
+  iconName: string
+  label: string
+  sortValue: FeedSortOrder
+  index: number
+}[] = [
+  { iconName: 'time-outline', label: 'Recent', sortValue: 'recent', index: 0 },
+  { iconName: 'school-outline', label: 'Easiest', sortValue: 'easiest', index: 1 },
+  { iconName: 'trending-up-outline', label: 'Hardest', sortValue: 'hardest', index: 2 },
+  { iconName: 'heart-outline', label: 'Interests', sortValue: 'interests', index: 3 },
+]
 
 export function OptionsMenuList() {
+  const { feedSortOrder, setFeedSortOrder } = useHome()
   const [isExpanded, setIsExpanded] = React.useState(false)
   const bg = useThemeColor({}, 'cardBackground')
   const borderColor = useThemeColor({}, 'border')
@@ -121,7 +130,11 @@ export function OptionsMenuList() {
               label={opt.label}
               isExpanded={isExpanded}
               index={opt.index}
-              onPress={close}
+              isActive={feedSortOrder === opt.sortValue}
+              onPress={() => {
+                setFeedSortOrder(opt.sortValue)
+                close()
+              }}
             />
           ))}
         </>
@@ -152,7 +165,11 @@ export function OptionsMenuList() {
                   label={opt.label}
                   isExpanded={isExpanded}
                   index={opt.index}
-                  onPress={close}
+                  isActive={feedSortOrder === opt.sortValue}
+                  onPress={() => {
+                    setFeedSortOrder(opt.sortValue)
+                    close()
+                  }}
                 />
               ))}
             </View>

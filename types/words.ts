@@ -2,6 +2,11 @@ import type { ReadingSelection } from '@/types/readings'
 
 export type SheetMode = 'feed' | 'loading' | 'view' | 'edit'
 
+export type WordExample = {
+  text: string
+  translation?: string
+}
+
 export type SavedWord = {
   id: string
   text: string
@@ -11,6 +16,8 @@ export type SavedWord = {
   selection: ReadingSelection
   selection_start: number
   selection_end: number
+  part_of_speech: string | null
+  examples: WordExample[]
 }
 
 export type SavedWordRow = {
@@ -21,6 +28,8 @@ export type SavedWordRow = {
   context: string
   selection_start: number
   selection_end: number
+  part_of_speech: string | null
+  examples: string
 }
 
 export type CachedWord = {
@@ -29,6 +38,8 @@ export type CachedWord = {
   translation: string
   selection_start: number
   selection_end: number
+  part_of_speech: string | null
+  examples: string
 }
 
 export type CachedWordKey = {

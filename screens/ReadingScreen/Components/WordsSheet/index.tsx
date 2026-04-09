@@ -19,6 +19,8 @@ export default function WordsSheet() {
     sentenceText,
     definition,
     translation,
+    partOfSpeech,
+    examples,
     definitionDraft,
     translationDraft,
     contextDraft,
@@ -71,6 +73,8 @@ export default function WordsSheet() {
               selectedText={selectedText}
               definition={definition}
               translation={translation}
+              partOfSpeech={partOfSpeech}
+              examples={examples}
               sentenceText={sentenceText}
               isSaved={isSaved}
               onBack={handleFeed}

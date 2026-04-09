@@ -7,6 +7,7 @@ import type {
   CachedWord,
   DefinitionAndTranslationParams,
   SavedWordRow,
+  WordExample,
 } from '@/types/words'
 import { supabase } from '@/utils/supabase'
 
@@ -16,7 +17,9 @@ export async function getCachedWords(
 ): Promise<CachedWord[]> {
   const { data, error } = await supabase
     .from('words_lookup_cache')
-    .select('selection, definition, translation, selection_start, selection_end')
+    .select(
+      'selection, definition, translation, selection_start, selection_end, part_of_speech, examples',
+    )
     .eq('reading_id', readingId)
     .eq('native_language', nativeLanguage)
 
@@ -35,7 +38,7 @@ export async function getSavedWords(
   const { data, error } = await supabase
     .from('words_saved')
     .select(
-      'id, selection, definition, translation, context, selection_start, selection_end',
+      'id, selection, definition, translation, context, selection_start, selection_end, part_of_speech, examples',
     )
     .eq('reading_id', readingId)
     .eq('user_id', userId)
@@ -58,6 +61,8 @@ export async function addSavedWord(params: {
   translation: string
   selection_start: number
   selection_end: number
+  part_of_speech: string | null
+  examples: string
 }): Promise<{ id: string }> {
   const { data, error } = await supabase
     .from('words_saved')
@@ -72,6 +77,8 @@ export async function addSavedWord(params: {
         translation: params.translation,
         selection_start: params.selection_start,
         selection_end: params.selection_end,
+        part_of_speech: params.part_of_speech,
+        examples: params.examples,
       },
       { onConflict: 'user_id,reading_id,selection_start,selection_end' },
     )
@@ -97,7 +104,10 @@ export async function removeSavedWord(id: string): Promise<void> {
   if (error) throw error
 }
 
-export function parseDefinition(raw: string): string {
+export function parseDefinition(raw: string | string[]): string {
+  if (Array.isArray(raw)) {
+    return raw.map((b: string) => `• ${b}`).join('\n')
+  }
   try {
     const parsed = JSON.parse(raw)
     if (Array.isArray(parsed)) {
@@ -117,9 +127,26 @@ export function serializeDefinition(display: string): string {
   return JSON.stringify(lines)
 }
 
+export function parseExamples(raw: string): WordExample[] {
+  try {
+    return JSON.parse(raw) as WordExample[]
+  } catch {
+    return []
+  }
+}
+
+export function serializeExamples(examples: WordExample[]): string {
+  return JSON.stringify(examples)
+}
+
 export async function getDefinitionAndTranslation(
   params: DefinitionAndTranslationParams,
-): Promise<{ definition: string; translation: string }> {
+): Promise<{
+  definition: string
+  translation: string
+  part_of_speech: string | null
+  examples: WordExample[]
+}> {
   const { data, error } = await supabase.functions.invoke('defintion-translation', {
     body: params,
   })
@@ -141,6 +168,8 @@ export async function getDefinitionAndTranslation(
 
   const definition = parseDefinition(data?.definition ?? '')
   const translation: string = data?.translation ?? ''
+  const part_of_speech: string | null = data?.part_of_speech ?? null
+  const examples: WordExample[] = Array.isArray(data?.examples) ? data.examples : []
 
-  return { definition, translation }
+  return { definition, translation, part_of_speech, examples }
 }

@@ -1,6 +1,5 @@
 import type BottomSheet from '@gorhom/bottom-sheet'
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
-import { Alert } from 'react-native'
 import { useProfile } from '@/hooks/useProfile'
 import { useReading } from '@/hooks/useReading'
 import { readingCacheService } from '@/services/readingCache'
@@ -184,7 +183,7 @@ export function ReadingWordsProvider({ children }: { children: React.ReactNode }
       return
     }
     if (selection.sentenceIndices.length > 1 || selection.tokenIndices.length > 10) {
-      Alert.alert('Selection too long', 'Please select text within a single sentence.')
+      alert('Please select text within a single sentence.')
       return
     }
     sheetRef.current?.snapToIndex(0)
@@ -321,115 +320,97 @@ export function ReadingWordsProvider({ children }: { children: React.ReactNode }
 
   const isSaved = selection ? savedWords.has(selectionCacheKey(selection)) : false
 
-  function handleRemove() {
+  async function handleRemove() {
     if (!selection || !selectedText) return
     const key = selectionCacheKey(selection)
     const savedWord = savedWords.get(key)
     if (!savedWord) return
 
-    Alert.alert(selectedText, 'Remove this word from your list?', [
-      { text: 'Cancel', style: 'cancel' },
-      {
-        text: 'Remove',
-        style: 'destructive',
-        onPress: async () => {
-          setSavedWords((prev) => {
-            const updated = new Map(prev)
-            updated.delete(key)
-            return updated
-          })
-          try {
-            await removeSavedWord(savedWord.id)
-            const newMap = new Map(savedWords)
-            newMap.delete(key)
-            readingCacheService.setSavedWords(
-              reading!.id,
-              profile!.id,
-              profile?.native_language ?? 'en',
-              Array.from(newMap.values()).map(savedWordToRow),
-            )
-          } catch (err) {
-            console.error('Failed to remove saved word:', err)
-            setSavedWords((prev) => new Map(prev).set(key, savedWord))
-          }
-        },
-      },
-    ])
+    setSavedWords((prev) => {
+      const updated = new Map(prev)
+      updated.delete(key)
+      return updated
+    })
+    try {
+      await removeSavedWord(savedWord.id)
+      const newMap = new Map(savedWords)
+      newMap.delete(key)
+      readingCacheService.setSavedWords(
+        reading!.id,
+        profile!.id,
+        profile?.native_language ?? 'en',
+        Array.from(newMap.values()).map(savedWordToRow),
+      )
+    } catch (err) {
+      console.error('Failed to remove saved word:', err)
+      setSavedWords((prev) => new Map(prev).set(key, savedWord))
+    }
   }
 
   function handleClose() {
     setSelection(null)
   }
 
-  function handleAdd() {
+  async function handleAdd() {
     if (!selection || !selectedText || !reading || !profile) return
-    Alert.alert(selectedText, 'add word to list', [
-      { text: 'Cancel', style: 'destructive' },
-      {
-        text: 'Confirm',
-        style: 'default',
-        onPress: async () => {
-          const selectedTokens = readingContent!.tokens.filter((t) =>
-            selection.tokenIndices.includes(t.i),
-          )
-          const selection_start = Math.min(...selectedTokens.map((t) => t.start))
-          const selection_end = Math.max(...selectedTokens.map((t) => t.end))
-          const key = selectionCacheKey(selection)
+    const selectedTokens = readingContent!.tokens.filter((t) =>
+      selection.tokenIndices.includes(t.i),
+    )
+    const selection_start = Math.min(...selectedTokens.map((t) => t.start))
+    const selection_end = Math.max(...selectedTokens.map((t) => t.end))
+    const key = selectionCacheKey(selection)
 
-          const tempWord: SavedWord = {
-            id: `temp-${Date.now()}`,
-            text: selectedText,
-            definition: definition ?? '',
-            translation: translation ?? '',
-            context: sentenceText ?? '',
-            selection,
-            selection_start,
-            selection_end,
-            part_of_speech: partOfSpeech,
-            examples,
-          }
-          setSavedWords((prev) => new Map(prev).set(key, tempWord))
+    const tempWord: SavedWord = {
+      id: `temp-${Date.now()}`,
+      text: selectedText,
+      definition: definition ?? '',
+      translation: translation ?? '',
+      context: sentenceText ?? '',
+      selection,
+      selection_start,
+      selection_end,
+      part_of_speech: partOfSpeech,
+      examples,
+    }
+    setSavedWords((prev) => new Map(prev).set(key, tempWord))
 
-          try {
-            const { id } = await addSavedWord({
-              readingId: reading.id,
-              userId: profile.id,
-              nativeLanguage: profile.native_language ?? 'en',
-              selection: selectedText,
-              context: sentenceText ?? '',
-              definition: serializeDefinition(definition ?? ''),
-              translation: translation ?? '',
-              selection_start,
-              selection_end,
-              part_of_speech: partOfSpeech,
-              examples: serializeExamples(examples),
-            })
-            setSavedWords((prev) => {
-              const updated = new Map(prev)
-              const word = updated.get(key)
-              if (word) updated.set(key, { ...word, id })
-              return updated
-            })
-            const finalWord: SavedWord = { ...tempWord, id }
-            const newMap = new Map(savedWords)
-            newMap.set(key, finalWord)
-            readingCacheService.setSavedWords(
-              reading.id,
-              profile.id,
-              profile?.native_language ?? 'en',
-              Array.from(newMap.values()).map(savedWordToRow),
-            )
-          } catch (err) {
-            console.error('Failed to save word:', err)
-            setSavedWords((prev) => {
-              const rolled = new Map(prev)
-              rolled.delete(key)
-              return rolled
-            })
-          }
-        },
-      },
-    ])
+    try {
+      const { id } = await addSavedWord({
+        readingId: reading.id,
+        userId: profile.id,
+        nativeLanguage: profile.native_language ?? 'en',
+        selection: selectedText,
+        context: sentenceText ?? '',
+        definition: serializeDefinition(definition ?? ''),
+        translation: translation ?? '',
+        selection_start,
+        selection_end,
+        part_of_speech: partOfSpeech,
+        examples: serializeExamples(examples),
+      })
+      setSavedWords((prev) => {
+        const updated = new Map(prev)
+        const word = updated.get(key)
+        if (word) updated.set(key, { ...word, id })
+        return updated
+      })
+      const finalWord: SavedWord = { ...tempWord, id }
+      const newMap = new Map(savedWords)
+      newMap.set(key, finalWord)
+      readingCacheService.setSavedWords(
+        reading.id,
+        profile.id,
+        profile?.native_language ?? 'en',
+        Array.from(newMap.values()).map(savedWordToRow),
+      )
+    } catch (err) {
+      console.error('Failed to save word:', err)
+      setSavedWords((prev) => {
+        const rolled = new Map(prev)
+        rolled.delete(key)
+        return rolled
+      })
+    }
   }
 
   return (

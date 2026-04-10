@@ -15,7 +15,12 @@ export default function HomeFeed() {
   }, [readings])
 
   return (
-    <ScrollView contentContainerStyle={styles.feed} keyboardDismissMode="on-drag">
+    <ScrollView
+      style={styles.feedScroll}
+      contentContainerStyle={styles.feed}
+      keyboardDismissMode="on-drag"
+      showsVerticalScrollIndicator={false}
+    >
       {feed.map((reading, index) => (
         <Card
           key={index}

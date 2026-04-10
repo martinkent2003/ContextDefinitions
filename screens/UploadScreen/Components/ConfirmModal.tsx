@@ -5,6 +5,7 @@ import { KeyboardAvoidingView, Modal, Platform } from 'react-native'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { Button, View, ScrollView } from '@/components/ui'
 import { spacing } from '@/constants/Themes'
+import { useFullscreenModal } from '@/hooks/useFullscreenModal'
 import { useThemeColor } from '@/hooks/useThemeColor'
 import Header from '@screens/UploadScreen/Components/Header'
 import { styles } from '@screens/UploadScreen/styles'
@@ -29,6 +30,13 @@ export default function ConfirmModal({
   children,
 }: Props) {
   const backgroundColor = useThemeColor({}, 'background')
+  const { setIsFullscreenModalOpen } = useFullscreenModal()
+
+  React.useEffect(() => {
+    if (Platform.OS !== 'web') return
+    setIsFullscreenModalOpen(visible)
+    return () => setIsFullscreenModalOpen(false)
+  }, [visible, setIsFullscreenModalOpen])
 
   return (
     <Modal visible={visible} animationType="slide">

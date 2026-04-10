@@ -1,6 +1,5 @@
 import { useRouter } from 'expo-router'
 import React, { useState } from 'react'
-import { Alert } from 'react-native'
 import { Button, Icon, Input, Picker, ScrollView, Text, View } from '@/components/ui'
 import { useLoading } from '@/hooks/useLoading'
 import { useOnboarding } from '@/hooks/useOnboarding'
@@ -26,6 +25,7 @@ export default function MetadataScreen() {
 
   const [usernameTouched, setUsernameTouched] = useState(false)
   const [fullNameTouched, setFullNameTouched] = useState(false)
+  const [formError, setFormError] = useState<string | null>(null)
 
   const usernameValid = username.length >= 6
   const fullNameValid = fullName.trim().length > 0
@@ -46,7 +46,7 @@ export default function MetadataScreen() {
       const message = error.message.includes('Database error saving new user')
         ? 'Could not create account. Your username may already be taken.'
         : error.message
-      Alert.alert('Sign up failed', message)
+      setFormError(message)
       return
     }
 
@@ -55,6 +55,15 @@ export default function MetadataScreen() {
 
   return (
     <ScrollView style={styles.container} keyboardShouldPersistTaps="handled">
+      <View style={styles.screenHeader}>
+        <Text style={styles.screenTitle}>Tell us about you.</Text>
+        <Text style={styles.screenSubtitle}>
+          This helps us personalise your experience.
+        </Text>
+      </View>
+
+      {formError && <Text style={styles.formError}>{formError}</Text>}
+
       <View style={[styles.verticallySpaced, styles.mt20]}>
         <Input
           leftIcon={<Icon library="FontAwesome" name="user" size={20} />}
@@ -63,6 +72,7 @@ export default function MetadataScreen() {
           value={username}
           placeholder="Username (min 6 characters)"
           autoCapitalize={'none'}
+          autoFocus
         />
         {usernameTouched && !usernameValid && username.length > 0 && (
           <Text style={styles.errorText}>Username must be at least 6 characters</Text>
@@ -112,7 +122,7 @@ export default function MetadataScreen() {
           disabled={!canSubmit}
           onPress={handleContinue}
         >
-          Continue
+          Sign up
         </Button>
       </View>
     </ScrollView>

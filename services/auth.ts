@@ -61,6 +61,18 @@ export async function updateProfile(userId: string, metadata: ProfileMetadata) {
   return { data, error }
 }
 
+// Checks whether an email address is available for sign-up.
+// Uses signInWithOtp with shouldCreateUser: false — if no error is returned,
+// a login OTP was sent to an existing account (email is taken); if an error
+// is returned, the user does not exist and the email is free.
+export async function checkEmailAvailable(email: string) {
+  const { error } = await supabase.auth.signInWithOtp({
+    email,
+    options: { shouldCreateUser: false },
+  })
+  return { available: error !== null }
+}
+
 export async function signOut() {
   const { error } = await supabase.auth.signOut()
   return { error }

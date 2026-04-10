@@ -74,7 +74,10 @@ export default function VerifyScreen() {
 
   return (
     <ScrollView style={styles.container} keyboardShouldPersistTaps="handled">
-      <Text style={styles.infoText}>We sent a verification code to {email}</Text>
+      <View style={styles.screenHeader}>
+        <Text style={styles.screenTitle}>Check your inbox.</Text>
+        <Text style={styles.screenSubtitle}>We sent a verification code to {email}</Text>
+      </View>
 
       {error && <Text style={styles.formError}>{error}</Text>}
 

@@ -64,9 +64,14 @@ export default function SignIn() {
 
   return (
     <ScrollView style={styles.container} keyboardShouldPersistTaps="handled">
+      <View style={styles.screenHeader}>
+        <Text style={styles.screenTitle}>Welcome back.</Text>
+        <Text style={styles.screenSubtitle}>Sign in to continue.</Text>
+      </View>
+
       {formError && <Text style={styles.formError}>{formError}</Text>}
 
-      <View style={styles.verticallySpaced}>
+      <View style={[styles.verticallySpaced, styles.mt20]}>
         <Input
           leftIcon={<Icon library="FontAwesome" name="envelope" size={20} />}
           onChangeText={(text) => setEmail(text)}
@@ -87,7 +92,7 @@ export default function SignIn() {
         />
       </View>
 
-      <View style={styles.verticallySpaced}>
+      <View style={[styles.verticallySpaced, styles.mt20]}>
         <Button variant="primary" size="lg" onPress={() => signIn()}>
           Sign In
         </Button>

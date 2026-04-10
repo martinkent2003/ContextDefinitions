@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { AppState } from 'react-native'
 import { Button, Icon, Input, ScrollView, Text, View } from '@/components/ui'
 import { useOnboarding } from '@/hooks/useOnboarding'
+import { checkEmailAvailable } from '@/services/auth'
 import { styles } from '@screens/AuthScreen/styles'
 import { supabase } from '@utils/supabase'
 
@@ -25,6 +26,8 @@ export default function SignUp() {
   const [password, setPassword] = useState('')
   const [emailTouched, setEmailTouched] = useState(false)
   const [passwordTouched, setPasswordTouched] = useState(false)
+  const [formError, setFormError] = useState<string | null>(null)
+  const [checking, setChecking] = useState(false)
 
   const { setEmail: setOnboardingEmail, setPassword: setOnboardingPassword } =
     useOnboarding()
@@ -34,7 +37,15 @@ export default function SignUp() {
   const passwordValid = password.length >= 6
   const canSubmit = emailValid && passwordValid
 
-  function handleSignUp() {
+  async function handleSignUp() {
+    setFormError(null)
+    setChecking(true)
+    const { available } = await checkEmailAvailable(email)
+    setChecking(false)
+    if (!available) {
+      setFormError('taken')
+      return
+    }
     setOnboardingEmail(email)
     setOnboardingPassword(password)
     router.push('/metadata' as any)
@@ -42,6 +53,25 @@ export default function SignUp() {
 
   return (
     <ScrollView style={styles.container} keyboardShouldPersistTaps="handled">
+      <View style={styles.screenHeader}>
+        <Text style={styles.screenTitle}>Create your account.</Text>
+        <Text style={styles.screenSubtitle}>
+          {"Let's get you set up in a few steps."}
+        </Text>
+      </View>
+
+      {formError === 'taken' && (
+        <Text style={styles.formError}>
+          An account with this email already exists.{' '}
+          <Text
+            style={styles.formErrorLink}
+            onPress={() => router.replace('/signin' as any)}
+          >
+            Sign in instead.
+          </Text>
+        </Text>
+      )}
+
       <View style={[styles.verticallySpaced, styles.mt20]}>
         <Input
           leftIcon={<Icon library="FontAwesome" name="envelope" size={20} />}
@@ -73,8 +103,14 @@ export default function SignUp() {
       </View>
 
       <View style={[styles.verticallySpaced, styles.mt20]}>
-        <Button variant="primary" size="lg" disabled={!canSubmit} onPress={handleSignUp}>
-          Sign up
+        <Button
+          variant="primary"
+          size="lg"
+          disabled={!canSubmit}
+          loading={checking}
+          onPress={handleSignUp}
+        >
+          Continue
         </Button>
       </View>
     </ScrollView>

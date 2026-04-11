@@ -3,8 +3,10 @@ import {
   requestMediaLibraryPermissionsAsync,
 } from 'expo-image-picker'
 import { StatusBar } from 'expo-status-bar'
+import { useState } from 'react'
 import { Alert, Image, Platform, Pressable } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
+
 
 import { Button, Icon, Text, View } from '@/components/ui'
 import { useLoading } from '@/hooks/useLoading'
@@ -31,6 +33,7 @@ export default function ProfileScreen() {
   const { profile, refreshProfile } = useProfile()
   const { session } = useSession()
   const backgroundColor = useThemeColor({}, 'background')
+  const [avatarError, setAvatarError] = useState(false)
 
   const langLabel = (code: string | null) =>
     code ? (LANGUAGES.find((l) => l.value === code)?.label ?? code) : null
@@ -57,13 +60,19 @@ export default function ProfileScreen() {
       allowsEditing: true,
       aspect: [1, 1],
       quality: 0.8,
+      base64: true,
     })
     if (result.canceled) return
 
-    const uri = result.assets[0].uri
+    const asset = result.assets[0]
+    const ext = asset.uri.split('.').pop()?.split('?')[0] ?? 'jpg'
     showLoading('Uploading avatar...')
 
-    const { url, error: uploadError } = await uploadAvatar(session!.user.id, uri)
+    const { url, error: uploadError } = await uploadAvatar(
+      session!.user.id,
+      asset.base64!,
+      ext,
+    )
     if (uploadError || !url) {
       Alert.alert('Upload failed', uploadError?.message ?? 'Unknown error')
       hideLoading()
@@ -72,7 +81,10 @@ export default function ProfileScreen() {
 
     const { error: updateError } = await updateProfileAvatarUrl(session!.user.id, url)
     if (updateError) Alert.alert('Failed to save avatar', updateError.message)
-    else await refreshProfile()
+    else {
+      setAvatarError(false)
+      await refreshProfile()
+    }
     hideLoading()
   }
 
@@ -90,8 +102,12 @@ export default function ProfileScreen() {
           style={({ pressed }) => [styles.avatarWrapper, { opacity: pressed ? 0.7 : 1 }]}
           onPress={pickAndUploadAvatar}
         >
-          {profile?.avatar_url ? (
-            <Image source={{ uri: profile.avatar_url }} style={styles.avatar} />
+          {profile?.avatar_url && !avatarError ? (
+            <Image
+              source={{ uri: profile.avatar_url }}
+              style={styles.avatar}
+              onError={() => setAvatarError(true)}
+            />
           ) : (
             <Icon library="Ionicons" name="person-circle" size={72} />
           )}

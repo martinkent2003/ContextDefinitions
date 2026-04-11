@@ -11,14 +11,18 @@ export async function fetchProfileById(userId: string) {
   return { data: data as Profile | null, error }
 }
 
-export async function uploadAvatar(userId: string, uri: string) {
-  const ext = uri.split('.').pop()?.split('?')[0] ?? 'jpg'
+export async function uploadAvatar(userId: string, base64: string, ext: string) {
   const filePath = `${userId}/avatar.${ext}`
-  const blob = await fetch(uri).then((r) => r.blob())
+
+  const binaryString = atob(base64)
+  const bytes = new Uint8Array(binaryString.length)
+  for (let i = 0; i < binaryString.length; i++) {
+    bytes[i] = binaryString.charCodeAt(i)
+  }
 
   const { error: uploadError } = await supabase.storage
     .from('avatars')
-    .upload(filePath, blob, { upsert: true, contentType: `image/${ext}` })
+    .upload(filePath, bytes, { upsert: true, contentType: `image/${ext}` })
 
   if (uploadError) return { url: null, error: uploadError }
 

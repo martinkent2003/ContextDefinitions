@@ -38,4 +38,9 @@ body {
   body {
     background-color: #000;
   }
+}
+#root > * {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
 }`

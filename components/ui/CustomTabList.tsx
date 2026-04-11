@@ -1,3 +1,4 @@
+import { useSegments } from 'expo-router'
 import { TabTrigger } from 'expo-router/ui'
 import * as React from 'react'
 import { Platform, Pressable, StyleSheet, View } from 'react-native'
@@ -10,6 +11,7 @@ import Animated, {
 import { CustomTabButton } from '@/components/ui/CustomTabButton'
 import { ToggleMenuButton } from '@/components/ui/ToggleMenuButton'
 import { spacing } from '@/constants/Themes'
+import { useFullscreenModal } from '@/hooks/useFullscreenModal'
 
 let createPortal:
   | ((children: React.ReactNode, container: Element) => React.ReactPortal)
@@ -28,6 +30,10 @@ const TABS = [
 ] as const
 
 export function CustomTabList() {
+  const segments = useSegments()
+  const isOnTabsScreen = segments.includes('(tabs)' as never)
+  const { isFullscreenModalOpen } = useFullscreenModal()
+
   const [isExpanded, setIsExpanded] = React.useState(false)
   const backdropOpacity = useSharedValue(0)
   const [portalContainer, setPortalContainer] = React.useState<HTMLDivElement | null>(
@@ -70,6 +76,8 @@ export function CustomTabList() {
   }))
 
   const close = React.useCallback(() => setIsExpanded(false), [])
+
+  if (Platform.OS === 'web' && (!isOnTabsScreen || isFullscreenModalOpen)) return null
 
   const tabs = TABS.map((tab) => (
     <TabTrigger key={tab.name} name={tab.name} asChild>

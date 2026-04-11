@@ -9,8 +9,17 @@ export const styles = StyleSheet.create({
     // borderColor: "#FFFFFF",
     // borderWidth: 1,
   },
+  screenWeb: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    flexDirection: 'column',
+  },
   pressable: {
     flex: 1,
+    minHeight: 0,
     paddingHorizontal: spacing.md,
     overflow: 'visible',
     //  borderColor: "#FFFFFF",
@@ -51,6 +60,10 @@ export const styles = StyleSheet.create({
   },
   userIconText: {
     fontSize: typography.sizes.xs,
+  },
+  feedScroll: {
+    flex: 1,
+    minHeight: 0,
   },
   feed: {
     marginTop: spacing.xs,

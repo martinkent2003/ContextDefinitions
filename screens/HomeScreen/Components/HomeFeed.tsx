@@ -17,11 +17,10 @@ export default function HomeFeed() {
 
   return (
     <ScrollView
+      style={styles.feedScroll}
       contentContainerStyle={styles.feed}
       keyboardDismissMode="on-drag"
-      refreshControl={
-        <RefreshControl refreshing={isRefreshing} onRefresh={pullRefresh} />
-      }
+      showsVerticalScrollIndicator={false}
     >
       {feed.map((reading, index) => (
         <Card

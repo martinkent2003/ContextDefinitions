@@ -40,7 +40,7 @@ export default function WordsSheet() {
 
   const cardBackground = useThemeColor({}, 'cardBackground')
   const handleColor = useThemeColor({}, 'textTertiary')
-  const snapPoints = useMemo(() => ['12%', '50%', '90%'], [])
+  const snapPoints = useMemo(() => ['20%', '50%', '90%'], [])
 
   return (
     <BottomSheet
@@ -48,6 +48,7 @@ export default function WordsSheet() {
       snapPoints={snapPoints}
       index={1}
       enableDynamicSizing={false}
+      enableContentPanningGesture={false}
       enablePanDownToClose={true}
       onClose={handleClose}
       backgroundStyle={{ backgroundColor: cardBackground }}

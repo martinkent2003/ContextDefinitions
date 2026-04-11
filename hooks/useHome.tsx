@@ -14,6 +14,8 @@ type HomeContextType = {
   feedSortOrder: FeedSortOrder
   setFeedSortOrder: (sort: FeedSortOrder) => void
   refreshReadings: () => Promise<void>
+  isRefreshing: boolean
+  pullRefresh: () => Promise<void>
   handleCardPress: (reading: ReadingMetadata) => Promise<void>
 }
 
@@ -23,6 +25,7 @@ export function HomeProvider({ children }: { children: React.ReactNode }) {
   const [readings, setReadings] = useState<ReadingMetadata[]>([])
   const [selectedSegment, setSelectedSegment] = useState('Feed')
   const [feedSortOrder, setFeedSortOrder] = useState<FeedSortOrder>('recent')
+  const [isRefreshing, setIsRefreshing] = useState(false)
   const { showLoading, hideLoading } = useLoading()
   const { handleReadingChange } = useReading()
   const router = useRouter()
@@ -72,6 +75,19 @@ export function HomeProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
+  const pullRefresh = async () => {
+    setIsRefreshing(true)
+    try {
+      if (selectedSegment === 'Feed') {
+        await fetchFeed()
+      } else {
+        await fetchPrivate()
+      }
+    } finally {
+      setIsRefreshing(false)
+    }
+  }
+
   useEffect(() => {
     refreshReadings()
   }, [selectedSegment, feedSortOrder])
@@ -85,6 +101,8 @@ export function HomeProvider({ children }: { children: React.ReactNode }) {
         feedSortOrder,
         setFeedSortOrder,
         refreshReadings,
+        isRefreshing,
+        pullRefresh,
         handleCardPress,
       }}
     >

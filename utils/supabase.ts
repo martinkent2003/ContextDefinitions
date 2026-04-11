@@ -3,8 +3,8 @@ import 'expo-sqlite/localStorage/install'
 import { setSignOutReason } from './signOutReason'
 
 //publishable key is safe as long as RLS is enabled*
-const supabaseUrl = 'https://irspwhgeyrojqluzgciu.supabase.co'
-const supabasePublishableKey = 'sb_publishable_bNzJDiqiG-wKL7JKnxY6Aw_SuGvFjdY'
+export const supabaseUrl = 'https://irspwhgeyrojqluzgciu.supabase.co'
+export const supabasePublishableKey = 'sb_publishable_bNzJDiqiG-wKL7JKnxY6Aw_SuGvFjdY'
 
 // Get a storage object safely in any runtime (web/native/SSR-ish)
 function getStorage(): Storage | undefined {

@@ -1,3 +1,5 @@
+export type FeedSortOrder = 'recent' | 'easiest' | 'hardest' | 'interests'
+
 export type ReadingMetadata = {
   id: string
   title: string

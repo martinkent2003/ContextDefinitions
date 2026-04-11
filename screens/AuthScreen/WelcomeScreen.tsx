@@ -1,67 +1,28 @@
 import { useRouter } from 'expo-router'
-import { StyleSheet } from 'react-native'
 import { Button, Text, View } from '@/components/ui'
 import { consumeSignOutReason } from '@/utils/signOutReason'
+import { styles } from '@screens/AuthScreen/styles'
 
 export default function WelcomeScreen() {
   const router = useRouter()
   const signOutMessage = consumeSignOutReason()
   return (
-    <View style={styles.content}>
-      <Text style={styles.title}>Yomu</Text>
-      {signOutMessage && <Text style={styles.signOutMessage}>{signOutMessage}</Text>}
-      <Text style={styles.subtitle}>Get started, sign in or creating an account</Text>
-
-      <View style={styles.buttonContainer}>
-        <Button
-          variant="primary"
-          size="lg"
-          onPress={() => {
-            router.push('/signin')
-          }}
-        >
+    <View style={styles.welcomeContent}>
+      <Text style={styles.welcomeTitle}>Context Definitions</Text>
+      {signOutMessage && (
+        <Text style={styles.welcomeSignOutMessage}>{signOutMessage}</Text>
+      )}
+      <Text style={styles.welcomeSubtitle}>
+        Build your reading vocabulary, one word at a time.
+      </Text>
+      <View style={styles.welcomeButtonContainer}>
+        <Button variant="primary" size="lg" onPress={() => router.push('/signin')}>
           Sign In
         </Button>
-        <Button
-          variant="secondary"
-          size="lg"
-          onPress={() => {
-            router.push('/signup')
-          }}
-        >
+        <Button variant="secondary" size="lg" onPress={() => router.push('/signup')}>
           Sign Up
         </Button>
       </View>
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  content: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#666',
-    textAlign: 'center',
-    marginBottom: 40,
-  },
-  signOutMessage: {
-    fontSize: 14,
-    color: '#ef4444',
-    textAlign: 'center',
-    marginBottom: 16,
-  },
-  buttonContainer: {
-    width: '100%',
-    gap: 12,
-  },
-})

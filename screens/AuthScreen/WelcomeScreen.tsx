@@ -1,4 +1,5 @@
 import { useRouter } from 'expo-router'
+import { Image } from 'react-native'
 import { Button, Text, View } from '@/components/ui'
 import { consumeSignOutReason } from '@/utils/signOutReason'
 import { styles } from '@screens/AuthScreen/styles'
@@ -8,6 +9,7 @@ export default function WelcomeScreen() {
   const signOutMessage = consumeSignOutReason()
   return (
     <View style={styles.welcomeContent}>
+      <Image source={require('@/assets/images/icon.png')} style={styles.welcomeIcon} />
       <Text style={styles.welcomeTitle}>Context Definitions</Text>
       {signOutMessage && (
         <Text style={styles.welcomeSignOutMessage}>{signOutMessage}</Text>

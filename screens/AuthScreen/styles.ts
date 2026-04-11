@@ -72,6 +72,12 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: spacing.xl,
   },
+  welcomeIcon: {
+    width: 80,
+    height: 80,
+    borderRadius: 16,
+    marginBottom: spacing.lg,
+  },
   welcomeTitle: {
     fontSize: typography.sizes.xxxl,
     fontWeight: '900',

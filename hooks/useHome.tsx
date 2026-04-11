@@ -1,12 +1,8 @@
 import { useRouter } from 'expo-router'
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { Alert } from 'react-native'
-import {
-  fetchAllAvailableReadings,
-  fetchFeedReadings,
-  fetchSavedReadings,
-} from '@/services/readings'
-import type { ReadingMetadata } from '@/types/readings'
+import { fetchAllAvailableReadings, fetchSavedReadings } from '@/services/readings'
+import type { FeedSortOrder, ReadingMetadata } from '@/types/readings'
 import { useLoading } from '@hooks/useLoading'
 import { useReading } from '@hooks/useReading'
 
@@ -15,6 +11,8 @@ type HomeContextType = {
   readings: ReadingMetadata[]
   selectedSegment: string
   setSelectedSegment: (segment: string) => void
+  feedSortOrder: FeedSortOrder
+  setFeedSortOrder: (sort: FeedSortOrder) => void
   refreshReadings: () => Promise<void>
   handleCardPress: (reading: ReadingMetadata) => Promise<void>
 }
@@ -24,6 +22,7 @@ const HomeContext = createContext<HomeContextType | null>(null)
 export function HomeProvider({ children }: { children: React.ReactNode }) {
   const [readings, setReadings] = useState<ReadingMetadata[]>([])
   const [selectedSegment, setSelectedSegment] = useState('Feed')
+  const [feedSortOrder, setFeedSortOrder] = useState<FeedSortOrder>('recent')
   const { showLoading, hideLoading } = useLoading()
   const { handleReadingChange } = useReading()
   const router = useRouter()
@@ -50,7 +49,7 @@ export function HomeProvider({ children }: { children: React.ReactNode }) {
   }
 
   const fetchFeed = async () => {
-    const data = await fetchAllAvailableReadings()
+    const data = await fetchAllAvailableReadings(feedSortOrder)
     setReadings(data)
   }
 
@@ -75,7 +74,7 @@ export function HomeProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     refreshReadings()
-  }, [selectedSegment])
+  }, [selectedSegment, feedSortOrder])
 
   return (
     <HomeContext.Provider
@@ -83,6 +82,8 @@ export function HomeProvider({ children }: { children: React.ReactNode }) {
         readings,
         selectedSegment,
         setSelectedSegment,
+        feedSortOrder,
+        setFeedSortOrder,
         refreshReadings,
         handleCardPress,
       }}

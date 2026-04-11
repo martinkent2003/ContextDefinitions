@@ -33,10 +33,11 @@ export const styles = StyleSheet.create({
   value: {
     fontSize: typography.sizes.md,
   },
-  spacer: {
-    flex: 1,
+  avatarWrapper: {
+    borderRadius: radii.full,
+    overflow: 'hidden',
   },
-  signOutContainer: {
-    paddingBottom: spacing.lg,
+  signOut: {
+    marginTop: spacing.xl,
   },
 })

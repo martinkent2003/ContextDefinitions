@@ -21,6 +21,9 @@ export default function HomeFeed() {
       contentContainerStyle={styles.feed}
       keyboardDismissMode="on-drag"
       showsVerticalScrollIndicator={false}
+      refreshControl={
+        <RefreshControl refreshing={isRefreshing} onRefresh={pullRefresh} />
+      }
     >
       {feed.map((reading, index) => (
         <Card

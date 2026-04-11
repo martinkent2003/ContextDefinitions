@@ -49,6 +49,7 @@ export function OptionsMenuButton({
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ translateY: translateY.value }, { scale: scale.value }],
     opacity: opacity.value,
+    pointerEvents: opacity.value > 0 ? 'auto' : 'none',
     position: 'absolute',
     top: 0,
     right: 0,

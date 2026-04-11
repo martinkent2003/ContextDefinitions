@@ -1,10 +1,10 @@
+import { useRouter } from 'expo-router'
 import React, { useState } from 'react'
-import { Alert, AppState, StyleSheet } from 'react-native'
-import { Button, Icon, Input, Picker, ScrollView, View } from '@/components/ui'
-import { useLoading } from '@/hooks/useLoading'
-import { signUpWithEmail } from '@/services/auth'
-import type { SignUpData } from '@/types/auth'
-import { LANGUAGES, type LanguageCode } from '@/types/language'
+import { AppState } from 'react-native'
+import { Button, Icon, Input, ScrollView, Text, View } from '@/components/ui'
+import { useOnboarding } from '@/hooks/useOnboarding'
+import { checkEmailAvailable } from '@/services/auth'
+import { styles } from '@screens/AuthScreen/styles'
 import { supabase } from '@utils/supabase'
 
 // Tells Supabase Auth to continuously refresh the session automatically if
@@ -19,113 +19,100 @@ AppState.addEventListener('change', (state) => {
   }
 })
 
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
 export default function SignUp() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [username, setUsername] = useState('')
-  const [fullName, setFullName] = useState('')
-  const [nativeLanguage, setNativeLanguage] = useState<LanguageCode>('en')
-  const [targetLanguage, setTargetLanguage] = useState<LanguageCode>('es')
+  const [emailTouched, setEmailTouched] = useState(false)
+  const [passwordTouched, setPasswordTouched] = useState(false)
+  const [formError, setFormError] = useState<string | null>(null)
+  const [checking, setChecking] = useState(false)
 
-  const { showLoading, hideLoading } = useLoading()
+  const { setEmail: setOnboardingEmail, setPassword: setOnboardingPassword } =
+    useOnboarding()
+  const router = useRouter()
 
-  async function signUp() {
-    showLoading('Creating account...', 'typing')
-    const signUpData: SignUpData = {
-      email,
-      password,
-      username,
-      fullName,
-      nativeLanguage,
-      targetLanguage,
+  const emailValid = EMAIL_REGEX.test(email)
+  const passwordValid = password.length >= 6
+  const canSubmit = emailValid && passwordValid
+
+  async function handleSignUp() {
+    setFormError(null)
+    setChecking(true)
+    const { available } = await checkEmailAvailable(email)
+    setChecking(false)
+    if (!available) {
+      setFormError('taken')
+      return
     }
-
-    const {
-      data: { session },
-      error,
-    } = await signUpWithEmail(signUpData)
-
-    if (error) Alert.alert(error.message)
-    if (!session) Alert.alert('Please check your inbox for email verification!')
-    hideLoading()
+    setOnboardingEmail(email)
+    setOnboardingPassword(password)
+    router.push('/metadata' as any)
   }
 
   return (
     <ScrollView style={styles.container} keyboardShouldPersistTaps="handled">
+      <View style={styles.screenHeader}>
+        <Text style={styles.screenTitle}>Create your account.</Text>
+        <Text style={styles.screenSubtitle}>
+          {"Let's get you set up in a few steps."}
+        </Text>
+      </View>
+
+      {formError === 'taken' && (
+        <Text style={styles.formError}>
+          An account with this email already exists.{' '}
+          <Text
+            style={styles.formErrorLink}
+            onPress={() => router.replace('/signin' as any)}
+          >
+            Sign in instead.
+          </Text>
+        </Text>
+      )}
+
       <View style={[styles.verticallySpaced, styles.mt20]}>
         <Input
           leftIcon={<Icon library="FontAwesome" name="envelope" size={20} />}
           onChangeText={(text) => setEmail(text)}
+          onBlur={() => setEmailTouched(true)}
           value={email}
           placeholder="email@address.com"
           autoCapitalize={'none'}
+          keyboardType="email-address"
         />
+        {emailTouched && !emailValid && email.length > 0 && (
+          <Text style={styles.errorText}>Enter a valid email address</Text>
+        )}
       </View>
+
       <View style={styles.verticallySpaced}>
         <Input
           leftIcon={<Icon library="FontAwesome" name="lock" size={20} />}
           onChangeText={(text) => setPassword(text)}
+          onBlur={() => setPasswordTouched(true)}
           value={password}
           secureTextEntry={true}
           placeholder="Password"
           autoCapitalize={'none'}
         />
+        {passwordTouched && !passwordValid && password.length > 0 && (
+          <Text style={styles.errorText}>Password must be at least 6 characters</Text>
+        )}
       </View>
-      <View style={styles.verticallySpaced}>
-        <Input
-          leftIcon={<Icon library="FontAwesome" name="user" size={20} />}
-          onChangeText={(text) => setUsername(text)}
-          value={username}
-          placeholder="Username (min 6 characters)"
-          autoCapitalize={'none'}
-        />
-      </View>
-      <View style={styles.verticallySpaced}>
-        <Input
-          leftIcon={<Icon library="FontAwesome" name="id-card" size={20} />}
-          onChangeText={(text) => setFullName(text)}
-          value={fullName}
-          placeholder="Your full name"
-        />
-      </View>
-      <View style={styles.verticallySpaced}>
-        <Picker
-          label="Native Language"
-          items={LANGUAGES}
-          selectedValue={nativeLanguage}
-          onValueChange={(value) => setNativeLanguage(value as LanguageCode)}
-        />
-      </View>
-      <View style={styles.verticallySpaced}>
-        <Picker
-          label="Target Language"
-          items={LANGUAGES}
-          selectedValue={targetLanguage}
-          onValueChange={(value) => setTargetLanguage(value as LanguageCode)}
-        />
-      </View>
+
       <View style={[styles.verticallySpaced, styles.mt20]}>
-        <Button variant="primary" size="lg" onPress={() => signUp()}>
-          Sign up
+        <Button
+          variant="primary"
+          size="lg"
+          disabled={!canSubmit}
+          loading={checking}
+          onPress={handleSignUp}
+        >
+          Continue
         </Button>
       </View>
     </ScrollView>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: 'transparent',
-    marginTop: 100,
-    marginBottom: 50,
-    padding: 12,
-  },
-  verticallySpaced: {
-    backgroundColor: 'transparent',
-    paddingTop: 4,
-    paddingBottom: 4,
-  },
-  mt20: {
-    marginTop: 20,
-  },
-})

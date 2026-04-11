@@ -185,7 +185,15 @@ export async function fetchAllAvailableReadings(
   const map = new Map<string, ReadingMetadata>()
   for (const r of [...saved, ...feed]) map.set(r.id, r)
 
-  return Array.from(map.values())
+  const result = Array.from(map.values())
+
+  if (sort === 'easiest') {
+    result.sort((a, b) => parseFloat(a.rating || '0') - parseFloat(b.rating || '0'))
+  } else if (sort === 'hardest') {
+    result.sort((a, b) => parseFloat(b.rating || '0') - parseFloat(a.rating || '0'))
+  }
+
+  return result
 }
 
 export async function getReadingStructure(

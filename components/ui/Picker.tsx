@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     ...Platform.select({
       ios: {
-        height: 160,
+        height: 130,
       },
       web: {},
       android: {},
@@ -96,8 +96,8 @@ const styles = StyleSheet.create({
   picker: {
     ...Platform.select({
       ios: {
-        height: 160, // Actual picker height (larger than container)
-        marginTop: -30, // Offset to center the selection
+        height: 160, // Full wheel height so spin gesture works
+        marginTop: -55, // Re-centre selected row in the 100px container window
       },
       android: {
         height: undefined,

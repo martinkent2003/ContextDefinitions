@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { RefreshControl } from 'react-native'
 import { Card, FadingScrollView, ScrollView } from '@/components/ui'
 import { useHome } from '@/hooks/useHome'
 import { useReading } from '@/hooks/useReading'
@@ -6,7 +7,7 @@ import type { ReadingMetadata } from '@/types/readings'
 import { styles } from '@screens/HomeScreen/styles'
 
 export default function HomeFeed() {
-  const { readings, handleCardPress } = useHome()
+  const { readings, handleCardPress, isRefreshing, pullRefresh } = useHome()
   const { cachedReadingIds } = useReading()
   const [feed, setFeed] = useState<ReadingMetadata[]>([])
 

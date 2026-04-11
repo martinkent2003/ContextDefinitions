@@ -16,6 +16,7 @@ export interface OptionsMenuButtonProps {
   isExpanded: boolean
   index: number
   onPress: () => void
+  isActive?: boolean
 }
 
 export function OptionsMenuButton({
@@ -24,10 +25,12 @@ export function OptionsMenuButton({
   isExpanded,
   index,
   onPress,
+  isActive = false,
 }: OptionsMenuButtonProps) {
   const cardBg = useThemeColor({}, 'cardBackground')
   const borderColor = useThemeColor({}, 'border')
   const iconColor = useThemeColor({}, 'text')
+  const tint = useThemeColor({}, 'tint')
   const translateY = useSharedValue(0)
   const opacity = useSharedValue(0)
   const scale = useSharedValue(1)
@@ -70,10 +73,20 @@ export function OptionsMenuButton({
         }}
         style={styles.container}
       >
-        <View style={[styles.iconBox, { borderColor, backgroundColor: cardBg }]}>
+        <View
+          style={[
+            styles.iconBox,
+            {
+              borderColor: isActive ? tint : borderColor,
+              backgroundColor: isActive ? tint + '22' : cardBg,
+            },
+          ]}
+        >
           <Icon library="Ionicons" name={iconName as any} size={20} color={iconColor} />
         </View>
-        <Text style={[styles.label, { color: iconColor }]}>{label}</Text>
+        <Text style={[styles.label, { color: iconColor }]} numberOfLines={1}>
+          {label}
+        </Text>
       </Pressable>
     </Animated.View>
   )
@@ -92,7 +105,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   label: {
-    fontSize: typography.sizes.xs,
+    fontSize: 10,
     fontWeight: typography.weights.medium,
   },
 })

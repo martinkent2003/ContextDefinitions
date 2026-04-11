@@ -1,7 +1,11 @@
 import { useRouter } from 'expo-router'
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { Alert } from 'react-native'
-import { fetchAllAvailableReadings, fetchSavedReadings } from '@/services/readings'
+import {
+  fetchAllAvailableReadings,
+  fetchFeedReadings,
+  fetchSavedReadings,
+} from '@/services/readings'
 import type { FeedSortOrder, ReadingMetadata } from '@/types/readings'
 import { useLoading } from '@hooks/useLoading'
 import { useReading } from '@hooks/useReading'
@@ -52,7 +56,7 @@ export function HomeProvider({ children }: { children: React.ReactNode }) {
   }
 
   const fetchFeed = async () => {
-    const data = await fetchAllAvailableReadings(feedSortOrder)
+    const data = await fetchFeedReadings(feedSortOrder)
     setReadings(data)
   }
 

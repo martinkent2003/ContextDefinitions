@@ -1,5 +1,5 @@
 import { BottomSheetScrollView, useBottomSheet } from '@gorhom/bottom-sheet'
-import { Platform, ScrollView, useWindowDimensions, View } from 'react-native'
+import { Platform, useWindowDimensions, View } from 'react-native'
 import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated'
 import { Text } from '@/components/ui'
 import { WordCard } from '@/components/ui/WordCard'
@@ -61,6 +61,8 @@ function WordFeedWeb({ savedWords, handleView }: WordFeedProps) {
   )
 }
 
+const MIN_SCROLL_HEIGHT = 50
+
 function WordFeedNative({ savedWords, handleView }: WordFeedProps) {
   const textColor = useThemeColor({}, 'text')
   const textSecondary = useThemeColor({}, 'textSecondary')
@@ -68,12 +70,12 @@ function WordFeedNative({ savedWords, handleView }: WordFeedProps) {
   const { height: screenHeight } = useWindowDimensions()
   const headerHeight = useSharedValue(0)
 
-  const scrollStyle = useAnimatedStyle(() => ({
-    maxHeight: Math.max(
-      0,
-      screenHeight - animatedPosition.value - HANDLE_HEIGHT - headerHeight.value,
-    ),
-  }))
+  const scrollStyle = useAnimatedStyle(() => {
+    const h = screenHeight - animatedPosition.value - HANDLE_HEIGHT - headerHeight.value
+    return {
+      height: Math.max(MIN_SCROLL_HEIGHT, h),
+    }
+  })
 
   return (
     <View style={{ flex: 1 }}>
@@ -90,7 +92,7 @@ function WordFeedNative({ savedWords, handleView }: WordFeedProps) {
         </Text>
       ) : (
         <Animated.View style={scrollStyle}>
-          <ScrollView
+          <BottomSheetScrollView
             style={{ flex: 1 }}
             contentContainerStyle={{ paddingBottom: spacing.xxl }}
           >
@@ -102,7 +104,7 @@ function WordFeedNative({ savedWords, handleView }: WordFeedProps) {
                 onPress={() => handleView(word)}
               />
             ))}
-          </ScrollView>
+          </BottomSheetScrollView>
         </Animated.View>
       )}
     </View>

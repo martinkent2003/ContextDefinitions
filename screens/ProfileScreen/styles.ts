@@ -13,13 +13,26 @@ export const styles = StyleSheet.create({
     paddingVertical: spacing.xl,
   },
   avatar: {
-    width: 72,
-    height: 72,
+    width: 96,
+    height: 96,
     borderRadius: radii.full,
   },
+  avatarWrapper: {
+    borderRadius: radii.full,
+    overflow: 'hidden',
+  },
+  avatarInfo: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    gap: spacing.xs,
+  },
   username: {
-    fontSize: typography.sizes.xl,
+    fontSize: typography.sizes.xxl,
     fontWeight: typography.weights.semibold,
+  },
+  editButton: {
+    paddingLeft: 0,
   },
   infoSection: {
     gap: spacing.md,
@@ -33,9 +46,12 @@ export const styles = StyleSheet.create({
   value: {
     fontSize: typography.sizes.md,
   },
-  avatarWrapper: {
-    borderRadius: radii.full,
-    overflow: 'hidden',
+  inputRow: {
+    gap: spacing.xs,
+  },
+  editActions: {
+    gap: spacing.sm,
+    marginTop: spacing.xl,
   },
   signOut: {
     marginTop: spacing.xl,

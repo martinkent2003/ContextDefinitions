@@ -4,7 +4,7 @@ import {
   FunctionsRelayError,
 } from '@supabase/supabase-js'
 import type { FeedSortOrder, ReadingMetadata, ReadingPackageV1 } from '@/types/readings'
-import { supabase, supabasePublishableKey, supabaseUrl } from '@utils/supabase'
+import { supabase } from '@utils/supabase'
 
 //since blob.text() is a web-only api
 function blobToText(blob: Blob): Promise<string> {
@@ -90,28 +90,16 @@ export async function fetchFeedReadings(
   sort: FeedSortOrder = 'recent',
 ): Promise<ReadingMetadata[]> {
   if (sort === 'interests') {
-    const {
-      data: { session },
-    } = await supabase.auth.getSession()
-    if (!session) {
-      console.log('fetchFeedReadings (interests): no session')
-      return []
-    }
-    const response = await fetch(
-      `${supabaseUrl}/functions/v1/personal-feed?limit=50&offset=0`,
+    const { data, error } = await supabase.functions.invoke(
+      'personal-feed?limit=50&offset=0',
       {
         method: 'GET',
-        headers: {
-          Authorization: `Bearer ${session.access_token}`,
-          apikey: supabasePublishableKey,
-        },
       },
     )
-    if (!response.ok) {
-      console.log('fetchFeedReadings (interests) error:', response.status)
+    if (error) {
+      console.log('fetchFeedReadings (interests) error:', error.message)
       return []
     }
-    const data = await response.json()
     console.log(data)
     const readings = Array.isArray(data) ? data : (data?.feed ?? [])
     return readings.map(

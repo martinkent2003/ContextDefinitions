@@ -5,6 +5,7 @@ import {
   fetchAllAvailableReadings,
   fetchFeedReadings,
   fetchSavedReadings,
+  searchReadings,
 } from '@/services/readings'
 import type { FeedSortOrder, ReadingMetadata } from '@/types/readings'
 import { useLoading } from '@hooks/useLoading'
@@ -21,6 +22,8 @@ type HomeContextType = {
   isRefreshing: boolean
   pullRefresh: () => Promise<void>
   handleCardPress: (reading: ReadingMetadata) => Promise<void>
+  searchQuery: string
+  handleSearchChange: (text: string) => void
 }
 
 const HomeContext = createContext<HomeContextType | null>(null)
@@ -30,10 +33,12 @@ export function HomeProvider({ children }: { children: React.ReactNode }) {
   const [selectedSegment, setSelectedSegment] = useState('Feed')
   const [feedSortOrder, setFeedSortOrder] = useState<FeedSortOrder>('recent')
   const [isRefreshing, setIsRefreshing] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
   const { showLoading, hideLoading } = useLoading()
   const { handleReadingChange } = useReading()
   const router = useRouter()
   const isNavigating = useRef(false)
+  const searchTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const handleCardPress = async (reading: ReadingMetadata) => {
     if (isNavigating.current) return
@@ -92,6 +97,30 @@ export function HomeProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
+  const handleSearchChange = (text: string) => {
+    setSearchQuery(text)
+    if (searchTimer.current) clearTimeout(searchTimer.current)
+
+    if (text.trim().length === 0) {
+      if (selectedSegment === 'Feed') {
+        fetchFeed()
+      } else {
+        fetchPrivate()
+      }
+      return
+    }
+
+    if (text.trim().length < 2) return
+
+    searchTimer.current = setTimeout(async () => {
+      const results = await searchReadings(
+        text.trim(),
+        selectedSegment === 'Private' ? 'private' : 'feed',
+      )
+      setReadings(results)
+    }, 300)
+  }
+
   useEffect(() => {
     refreshReadings()
   }, [selectedSegment, feedSortOrder])
@@ -108,6 +137,8 @@ export function HomeProvider({ children }: { children: React.ReactNode }) {
         isRefreshing,
         pullRefresh,
         handleCardPress,
+        searchQuery,
+        handleSearchChange,
       }}
     >
       {children}

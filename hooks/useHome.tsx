@@ -2,7 +2,6 @@ import { useRouter } from 'expo-router'
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { Alert } from 'react-native'
 import {
-  fetchAllAvailableReadings,
   fetchFeedReadings,
   fetchSavedReadings,
   searchReadings,
@@ -22,8 +21,7 @@ type HomeContextType = {
   isRefreshing: boolean
   pullRefresh: () => Promise<void>
   handleCardPress: (reading: ReadingMetadata) => Promise<void>
-  searchQuery: string
-  handleSearchChange: (text: string) => void
+  handleSearch: (query: string) => void
 }
 
 const HomeContext = createContext<HomeContextType | null>(null)
@@ -33,12 +31,10 @@ export function HomeProvider({ children }: { children: React.ReactNode }) {
   const [selectedSegment, setSelectedSegment] = useState('Feed')
   const [feedSortOrder, setFeedSortOrder] = useState<FeedSortOrder>('recent')
   const [isRefreshing, setIsRefreshing] = useState(false)
-  const [searchQuery, setSearchQuery] = useState('')
   const { showLoading, hideLoading } = useLoading()
   const { handleReadingChange } = useReading()
   const router = useRouter()
   const isNavigating = useRef(false)
-  const searchTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const handleCardPress = async (reading: ReadingMetadata) => {
     if (isNavigating.current) return
@@ -97,28 +93,21 @@ export function HomeProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
-  const handleSearchChange = (text: string) => {
-    setSearchQuery(text)
-    if (searchTimer.current) clearTimeout(searchTimer.current)
-
-    if (text.trim().length === 0) {
+  const handleSearch = async (query: string) => {
+    if (query.length === 0) {
       if (selectedSegment === 'Feed') {
-        fetchFeed()
+        await fetchFeed()
       } else {
-        fetchPrivate()
+        await fetchPrivate()
       }
       return
     }
 
-    if (text.trim().length < 2) return
-
-    searchTimer.current = setTimeout(async () => {
-      const results = await searchReadings(
-        text.trim(),
-        selectedSegment === 'Private' ? 'private' : 'feed',
-      )
-      setReadings(results)
-    }, 300)
+    const results = await searchReadings(
+      query,
+      selectedSegment === 'Private' ? 'private' : 'feed',
+    )
+    setReadings(results)
   }
 
   useEffect(() => {
@@ -137,8 +126,7 @@ export function HomeProvider({ children }: { children: React.ReactNode }) {
         isRefreshing,
         pullRefresh,
         handleCardPress,
-        searchQuery,
-        handleSearchChange,
+        handleSearch,
       }}
     >
       {children}

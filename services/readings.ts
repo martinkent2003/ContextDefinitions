@@ -190,14 +190,49 @@ export async function searchReadings(
   limit = 50,
   offset = 0,
 ): Promise<ReadingMetadata[]> {
-  const selectFields =
-    scope === 'private'
-      ? 'id, title, genre, language_code, content_preview, difficulty, owner_id, created_at, user_saved_readings!inner(reading_id)'
-      : 'id, title, genre, language_code, content_preview, difficulty, owner_id, created_at'
+  if (scope === 'feed') {
+    const { data: userRes, error: userErr } = await supabase.auth.getUser()
+    const userId = userRes?.user?.id
+    if (userErr || !userId) {
+      console.log('searchReadings auth error:', userErr?.message ?? 'No user')
+      return []
+    }
 
+    const { data, error } = await supabase
+      .from('readings')
+      .select(
+        `id, title, genre, difficulty, content_preview, user_saved_readings!left(reading_id)`,
+      )
+      .or(`title.ilike.%${query}%,genre.ilike.%${query}%`)
+      .eq('is_deleted', false)
+      .eq('status', 'processed')
+      .neq('owner_id', userId)
+      .is('user_saved_readings.reading_id', null)
+      .order('created_at', { ascending: false })
+      .range(offset, offset + limit - 1)
+
+    if (error) {
+      console.log('searchReadings error:', error.message)
+      return []
+    }
+
+    return (data ?? []).map(
+      (r: any): ReadingMetadata => ({
+        id: String(r.id),
+        title: String(r.title ?? ''),
+        genre: String(r.genre ?? ''),
+        rating: String(r.difficulty ?? ''),
+        body: String(r.content_preview ?? ''),
+      }),
+    )
+  }
+
+  // scope === 'private': inner join ensures only saved readings are returned
   const { data, error } = await supabase
     .from('readings')
-    .select(selectFields)
+    .select(
+      `id, title, genre, difficulty, content_preview, user_saved_readings!inner(reading_id)`,
+    )
     .or(`title.ilike.%${query}%,genre.ilike.%${query}%`)
     .eq('is_deleted', false)
     .eq('status', 'processed')

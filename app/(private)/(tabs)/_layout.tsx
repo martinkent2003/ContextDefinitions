@@ -12,7 +12,6 @@ export default function TabLayout() {
       <TabList style={styles.hidden}>
         <TabTrigger name="home" href="/home" />
         <TabTrigger name="create" href="/create" />
-        <TabTrigger name="library" href="/library" />
         <TabTrigger name="profile" href="/profile" />
       </TabList>
     </Tabs>

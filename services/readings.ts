@@ -60,7 +60,9 @@ export async function fetchSavedReadings(): Promise<ReadingMetadata[]> {
         title,
         genre,
         difficulty,
-        content_preview
+        content_preview,
+        owner_id,
+        visibility
       )
     `,
     )
@@ -75,15 +77,22 @@ export async function fetchSavedReadings(): Promise<ReadingMetadata[]> {
   return (data ?? [])
     .map((row: any) => row.readings)
     .filter(Boolean)
-    .map(
-      (r: any): ReadingMetadata => ({
+    .map((r: any): ReadingMetadata => {
+      console.log(
+        '[fetchSavedReadings] raw row:',
+        JSON.stringify({ id: r.id, owner_id: r.owner_id, visibility: r.visibility }),
+      )
+      return {
         id: String(r.id),
         title: String(r.title ?? ''),
         genre: String(r.genre ?? ''),
-        rating: String(r.difficulty ?? ''), // or "0" if you prefer
+        rating: String(r.difficulty ?? ''),
         body: String(r.content_preview ?? ''),
-      }),
-    )
+        owner_id: String(r.owner_id ?? ''),
+        visibility: r.visibility === 'private' ? 'private' : 'public',
+        isInLibrary: true,
+      }
+    })
 }
 
 export async function fetchFeedReadings(
@@ -109,6 +118,9 @@ export async function fetchFeedReadings(
         genre: String(r.genre ?? ''),
         rating: String(r.difficulty ?? ''),
         body: String(r.content_preview ?? ''),
+        owner_id: r.owner_id ? String(r.owner_id) : undefined,
+        visibility: 'public',
+        isInLibrary: false,
       }),
     )
   }
@@ -134,6 +146,8 @@ export async function fetchFeedReadings(
       genre,
       difficulty,
       content_preview,
+      owner_id,
+      visibility,
       user_saved_readings!left(reading_id)
     `,
     )
@@ -157,6 +171,9 @@ export async function fetchFeedReadings(
       genre: String(r.genre ?? ''),
       rating: String(r.difficulty ?? ''),
       body: String(r.content_preview ?? ''),
+      owner_id: String(r.owner_id ?? ''),
+      visibility: r.visibility === 'private' ? 'private' : 'public',
+      isInLibrary: false,
     }),
   )
 }
@@ -182,6 +199,56 @@ export async function fetchAllAvailableReadings(
   }
 
   return result
+}
+
+export async function addToLibrary(readingId: string): Promise<boolean> {
+  const { data: userRes } = await supabase.auth.getUser()
+  const userId = userRes?.user?.id
+  if (!userId) return false
+
+  const { error } = await supabase
+    .from('user_saved_readings')
+    .upsert(
+      { user_id: userId, reading_id: readingId },
+      { onConflict: 'user_id,reading_id' },
+    )
+
+  if (error) {
+    console.log('addToLibrary error:', error.message)
+    return false
+  }
+  return true
+}
+
+export async function removeFromLibrary(readingId: string): Promise<boolean> {
+  const { data: userRes } = await supabase.auth.getUser()
+  const userId = userRes?.user?.id
+  if (!userId) return false
+
+  const { error } = await supabase
+    .from('user_saved_readings')
+    .delete()
+    .eq('user_id', userId)
+    .eq('reading_id', readingId)
+
+  if (error) {
+    console.log('removeFromLibrary error:', error.message)
+    return false
+  }
+  return true
+}
+
+export async function deleteReading(readingId: string): Promise<boolean> {
+  const { error } = await supabase
+    .from('readings')
+    .update({ is_deleted: true, deleted_at: new Date().toISOString() })
+    .eq('id', readingId)
+
+  if (error) {
+    console.log('deleteReading error:', error.message)
+    return false
+  }
+  return true
 }
 
 export async function getReadingStructure(

@@ -3,7 +3,7 @@ import { useHome } from '@/hooks/useHome'
 import SearchBar from '@screens/HomeScreen/Components/SearchBar'
 import { styles } from '@screens/HomeScreen/styles'
 
-const SEGMENTS = ['Feed', 'Private']
+const SEGMENTS = ['Feed', 'Library']
 
 export default function Header() {
   const { selectedSegment, setSelectedSegment } = useHome()

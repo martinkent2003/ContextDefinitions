@@ -64,9 +64,10 @@ export default function RootLayout() {
       >
         <View
           style={[
-            Platform.OS === 'web' && !isMobile ? styles.webPadding : styles.root,
+            styles.root,
+            Platform.OS === 'web' && isMounted && !isMobile && styles.webPadding,
             Platform.OS === 'web' && isMounted && { backgroundColor },
-            Platform.OS === 'web' && isMobile && styles.webMobileSafeArea,
+            Platform.OS === 'web' && isMounted && isMobile && styles.webMobileSafeArea,
           ]}
         >
           <SafeAreaProvider>

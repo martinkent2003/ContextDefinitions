@@ -47,7 +47,7 @@ export function ActionMenuProvider({ children }: { children: React.ReactNode }) 
     console.log('[ActionMenu] isOwner           :', isOwner)
     console.log('[ActionMenu] isPublic          :', isPublic)
     console.log('[ActionMenu] libraryStatusKnown:', libraryStatusKnown)
-    console.log('[ActionMenu] Delete visible?   :', isOwner && !isPublic)
+    console.log('[ActionMenu] Delete visible?   :', isOwner)
   }, [
     reading?.id,
     reading?.owner_id,

@@ -80,7 +80,11 @@ export async function fetchSavedReadings(): Promise<ReadingMetadata[]> {
     .map((r: any): ReadingMetadata => {
       console.log(
         '[fetchSavedReadings] raw row:',
-        JSON.stringify({ id: r.id, owner_id: r.owner_id, visibility: r.visibility }),
+        JSON.stringify({
+          id: r.id,
+          owner_id: r.owner_id,
+          visibility: r.visibility,
+        }),
       )
       return {
         id: String(r.id),
@@ -239,10 +243,9 @@ export async function removeFromLibrary(readingId: string): Promise<boolean> {
 }
 
 export async function deleteReading(readingId: string): Promise<boolean> {
-  const { error } = await supabase
-    .from('readings')
-    .update({ is_deleted: true, deleted_at: new Date().toISOString() })
-    .eq('id', readingId)
+  const { error } = await supabase.rpc('soft_delete_reading', {
+    p_reading_id: readingId,
+  })
 
   if (error) {
     console.log('deleteReading error:', error.message)

@@ -13,6 +13,7 @@ import { Colors, spacing } from '@/constants/Themes'
 import { useColorScheme } from '@/hooks/useColorScheme'
 import { LoadingProvider } from '@/hooks/useLoading'
 import { SessionProvider, useSession } from '@/hooks/useSession'
+import { useThemeColor } from '@/hooks/useThemeColor'
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -27,7 +28,7 @@ export const unstable_settings = {
 SplashScreen.preventAutoHideAsync()
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme()
+  const backgroundColor = useThemeColor({}, 'background')
   const [loaded, error] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
     Excalifont: require('../assets/fonts/Excalifont-Regular.ttf'),
@@ -51,14 +52,13 @@ export default function RootLayout() {
 
   return (
     <LoadingProvider>
-      <GestureHandlerRootView style={styles.root}>
+      <GestureHandlerRootView
+        style={[styles.root, Platform.OS === 'web' && { backgroundColor }]}
+      >
         <View
           style={[
             Platform.OS === 'web' ? styles.webPadding : styles.root,
-            Platform.OS === 'web' && {
-              backgroundColor:
-                Colors[colorScheme === 'dark' ? 'dark' : 'light'].background,
-            },
+            Platform.OS === 'web' && { backgroundColor },
           ]}
         >
           <SafeAreaProvider>

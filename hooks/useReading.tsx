@@ -30,6 +30,7 @@ type ReadingContextType = {
   initialSavedWordRows: SavedWordRow[]
   cachedReadingIds: string[]
   handleReadingChange: (reading: ReadingMetadata) => Promise<boolean>
+  updateReadingLibraryStatus: (isInLibrary: boolean) => void
   setSelection: (sel: ReadingSelection | null) => void
   fontSize: number
   setFontSize: (size: number) => void
@@ -62,6 +63,10 @@ export function ReadingProvider({ children }: { children: React.ReactNode }) {
         setCachedReadingIds(ids)
       })
     })
+  }, [])
+
+  const updateReadingLibraryStatus = useCallback((isInLibrary: boolean) => {
+    setReading((prev) => (prev ? { ...prev, isInLibrary } : prev))
   }, [])
 
   const handleReadingChange = useCallback(
@@ -143,6 +148,7 @@ export function ReadingProvider({ children }: { children: React.ReactNode }) {
       initialSavedWordRows,
       cachedReadingIds,
       handleReadingChange,
+      updateReadingLibraryStatus,
       setSelection,
       fontSize,
       setFontSize,
@@ -159,6 +165,7 @@ export function ReadingProvider({ children }: { children: React.ReactNode }) {
       initialSavedWordRows,
       cachedReadingIds,
       handleReadingChange,
+      updateReadingLibraryStatus,
       fontSize,
       totalPages,
       currentPage,

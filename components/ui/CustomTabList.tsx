@@ -23,10 +23,9 @@ if (Platform.OS === 'web') {
 }
 
 const TABS = [
-  { name: 'library', iconName: 'folder', label: 'Library', index: 0 },
-  { name: 'create', iconName: 'plus', label: 'Create', index: 1 },
-  { name: 'home', iconName: 'home', label: 'Home', index: 2 },
-  { name: 'profile', iconName: 'user', label: 'Profile', index: 3 },
+  { name: 'create', iconName: 'plus', label: 'Create', index: 0 },
+  { name: 'home', iconName: 'home', label: 'Home', index: 1 },
+  { name: 'profile', iconName: 'user', label: 'Profile', index: 2 },
 ] as const
 
 export function CustomTabList() {

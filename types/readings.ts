@@ -6,6 +6,9 @@ export type ReadingMetadata = {
   genre: string
   rating: string
   body: string
+  owner_id?: string
+  visibility?: 'public' | 'private'
+  isInLibrary?: boolean
 }
 
 export type ReadingSelection = {

@@ -4,6 +4,7 @@ import { useReading } from '@/hooks/useReading'
 import { useThemeColor } from '@/hooks/useThemeColor'
 import Footer from '@/screens/ReadingScreen/Components/Footer/Footer'
 import WordsSheet from '@/screens/ReadingScreen/Components/WordsSheet'
+import { ActionMenuProvider } from '@/screens/ReadingScreen/hooks/useActionMenu'
 import { ReadingWordsProvider } from '@/screens/ReadingScreen/hooks/useReadingWords'
 import Header from '@screens/ReadingScreen/Components/Header'
 import ReadingContent from '@screens/ReadingScreen/Components/ReadingContent'
@@ -17,14 +18,16 @@ export default function ReadingScreen() {
 
   return (
     <ReadingWordsProvider>
-      <SafeAreaView style={[styles.readingScreen, { backgroundColor }]}>
-        <Header />
-        <ReadingContent />
-        <Footer />
-        <View style={styles.absoluteFillObject} pointerEvents="box-none">
-          <WordsSheet />
-        </View>
-      </SafeAreaView>
+      <ActionMenuProvider>
+        <SafeAreaView style={[styles.readingScreen, { backgroundColor }]}>
+          <Header />
+          <ReadingContent />
+          <Footer />
+          <View style={styles.absoluteFillObject} pointerEvents="box-none">
+            <WordsSheet />
+          </View>
+        </SafeAreaView>
+      </ActionMenuProvider>
     </ReadingWordsProvider>
   )
 }

@@ -105,7 +105,7 @@ export function HomeProvider({ children }: { children: React.ReactNode }) {
 
     const results = await searchReadings(
       query,
-      selectedSegment === 'Private' ? 'private' : 'feed',
+      selectedSegment === 'Library' ? 'private' : 'feed',
     )
     setReadings(results)
   }

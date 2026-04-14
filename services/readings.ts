@@ -273,6 +273,8 @@ export async function searchReadings(
       return title.includes(normalizedQuery) || genre.includes(normalizedQuery)
     })
     .slice(offset, offset + limit)
+}
+
 export async function addToLibrary(readingId: string): Promise<boolean> {
   const { data: userRes } = await supabase.auth.getUser()
   const userId = userRes?.user?.id

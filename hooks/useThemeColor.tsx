@@ -8,8 +8,8 @@ import { Colors } from '@/constants/Themes'
 import { useColorScheme } from '@hooks/useColorScheme'
 
 export type ThemeProps = {
-  lightColor?: string
-  darkColor?: string
+  light?: string
+  dark?: string
 }
 
 /**
@@ -27,11 +27,8 @@ export type ThemeProps = {
  * // With overrides - use custom colors instead of theme defaults
  * const customBg = useThemeColor({ light: '#fff', dark: '#000' }, 'background');
  */
-export function useThemeColor(
-  props: { light?: string; dark?: string },
-  colorName: ThemeColors,
-) {
-  const colorScheme = useColorScheme() ?? 'light'
+export function useThemeColor(props: ThemeProps, colorName: ThemeColors) {
+  const colorScheme: 'light' | 'dark' = useColorScheme() === 'dark' ? 'dark' : 'light'
   const colorFromProps = props[colorScheme]
 
   if (colorFromProps) {

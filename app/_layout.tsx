@@ -3,7 +3,7 @@ import { DefaultTheme, ThemeProvider } from '@react-navigation/native'
 import { useFonts } from 'expo-font'
 import { Redirect, Stack, useSegments } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Platform, StyleSheet, View } from 'react-native'
 import 'react-native-reanimated'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
@@ -29,6 +29,7 @@ SplashScreen.preventAutoHideAsync()
 
 export default function RootLayout() {
   const backgroundColor = useThemeColor({}, 'background')
+  const [isMounted, setIsMounted] = useState(false)
   const [loaded, error] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
     Excalifont: require('../assets/fonts/Excalifont-Regular.ttf'),
@@ -39,6 +40,10 @@ export default function RootLayout() {
   useEffect(() => {
     if (error) throw error
   }, [error])
+
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
 
   useEffect(() => {
     if (loaded) {
@@ -53,12 +58,12 @@ export default function RootLayout() {
   return (
     <LoadingProvider>
       <GestureHandlerRootView
-        style={[styles.root, Platform.OS === 'web' && { backgroundColor }]}
+        style={[styles.root, Platform.OS === 'web' && isMounted && { backgroundColor }]}
       >
         <View
           style={[
             Platform.OS === 'web' ? styles.webPadding : styles.root,
-            Platform.OS === 'web' && { backgroundColor },
+            Platform.OS === 'web' && isMounted && { backgroundColor },
           ]}
         >
           <SafeAreaProvider>

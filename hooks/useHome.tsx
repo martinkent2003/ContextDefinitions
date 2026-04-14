@@ -2,9 +2,9 @@ import { useRouter } from 'expo-router'
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { Alert } from 'react-native'
 import {
-  fetchAllAvailableReadings,
   fetchFeedReadings,
   fetchSavedReadings,
+  searchReadings,
 } from '@/services/readings'
 import type { FeedSortOrder, ReadingMetadata } from '@/types/readings'
 import { useLoading } from '@hooks/useLoading'
@@ -21,6 +21,7 @@ type HomeContextType = {
   isRefreshing: boolean
   pullRefresh: () => Promise<void>
   handleCardPress: (reading: ReadingMetadata) => Promise<void>
+  handleSearch: (query: string) => void
 }
 
 const HomeContext = createContext<HomeContextType | null>(null)
@@ -92,6 +93,23 @@ export function HomeProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
+  const handleSearch = async (query: string) => {
+    if (query.length === 0) {
+      if (selectedSegment === 'Feed') {
+        await fetchFeed()
+      } else {
+        await fetchPrivate()
+      }
+      return
+    }
+
+    const results = await searchReadings(
+      query,
+      selectedSegment === 'Private' ? 'private' : 'feed',
+    )
+    setReadings(results)
+  }
+
   useEffect(() => {
     refreshReadings()
   }, [selectedSegment, feedSortOrder])
@@ -108,6 +126,7 @@ export function HomeProvider({ children }: { children: React.ReactNode }) {
         isRefreshing,
         pullRefresh,
         handleCardPress,
+        handleSearch,
       }}
     >
       {children}

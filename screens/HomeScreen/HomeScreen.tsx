@@ -1,4 +1,4 @@
-import { Keyboard, Platform, Pressable, View } from 'react-native'
+import { Platform, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Header from '@screens/HomeScreen/Components/Header'
 import HomeFeed from '@screens/HomeScreen/Components/HomeFeed'
@@ -17,10 +17,10 @@ export default function HomeScreen() {
   }
   return (
     <SafeAreaView style={styles.screen} edges={['top']}>
-      <Pressable style={styles.pressable} onPress={Keyboard.dismiss}>
+      <View style={styles.pressable}>
         <Header />
         <HomeFeed />
-      </Pressable>
+      </View>
     </SafeAreaView>
   )
 }

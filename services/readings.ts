@@ -51,6 +51,14 @@ export async function uploadReading(
 }
 
 export async function fetchSavedReadings(): Promise<ReadingMetadata[]> {
+  const { data: userRes, error: userErr } = await supabase.auth.getUser()
+  const userId = userRes?.user?.id
+
+  if (userErr || !userId) {
+    console.log('fetchSavedReadings auth error:', userErr?.message ?? 'No user')
+    return []
+  }
+
   const { data, error } = await supabase
     .from('user_saved_readings')
     .select(
@@ -64,6 +72,7 @@ export async function fetchSavedReadings(): Promise<ReadingMetadata[]> {
       )
     `,
     )
+    .eq('user_id', userId)
     .order('last_accessed', { ascending: false })
     .limit(20)
 
@@ -134,14 +143,15 @@ export async function fetchFeedReadings(
       genre,
       difficulty,
       content_preview,
-      user_saved_readings!left(reading_id)
+      saved:user_saved_readings()
     `,
     )
     .eq('visibility', 'public')
     .eq('is_deleted', false)
     .eq('status', 'processed')
     .neq('owner_id', userId)
-    .is('user_saved_readings.reading_id', null)
+    .eq('saved.user_id', userId)
+    .is('saved', null)
     .order(orderColumn, { ascending })
     .limit(50)
 
@@ -190,6 +200,8 @@ export async function searchReadings(
   limit = 50,
   offset = 0,
 ): Promise<ReadingMetadata[]> {
+  const normalizedQuery = query.trim().toLowerCase()
+
   if (scope === 'feed') {
     const { data: userRes, error: userErr } = await supabase.auth.getUser()
     const userId = userRes?.user?.id
@@ -201,13 +213,15 @@ export async function searchReadings(
     const { data, error } = await supabase
       .from('readings')
       .select(
-        `id, title, genre, difficulty, content_preview, user_saved_readings!left(reading_id)`,
+        `id, title, genre, difficulty, content_preview, saved:user_saved_readings()`,
       )
       .or(`title.ilike.%${query}%,genre.ilike.%${query}%`)
+      .eq('visibility', 'public')
       .eq('is_deleted', false)
       .eq('status', 'processed')
       .neq('owner_id', userId)
-      .is('user_saved_readings.reading_id', null)
+      .eq('saved.user_id', userId)
+      .is('saved', null)
       .order('created_at', { ascending: false })
       .range(offset, offset + limit - 1)
 
@@ -227,32 +241,17 @@ export async function searchReadings(
     )
   }
 
-  // scope === 'private': inner join ensures only saved readings are returned
-  const { data, error } = await supabase
-    .from('readings')
-    .select(
-      `id, title, genre, difficulty, content_preview, user_saved_readings!inner(reading_id)`,
-    )
-    .or(`title.ilike.%${query}%,genre.ilike.%${query}%`)
-    .eq('is_deleted', false)
-    .eq('status', 'processed')
-    .order('created_at', { ascending: false })
-    .range(offset, offset + limit - 1)
+  // scope === 'private': use the same source as the saved feed so visibility/RLS
+  // changes cannot make search disagree with the visible saved list.
+  const savedReadings = await fetchSavedReadings()
 
-  if (error) {
-    console.log('searchReadings error:', error.message)
-    return []
-  }
-
-  return (data ?? []).map(
-    (r: any): ReadingMetadata => ({
-      id: String(r.id),
-      title: String(r.title ?? ''),
-      genre: String(r.genre ?? ''),
-      rating: String(r.difficulty ?? ''),
-      body: String(r.content_preview ?? ''),
-    }),
-  )
+  return savedReadings
+    .filter((reading) => {
+      const title = reading.title.toLowerCase()
+      const genre = reading.genre.toLowerCase()
+      return title.includes(normalizedQuery) || genre.includes(normalizedQuery)
+    })
+    .slice(offset, offset + limit)
 }
 
 export async function getReadingStructure(

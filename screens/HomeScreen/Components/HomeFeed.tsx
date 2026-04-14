@@ -1,5 +1,5 @@
 import { RefreshControl } from 'react-native'
-import { Card, FadingScrollView, ScrollView } from '@/components/ui'
+import { Card, ScrollView } from '@/components/ui'
 import { useHome } from '@/hooks/useHome'
 import { useReading } from '@/hooks/useReading'
 import { styles } from '@screens/HomeScreen/styles'

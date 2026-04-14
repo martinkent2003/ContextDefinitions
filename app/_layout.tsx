@@ -12,6 +12,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { Colors, spacing } from '@/constants/Themes'
 import { useColorScheme } from '@/hooks/useColorScheme'
 import { LoadingProvider } from '@/hooks/useLoading'
+import { useResponsive } from '@/hooks/useResponsive'
 import { SessionProvider, useSession } from '@/hooks/useSession'
 import { useThemeColor } from '@/hooks/useThemeColor'
 
@@ -29,6 +30,7 @@ SplashScreen.preventAutoHideAsync()
 
 export default function RootLayout() {
   const backgroundColor = useThemeColor({}, 'background')
+  const { isMobile } = useResponsive()
   const [isMounted, setIsMounted] = useState(false)
   const [loaded, error] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
@@ -62,8 +64,9 @@ export default function RootLayout() {
       >
         <View
           style={[
-            Platform.OS === 'web' ? styles.webPadding : styles.root,
+            Platform.OS === 'web' && !isMobile ? styles.webPadding : styles.root,
             Platform.OS === 'web' && isMounted && { backgroundColor },
+            Platform.OS === 'web' && isMobile && styles.webMobileSafeArea,
           ]}
         >
           <SafeAreaProvider>
@@ -84,6 +87,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.xxxxl,
     paddingTop: spacing.xl,
     overflow: 'visible',
+  },
+  webMobileSafeArea: {
+    flex: 1,
+    paddingTop: 'env(safe-area-inset-top)' as unknown as number,
   },
 })
 

@@ -12,6 +12,11 @@ export { TextArea, TextAreaProps } from '@components/ui/TextArea'
 export { RadioButton, RadioButtonProps, RadioItem } from '@components/ui/RadioButton'
 export { SegmentedControl, SegmentedControlProps } from '@components/ui/SegmentedControl'
 export { IconButton, IconButtonProps } from '@components/ui/IconButton'
+export {
+  ActionMenuModal,
+  ActionMenuModalProps,
+  ActionMenuItem,
+} from '@components/ui/ActionMenuModal'
 export { CustomTabButton, CustomTabButtonProps } from '@components/ui/CustomTabButton'
 export { CustomTabList } from '@components/ui/CustomTabList'
 export { ToggleMenuButton } from '@components/ui/ToggleMenuButton'
